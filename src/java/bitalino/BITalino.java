@@ -47,7 +47,7 @@ import javax.microedition.io.Connector;
 import javax.microedition.io.StreamConnection;
 
 
-import ceu.biolab.DeviceDiscoverer;
+import java.bitalino.DeviceDiscoverer;
 
 /// The %BITalino device class.
 public class BITalino {
