@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MotivSMA</title>
+    <link rel="stylesheet" href="/sma-client/frontend/styles/styles.css" />
+  </head>
+  <body>
+    <header>
+      <nav>
+        <h1>
+          <img
+            src="frontend/assets/svgs/logo.svg"
+            style="margin-right: 1rem; width: 40px"
+          />MotivSMA
+        </h1>
+        <div class="links">
+          <a>About</a>
+          <button class="open-button" onclick="openForm()">Login</button>
+        </div>
+      </nav>
+      <div class="sma-header-container">
+        <h1 class="sma-header">
+          Spinal <br />
+          Muscular <br />
+          Atrophy <br />
+        </h1>
+        <div class="sidebar"></div>
+      </div>
+    </header>
+    <main>
+      <div class="sma-text-main">
+        <h1>MotivSMA</h1>
+        Our website is dedicated to providing information, resources, and
+        support for individuals and families affected by SMA. We aim to raise
+        awareness about the condition, promote early diagnosis, and offer
+        guidance on managing the disease.
+        <br /><br />
+        Through our telemedicine platform, users can upload their current
+        biosignals via a BITalino sensor, connect with healthcare professionals,
+        and analyze their results.
+        <br /><br />
+        <article>
+          <h1>Services</h1>
+          <div class="services">
+            <div class="service">
+              <h2>Information Hub</h2>
+              <p>
+                Comprehensive resources about SMA, including symptoms,
+                diagnosis, treatment options, and care strategies.
+              </p>
+            </div>
+            <div class="service">
+              <h2>Telemedicine Platform</h2>
+              <p>
+                Upload biosignals using BITalino sensors and connect with
+                healthcare professionals for remote consultations and analysis.
+              </p>
+            </div>
+            <div class="service">
+              <h2>Community Support</h2>
+              <p>
+                Forums and support groups for individuals and families to share
+                experiences, advice, and encouragement.
+              </p>
+            </div>
+          </div>
+        </article>
+      </div>
+      <div class="auth-forms">
+        <div class="icon-circle">
+          <img src="frontend/assets/svgs/logo_white.svg" alt="Logo" />
+        </div>
+        <div class="get-started-text">
+          <h1>Get Started</h1>
+          <h3>
+            Whether you're a patient or doctor, sign up today to get started
+            with <strong>MotivSMA</strong>.
+          </h3>
+        </div>
+        <section class="register">
+          <h2>Register</h2>
+          <form id="register-form">
+            <label for="reg-name">Name</label>
+            <input type="text" id="reg-name" name="name" required />
+
+            <label for="reg-email">Email</label>
+            <input type="email" id="reg-email" name="email" required />
+
+            <label for="reg-password">Password</label>
+            <input type="password" id="reg-password" name="password" required />
+
+            <button type="submit">Register</button>
+          </form>
+        </section>
+      </div>
+
+      <div class="sidebar sidebar-dark"></div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <img src="frontend/assets/svgs/logo_white.svg" alt="MotivSMA Logo" />
+          <span>MotivSMA</span>
+        </div>
+        <div class="footer-links">
+          <a href="#">About</a>
+          <a href="#">Privacy Policy</a>
+          <a href="#">Contact</a>
+        </div>
+        <div class="footer-copy">
+          &copy; 2025 MotivSMA | All rights reserved
+        </div>
+      </div>
+    </footer>
+
+    <div id="myForm" class="form-popup">
+      <div class="form-popup-content">
+        <button class="close-button" onclick="closeForm()">×</button>
+        <h2>Login</h2>
+        <form id="login-form">
+          <label for="login-email">Email</label>
+          <input type="email" id="login-email" name="email" required />
+
+          <label for="login-password">Password</label>
+          <input type="password" id="login-password" name="password" required />
+
+          <button type="submit">Login</button>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      function openForm() {
+        document.getElementById("myForm").style.display = "flex";
+      }
+
+      function closeForm() {
+        document.getElementById("myForm").style.display = "none";
+      }
+
+      window.onclick = function (event) {
+        const popup = document.getElementById("myForm");
+        if (event.target === popup) {
+          closeForm();
+        }
+      };
+    </script>
+  </body>
+</html>
