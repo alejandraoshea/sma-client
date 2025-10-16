@@ -1,0 +1,220 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body,
+html {
+  height: 100%;
+  font-family: "Roboto", sans-serif;
+}
+
+.nav-patient {
+  position: relative;
+  width: 100%;
+  background: url("../assets/images/national-cancer-institute-BDKid0yJcAk-unsplash.jpg")
+    center/cover no-repeat;
+  padding: 2rem 3%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 1);
+}
+
+.nav-patient::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+}
+
+.nav-patient h1 {
+  font-size: 2rem;
+}
+
+.nav-patient h1,
+.nav-patient .links {
+  position: relative;
+  z-index: 2;
+  color: #f8f9f8dc;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.nav-patient .links a,
+.nav-patient .links button {
+  color: #f8f9f8dc;
+  text-decoration: none;
+  margin-left: 2rem;
+  font-weight: 500;
+  font-size: 1rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.nav-patient .links a:hover,
+.nav-patient .links button:hover {
+  color: #d53a3a;
+}
+
+.patient-dashboard-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  background-color: #1a1a1a;
+  color: #ffffff;
+  border-bottom: 1px solid #ddd;
+}
+
+.patient-dashboard-header h3 {
+  padding: 1.5rem 3%;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 1rem;
+  border-left: 1px solid rgba(255, 255, 255, 1);
+  max-width: 5vw;
+  min-width: 5vw;
+  width: 5vw;
+  height: auto;
+}
+
+.sidebar-dark {
+  border-left: 1px solid rgb(25, 25, 25);
+}
+
+main {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.main-div {
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.patient-sidebar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 3rem;
+  border-right: 1px solid rgba(0, 0, 0, 1);
+  max-width: 10vw;
+  min-width: 10vw;
+  width: 5vw;
+  height: 100%;
+}
+
+.log-symptoms-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 1rem;
+  width: 25%;
+  min-width: 200px;
+  min-height: 200px;
+  background-color: #ffffff;
+  color: #1a1a1a;
+  font-size: 1.4rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  border: 1px solid rgb(0, 0, 0);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.log-symptoms-button img {
+  width: 6rem;
+  height: 6rem;
+  transition: transform 0.3s ease;
+  margin: 1rem;
+}
+
+.log-symptoms-button:hover {
+  transform: translateY(-4px);
+  background: linear-gradient(135deg, #D94343, #B13232);
+  box-shadow: 0 14px 30px rgba(240, 84, 84, 0.4);
+}
+
+.log-symptoms-button:hover img {
+  transform: rotate(90deg);
+}
+
+.log-symptoms-button:active {
+  transform: scale(0.98);
+  box-shadow: 0 5px 15px rgba(240, 84, 84, 0.2);
+}
+
+.patient-dashboard-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.site-footer {
+  background-color: #1a1a1a;
+  color: #f0f0f0;
+  padding: 2rem 3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+  border-top: 2px solid #333;
+}
+
+.footer-content {
+  max-width: 1200px;
+  width: 100%;
+}
+
+.footer-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.footer-brand img {
+  width: 40px;
+  height: 40px;
+}
+
+.footer-links {
+  margin-bottom: 1rem;
+}
+
+.footer-links a {
+  color: #ccc;
+  text-decoration: none;
+  margin: 0 1rem;
+  transition: color 0.3s;
+}
+
+.footer-links a:hover {
+  color: #f05454;
+}
+
+.footer-copy {
+  font-size: 0.85rem;
+  color: #999;
+}

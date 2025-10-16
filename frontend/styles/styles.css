@@ -130,10 +130,12 @@ main {
 .sma-text-main {
   max-width: 1400px;
   margin: 2rem;
-  padding: 2rem;
-  color: #30475e;
+  padding: 4rem;
+  padding-left: 6rem;
+  padding-right: 6rem;
+  color: #3e4042;
   font-family: "Helvetica Neue", Arial, sans-serif;
-  font-size: 1.5rem;
+  font-size: 1.35rem;
   line-height: 1.8;
   border-radius: 12px;
 }
@@ -143,7 +145,7 @@ main {
 }
 
 .sma-text-main strong {
-  color: #30475e;
+  color: #3e4042;
   font-weight: 600;
 }
 
@@ -161,7 +163,7 @@ main {
 }
 
 .get-started-text {
-  color: #30475e !important;
+  color: #3e4042 !important;
   text-align: left;
 }
 
@@ -171,6 +173,7 @@ main {
 
 .get-started-text h3 {
   font-weight: 400;
+  font-size: 1.35rem;
 }
 
 .auth-forms section {
@@ -181,7 +184,7 @@ main {
 
 .auth-forms section h2 {
   margin-bottom: 1.5rem;
-  color: #30475e;
+  color: #3e4042;
 }
 
 .auth-forms form {
@@ -221,10 +224,14 @@ main {
 
 .service {
   font-size: 1.2rem;
-  border-top: 1px solid rgba(0, 0, 0, 1);
+  border-bottom: 1px solid rgba(0, 0, 0, 1);
   margin-top: 1rem;
   padding-bottom: 1rem;
-  color: #30475e;
+  color: #3e4042;
+}
+
+.service h2 {
+  font-size: 1.5rem;
 }
 
 .icon-circle {
@@ -271,7 +278,7 @@ main {
 }
 
 .form-popup-content h2 {
-  color: #30475e;
+  color: #3e4042;
   margin-bottom: 2rem;
   text-align: center;
 }
@@ -284,7 +291,7 @@ main {
 
 .form-popup-content label {
   font-weight: 500;
-  color: #30475e;
+  color: #3e4042;
 }
 
 .form-popup-content input {
@@ -316,7 +323,7 @@ main {
   background: none;
   border: none;
   font-size: 1.5rem;
-  color: #30475e;
+  color: #3e4042;
   cursor: pointer;
 }
 

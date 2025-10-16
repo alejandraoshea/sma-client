@@ -1,0 +1,155 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body,
+html {
+  height: 100%;
+  font-family: "Roboto", sans-serif;
+}
+
+.nav-doctor {
+  position: relative;
+  width: 100%;
+  background: url("../assets/images/national-cancer-institute-BDKid0yJcAk-unsplash.jpg")
+    center/cover no-repeat;
+  padding: 2rem 3%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 1);
+}
+
+.nav-doctor::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+}
+
+.nav-doctor h1 {
+  font-size: 2rem;
+}
+
+.nav-doctor h1,
+.nav-doctor .links {
+  position: relative;
+  z-index: 2;
+  color: #f8f9f8dc;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.nav-doctor .links a,
+.nav-doctor .links button {
+  color: #f8f9f8dc;
+  text-decoration: none;
+  margin-left: 2rem;
+  font-weight: 500;
+  font-size: 1rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.nav-doctor .links a:hover,
+.nav-doctor .links button:hover {
+  color: #d53a3a;
+}
+
+.doctor-dashboard-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  background-color: #1a1a1a;
+  color: #ffffff;
+  border-bottom: 1px solid #ddd;
+}
+
+.doctor-dashboard-header h3 {
+  padding: 1.5rem 3%;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 1rem;
+  border-left: 1px solid rgba(255, 255, 255, 1);
+  max-width: 5vw;
+  min-width: 5vw;
+  width: 5vw;
+  height: auto;
+}
+
+.sidebar-dark {
+  border-left: 1px solid rgb(25, 25, 25);
+}
+
+main {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.site-footer {
+  background-color: #1a1a1a;
+  color: #f0f0f0;
+  padding: 2rem 3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+  border-top: 2px solid #333;
+}
+
+.footer-content {
+  max-width: 1200px;
+  width: 100%;
+}
+
+.footer-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.footer-brand img {
+  width: 40px;
+  height: 40px;
+}
+
+.footer-links {
+  margin-bottom: 1rem;
+}
+
+.footer-links a {
+  color: #ccc;
+  text-decoration: none;
+  margin: 0 1rem;
+  transition: color 0.3s;
+}
+
+.footer-links a:hover {
+  color: #f05454;
+}
+
+.footer-copy {
+  font-size: 0.85rem;
+  color: #999;
+}
