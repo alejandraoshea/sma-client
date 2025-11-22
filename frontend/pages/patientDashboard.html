@@ -14,8 +14,7 @@
         MotivSMA
       </h1>
       <div class="links">
-        <a>About</a>
-        <button class="open-button" onclick="openForm()">Login</button>
+        <button id="logout-button" class="btn-logout">Logout</button>
       </div>
     </nav>
 
@@ -92,5 +91,17 @@
     </footer>
 
     <script src="../js/measurementSessions.js"></script>
+    <script>
+      const token = localStorage.getItem("token");
+      const role = localStorage.getItem("role");
+
+      if (!token) {
+        window.location.href = "../../index.html";
+      } else if (role !== "PATIENT") {
+        window.location.href = "../../index.html";
+      }
+    </script>
+
+    <script src="../js/logout.js"></script>
   </body>
 </html>

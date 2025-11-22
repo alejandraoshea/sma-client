@@ -150,7 +150,7 @@
       </div>
     </footer>
 
-    <div id="myForm" class="form-popup">
+    <div id="login" class="form-popup">
       <div class="form-popup-content">
         <button class="close-button" onclick="closeForm()">×</button>
         <h2>Login</h2>
@@ -168,15 +168,15 @@
 
     <script>
       function openForm() {
-        document.getElementById("myForm").style.display = "flex";
+        document.getElementById("login").style.display = "flex";
       }
 
       function closeForm() {
-        document.getElementById("myForm").style.display = "none";
+        document.getElementById("login").style.display = "none";
       }
 
       window.onclick = function (event) {
-        const popup = document.getElementById("myForm");
+        const popup = document.getElementById("login");
         if (event.target === popup) {
           closeForm();
         }
@@ -210,5 +210,6 @@
     </script>
 
     <script src="/frontend/js/register.js"></script>
+    <script src="/frontend/js/login.js"></script>
   </body>
 </html>

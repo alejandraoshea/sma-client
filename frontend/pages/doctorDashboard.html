@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Doctor Dashboard</title>
-    <link rel="stylesheet" href="/sma-client/frontend/styles/doctor.css" />
+    <link rel="stylesheet" href="../styles/doctor.css" />
   </head>
   <body>
     <nav class="nav-doctor">
@@ -15,8 +15,7 @@
         />MotivSMA
       </h1>
       <div class="links">
-        <a>About</a>
-        <button class="open-button" onclick="openForm()">Login</button>
+        <button id="logout-button" class="btn-logout">Logout</button>
       </div>
     </nav>
 
@@ -26,9 +25,7 @@
     </div>
 
     <main style="height: 100vh">
-      <section>
-
-      </section>
+      <section></section>
       <section class="sidebar sidebar-dark"></section>
     </main>
 
@@ -48,5 +45,18 @@
         </div>
       </div>
     </footer>
+
+    <script>
+      const token = localStorage.getItem("token");
+      const role = localStorage.getItem("role");
+
+      if (!token) {
+        window.location.href = "../../index.html";
+      } else if (role !== "DOCTOR") {
+        window.location.href = "../../index.html";
+      }
+    </script>
+
+    <script src="../js/logout.js"></script>
   </body>
 </html>

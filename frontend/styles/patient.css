@@ -296,3 +296,23 @@ main {
     transform: translateY(0);
   }
 }
+.btn-logout {
+  background-color: #ff4d4f;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btn-logout:hover {
+  background-color: #ff7875;
+}
+
+.btn-logout:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 77, 79, 0.5);
+}
