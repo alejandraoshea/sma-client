@@ -1,62 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Doctor Dashboard</title>
-    <link rel="stylesheet" href="../styles/doctor.css" />
-  </head>
-  <body>
-    <nav class="nav-doctor">
-      <h1>
-        <img
-          src="../assets/svgs/logo.svg"
-          style="margin-right: 1rem; width: 40px"
-        />MotivSMA
-      </h1>
-      <div class="links">
-        <button id="logout-button" class="btn-logout">Logout</button>
-      </div>
-    </nav>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Doctor Dashboard</title>
+  <link rel="stylesheet" href="../styles/patient.css" />
+  <link rel="stylesheet" href="../styles/doctor.css" />
+</head>
+<body>
+  <nav class="nav-patient">
+    <h1><img src="../assets/svgs/logo.svg" style="margin-right:1rem;width:40px" />MotivSMA</h1>
+    <div class="links"><button class="btn-logout">Logout</button></div>
+  </nav>
 
-    <div class="doctor-dashboard-header">
-      <h3>Doctor Dashboard</h3>
-      <div class="sidebar"></div>
+  <div class="patient-dashboard-header">
+    <h3>Doctor Dashboard</h3>
+    <div class="sidebar"></div>
+  </div>
+
+  <main style="height:100vh">
+    <section class="main-div">
+      <article class="patient-sidebar">Welcome,<br/>Doctor</article>
+
+      <article class="patient-dashboard-buttons">
+        <button id="see-patients-btn" class="log-symptoms-button">
+          <img src="../assets/svgs/add.svg" /> See all patients
+        </button>
+
+        <div id="requests-box" class="floating-box hidden">
+          <h3 id="requests-title">Requests (0)</h3>
+          <div id="requests-list">Loading requests...</div>
+        </div>
+
+        <div id="patients-box" class="floating-box hidden">
+          <h3>Your Patients</h3>
+          <table id="patients-table" style="width:100%;border-collapse:collapse">
+            <thead>
+              <tr style="background:#eee">
+                <th style="padding:.6rem;border:1px solid #ddd">Patient ID</th>
+                <th style="padding:.6rem;border:1px solid #ddd">Name</th>
+                <th style="padding:.6rem;border:1px solid #ddd">Surname</th>
+                <th style="padding:.6rem;border:1px solid #ddd">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="patients-body"></tbody>
+          </table>
+        </div>
+
+      </article>
+    </section>
+
+    <section class="sidebar sidebar-dark"></section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <img src="../assets/svgs/logo_white.svg" alt="MotivSMA Logo" />
+        <span>MotivSMA</span>
+      </div>
+      <div class="footer-links">
+        <a href="#">About</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Contact</a>
+      </div>
+      <div class="footer-copy">&copy; 2025 MotivSMA | All rights reserved</div>
     </div>
+  </footer>
 
-    <main style="height: 100vh">
-      <section></section>
-      <section class="sidebar sidebar-dark"></section>
-    </main>
+  <!--<script>
+    const token = localStorage.getItem("token");
+    const role = localStorage.getItem("role");
 
-    <footer class="site-footer">
-      <div class="footer-content">
-        <div class="footer-brand">
-          <img src="../assets/svgs/logo_white.svg" alt="MotivSMA Logo" />
-          <span>MotivSMA</span>
-        </div>
-        <div class="footer-links">
-          <a href="#">About</a>
-          <a href="#">Privacy Policy</a>
-          <a href="#">Contact</a>
-        </div>
-        <div class="footer-copy">
-          &copy; 2025 MotivSMA | All rights reserved
-        </div>
-      </div>
-    </footer>
+    if (!token) {
+      window.location.href = "../../index.html";
+    } else if (role !== "DOCTOR") {
+      window.location.href = "../../index.html";
+    }
+  </script>
 
-    <script>
-      const token = localStorage.getItem("token");
-      const role = localStorage.getItem("role");
-
-      if (!token) {
-        window.location.href = "../../index.html";
-      } else if (role !== "DOCTOR") {
-        window.location.href = "../../index.html";
-      }
-    </script>
-
-    <script src="../js/logout.js"></script>
-  </body>
+  <script src="../js/logout.js"></script>
+-->
+  <script src="../js/doctor.js"></script>
+</body>
 </html>
