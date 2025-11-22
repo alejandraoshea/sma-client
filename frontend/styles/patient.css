@@ -148,7 +148,7 @@ main {
 
 .log-symptoms-button:hover {
   transform: translateY(-4px);
-  background: linear-gradient(135deg, #D94343, #B13232);
+  background: linear-gradient(135deg, #d94343, #b13232);
   box-shadow: 0 14px 30px rgba(240, 84, 84, 0.4);
 }
 
@@ -217,4 +217,82 @@ main {
 .footer-copy {
   font-size: 0.85rem;
   color: #999;
+}
+
+.inline-section {
+  width: 100%;
+  background: #ffffff;
+  padding: 1.5rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 12px;
+  box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.1);
+  animation: fadeSlide 0.25s ease-out;
+}
+
+.section-title {
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.checkbox-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.symptom-item label {
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.save-symptoms-btn {
+  background: #e63946;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.save-symptoms-btn:hover {
+  background: #c82333;
+}
+
+.signal-options {
+  display: flex;
+  gap: 1rem;
+}
+
+.signal-option {
+  flex: 1;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+  background: #f0f0f0;
+  transition: background-color 0.3s ease;
+}
+
+.signal-option:hover {
+  background: #ddd;
+}
+
+.hidden {
+  display: none !important;
+}
+
+@keyframes fadeSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

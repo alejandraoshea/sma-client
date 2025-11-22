@@ -6,13 +6,12 @@
     <title>Patient Dashboard</title>
     <link rel="stylesheet" href="../styles/patient.css" />
   </head>
+
   <body>
     <nav class="nav-patient">
       <h1>
-        <img
-          src="../assets/svgs/logo.svg"
-          style="margin-right: 1rem; width: 40px"
-        />MotivSMA
+        <img src="../assets/svgs/logo.svg" style="margin-right: 1rem; width: 40px" />
+        MotivSMA
       </h1>
       <div class="links">
         <a>About</a>
@@ -27,22 +26,51 @@
 
     <main style="height: 100vh">
       <section class="main-div">
-        <article class="patient-sidebar">Welcome, <br />Patient</article>
+        <article class="patient-sidebar">
+          Welcome, <br />Patient
+        </article>
+
         <article class="patient-dashboard-buttons">
           <button id="start-session-btn" class="log-symptoms-button">
             <img src="../assets/svgs/add.svg" />
             Start Session
           </button>
+
           <button id="log-symptoms-btn" class="log-symptoms-button">
             <img src="../assets/svgs/add.svg" />
-            Log <br />Symptoms
+            Log Symptoms
           </button>
+
+          <!-- Inline Symptoms container -->
+          <div id="symptoms-container" class="hidden inline-section">
+            <h3 class="section-title">Log Symptoms</h3>
+
+            <form id="symptoms-form">
+              <div id="symptoms-checkboxes" class="checkbox-container"></div>
+
+              <button type="submit" class="save-symptoms-btn">
+                Save Symptoms
+              </button>
+            </form>
+          </div>
+
           <button id="log-signals-btn" class="log-symptoms-button">
             <img src="../assets/svgs/add.svg" />
-            Log <br />Signals
+            Log Signals
           </button>
+
+          <!-- Inline Signals container -->
+          <div id="signals-container" class="hidden inline-section">
+            <h3 class="section-title">Log Signals</h3>
+
+            <div class="signal-options">
+              <button class="signal-option">ECG</button>
+              <button class="signal-option">EMG</button>
+            </div>
+          </div>
         </article>
       </section>
+
       <section class="sidebar sidebar-dark"></section>
     </main>
 
@@ -62,6 +90,7 @@
         </div>
       </div>
     </footer>
-    <script src="/frontend/js/startSession.js"></script>
+
+    <script src="../js/measurementSessions.js"></script>
   </body>
 </html>
