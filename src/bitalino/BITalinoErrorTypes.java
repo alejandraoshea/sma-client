@@ -1,4 +1,4 @@
-package java.bitalino;
+package bitalino;
 
 public enum BITalinoErrorTypes {
 	BT_DEVICE_NOT_CONNECTED (0, "Bluetooth Device not connected"),

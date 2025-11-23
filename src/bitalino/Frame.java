@@ -1,4 +1,4 @@
-package java.bitalino;
+package bitalino;
 
 /// A frame returned by BITalino.read()
 //** foto de los datos del BITalino en un instante de tiempo

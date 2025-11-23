@@ -1,4 +1,4 @@
-package java.bitalino;
+package bitalino;
 
 import java.util.Vector;
 import javax.bluetooth.DeviceClass;

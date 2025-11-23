@@ -36,7 +36,7 @@
 
   */
 
-package java.bitalino;
+package bitalino;
 
 import java.io.IOException;
 import java.io.DataInputStream;
@@ -46,10 +46,7 @@ import javax.bluetooth.RemoteDevice;
 import javax.microedition.io.Connector;
 import javax.microedition.io.StreamConnection;
 
-
-import java.bitalino.DeviceDiscoverer;
-
-/// The %BITalino device class.
+ /// The %BITalino device class.
 public class BITalino {
 	
         /// Array with the list of analog inputs to be acquired from the device (auxiliary variable)
@@ -59,13 +56,13 @@ public class BITalino {
 	private int number_bytes = 0;
 
         /// Instance of the Bluetooth socket connection established with the BITalino device
-	private StreamConnection hSocket = null;
+        StreamConnection hSocket = null;
 
         /// Instance of the data stream with data coming from the BITalino device
-	private DataInputStream iStream = null;
+        DataInputStream iStream = null;
 
         /// Instance of the data stream through which data can be sent to the BITalino device
-	private DataOutputStream oStream = null;
+        DataOutputStream oStream = null;
 	
 	public BITalino() {}
 	
