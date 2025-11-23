@@ -1,6 +1,8 @@
 package bitalino;
 
 
+import com.sma.client.DataUploader;
+
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
@@ -141,7 +143,8 @@ public class BitalinoDemo {
                 Files.copy(file.toPath(), fileFinal.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
                 System.out.println("Archivo guardado en: " + file.getAbsolutePath());
-
+                //AQUI SE MANDA AL SERVER
+                DataUploader.sendFile(file);
 
             } else if (test.equals("B")||test.equals("emg")||test.equals("b")) {
                 //crea archivo temporal (no lo guarda en el sistema solo será mandado al server)
@@ -213,7 +216,11 @@ public class BitalinoDemo {
                 Files.copy(file.toPath(), fileFinal.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
                 System.out.println("Archivo guardado en: " + file.getAbsolutePath());
+
+                //AQUI SE MANDA AL SERVER
+                DataUploader.sendFile(file);
             }
+
         } catch (BITalinoException ex) {
             Logger.getLogger(BitalinoDemo.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Throwable ex) {
