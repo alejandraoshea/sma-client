@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MotivSMA</title>
+    <link rel="icon" type="image/x-icon" href="/frontend/assets/svgs/logo.ico">
     <link rel="stylesheet" href="/frontend/styles/styles.css" />
   </head>
   <body>
@@ -79,25 +80,54 @@
             with <strong>MotivSMA</strong>.
           </h3>
         </div>
-        <section class="register">
-          <h2>Register</h2>
-          <form id="register-form">
-            <label for="reg-email">Email</label>
-            <input type="email" id="reg-email" name="email" required />
 
-            <label for="reg-password">Password</label>
-            <input type="password" id="reg-password" name="password" required />
+        <div id="register" class="register">
+          <section>
+            <h2>Register</h2>
+            <form action="/submit" method="POST">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" required />
 
-            <label for="reg-role">Role</label>
-            <select id="reg-role" name="role" required>
-              <option value="">Select Role</option>
-              <option value="CLIENT">Client</option>
-              <option value="PATIENT">Patient</option>
-            </select>
+              <label for="password">Password</label>
+              <input type="password" id="password" name="password" required />
 
-            <button type="submit">Register</button>
-          </form>
-        </section>
+              <label for="reg-role">Select Role</label>
+              <div style="position: relative">
+                <button id="dropdownDefaultButton" type="button">
+                  Select Role
+                  <svg
+                    class="icon"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="m19 9-7 7-7-7"
+                    />
+                  </svg>
+                </button>
+
+                <div id="dropdown">
+                  <ul>
+                    <li><a href="#" data-role="DOCTOR">Doctor</a></li>
+                    <li><a href="#" data-role="PATIENT">Patient</a></li>
+                  </ul>
+                </div>
+              </div>
+
+              <input type="hidden" id="reg-role" name="role" required />
+
+              <button type="submit">Register</button>
+            </form>
+          </section>
+        </div>
       </div>
 
       <div class="sidebar sidebar-dark"></div>
@@ -120,7 +150,7 @@
       </div>
     </footer>
 
-    <div id="myForm" class="form-popup">
+    <div id="login" class="form-popup">
       <div class="form-popup-content">
         <button class="close-button" onclick="closeForm()">×</button>
         <h2>Login</h2>
@@ -138,15 +168,15 @@
 
     <script>
       function openForm() {
-        document.getElementById("myForm").style.display = "flex";
+        document.getElementById("login").style.display = "flex";
       }
 
       function closeForm() {
-        document.getElementById("myForm").style.display = "none";
+        document.getElementById("login").style.display = "none";
       }
 
       window.onclick = function (event) {
-        const popup = document.getElementById("myForm");
+        const popup = document.getElementById("login");
         if (event.target === popup) {
           closeForm();
         }
@@ -154,46 +184,32 @@
     </script>
 
     <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        const form = document.getElementById("register-form");
+      const btn = document.getElementById("dropdownDefaultButton");
+      const dropdown = document.getElementById("dropdown");
+      const roleInput = document.getElementById("reg-role");
 
-        form.addEventListener("submit", async (event) => {
-          event.preventDefault();
+      btn.addEventListener("click", () => {
+        dropdown.classList.toggle("show");
+      });
 
-          const email = document.getElementById("reg-email").value;
-          const password = document.getElementById("reg-password").value;
-          const role = document.getElementById("reg-role").value;
-
-          const user = {
-            email: email,
-            password: password,
-            role: role,
-          };
-
-          try {
-            const response = await fetch(
-              "https://localhost:8080/api/authentication/register",
-              {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(user),
-              }
-            );
-
-            if (response.ok) {
-              const message = await response.text();
-              alert(message);
-              form.reset();
-            } else {
-              const error = await response.text();
-              alert("Error: " + error);
-            }
-          } catch (error) {
-            console.error("Error:", error);
-            alert("Network error. Server is down.");
-          }
+      dropdown.querySelectorAll("a").forEach((item) => {
+        item.addEventListener("click", (e) => {
+          e.preventDefault();
+          const role = item.getAttribute("data-role");
+          roleInput.value = role;
+          btn.childNodes[0].textContent = item.textContent;
+          dropdown.classList.remove("show");
         });
       });
+
+      document.addEventListener("click", (e) => {
+        if (!btn.contains(e.target) && !dropdown.contains(e.target)) {
+          dropdown.classList.remove("show");
+        }
+      });
     </script>
+
+    <script src="/frontend/js/register.js"></script>
+    <script src="/frontend/js/login.js"></script>
   </body>
 </html>

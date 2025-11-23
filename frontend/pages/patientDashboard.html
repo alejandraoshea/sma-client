@@ -1,22 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Patient Dashboard</title>
     <link rel="stylesheet" href="../styles/patient.css" />
   </head>
+
   <body>
     <nav class="nav-patient">
       <h1>
-        <img
-          src="../assets/svgs/logo.svg"
-          style="margin-right: 1rem; width: 40px"
-        />MotivSMA
+        <img src="../assets/svgs/logo.svg" style="margin-right:1rem;width:40px" />
+        MotivSMA
       </h1>
       <div class="links">
-        <a>About</a>
-        <button class="open-button" onclick="openForm()">Login</button>
+        <button id="logout-button" class="btn-logout">Logout</button>
       </div>
     </nav>
 
@@ -25,20 +23,58 @@
       <div class="sidebar"></div>
     </div>
 
-    <main style="height: 100vh">
+    <main style="height:100vh">
       <section class="main-div">
-        <article class="patient-sidebar">Welcome, <br />Patient</article>
+        <article class="patient-sidebar">Welcome,<br/>Patient</article>
+
         <article class="patient-dashboard-buttons">
-          <button class="log-symptoms-button">
-            <img src="../assets/svgs/add.svg" />
-            Log <br />Symptoms
+          <button id="start-session-btn" class="log-symptoms-button">
+            <img src="../assets/svgs/add.svg" alt="+" />
+            Start Session
           </button>
-          <button class="log-symptoms-button">
-            <img src="../assets/svgs/add.svg" />
-            Make <br />Appointment
-          </button>
+
+          <div class="stacked">
+            <button id="log-symptoms-btn" class="log-symptoms-button hidden">
+              <img src="../assets/svgs/add.svg" alt="+" />
+              Log Symptoms
+            </button>
+            <div id="symptoms-container" class="floating-box hidden">
+              <h3 class="section-title">Log Symptoms</h3>
+              <form id="symptoms-form">
+                <div id="symptoms-checkboxes" class="symptom-grid"></div>
+                <div style="display:flex;justify-content:flex-end;">
+                  <button type="submit" class="save-btn">Save Symptoms</button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <div class="stacked">
+            <button id="log-signals-btn" class="log-symptoms-button hidden">
+              <img src="../assets/svgs/add.svg" alt="+" />
+              Log Signals
+            </button>
+
+            <div id="signals-container" class="floating-box hidden">
+              <h3 class="section-title">Log Signals</h3>
+              <div class="signal-grid">
+                <button class="signal-btn" data-signal="ECG">ECG</button>
+                <button class="signal-btn" data-signal="EMG">EMG</button>
+                <button class="signal-btn" data-signal="ACC">ACC</button>
+              </div>
+              <div id="record-area" class="record-area hidden">
+                <p id="recording-label" style="margin:0 0 1rem 0; text-align:center; color:#333">Ready to record</p>
+                <div style="display:flex; gap:0.75rem; justify-content:center">
+                  <button id="record-btn" class="record-control">Record</button>
+                  <button id="stop-btn" class="record-control" disabled>Stop</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </article>
       </section>
+
       <section class="sidebar sidebar-dark"></section>
     </main>
 
@@ -53,10 +89,23 @@
           <a href="#">Privacy Policy</a>
           <a href="#">Contact</a>
         </div>
-        <div class="footer-copy">
-          &copy; 2025 MotivSMA | All rights reserved
-        </div>
+        <div class="footer-copy">&copy; 2025 MotivSMA | All rights reserved</div>
       </div>
     </footer>
+
+    <!--<script>
+      const token = localStorage.getItem("token");
+      const role = localStorage.getItem("role");
+
+      if (!token) {
+        window.location.href = "../../index.html";
+      } else if (role !== "PATIENT") {
+        window.location.href = "../../index.html";
+      }
+    </script>
+
+    <script src="../js/logout.js"></script>
+  -->
+    <script src="../js/measurementSessions.js"></script>
   </body>
 </html>
