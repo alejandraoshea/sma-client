@@ -55,7 +55,6 @@ public class BitalinoDemo {
                     //  + frame[i].analog[4] + " "
                     //  + frame[i].analog[5]
                     );
-
                 }
             }
             //stop acquisition
@@ -74,7 +73,5 @@ public class BitalinoDemo {
                 Logger.getLogger(BitalinoDemo.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-
     }
-
 }
