@@ -22,19 +22,26 @@ public class DataUploader {
         System.out.println("Server response: " + responseCode);
     }
 
-    public static void sendFile(File file) throws Exception {
-        URL url = new URL("https://localhost:8080/api/patient/data");
-        HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+    private static void sendFile(URL url, File file) throws Exception {
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("POST");
         conn.setRequestProperty("Content-Type", "application/octet-stream");
         conn.setDoOutput(true);
-
         try (OutputStream os = conn.getOutputStream()) {
             os.write(Files.readAllBytes(file.toPath()));
         }
+        System.out.println("Server response: " + conn.getResponseCode());
+    }
 
-        int responseCode = conn.getResponseCode();
-        System.out.println("Server response: " + responseCode);
+
+    public static void sendECG(File file) throws Exception {
+        URL url = new URL("https://localhost:8080/api/patient/ecg");
+        sendFile(url, file);
+    }
+
+    public static void sendEMG(File file) throws Exception {
+        URL url = new URL("https://localhost:8080/api/patient/emg");
+        sendFile(url, file);
     }
 
 }
