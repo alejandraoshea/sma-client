@@ -6,6 +6,7 @@
 
 body,
 html {
+  font-size: 16px;
   height: 100%;
   font-family: "Roboto", sans-serif;
 }
@@ -84,8 +85,8 @@ html {
   align-items: center;
   padding: 1rem;
   border-left: 1px solid rgba(255, 255, 255, 1);
-  max-width: 5vw;
-  min-width: 5vw;
+  max-width: 80px;
+  min-width: 60px;
   width: 5vw;
   height: auto;
 }
@@ -96,7 +97,7 @@ html {
 
 main {
   display: flex;
-  flex-direction: row;
+  flex-direction: wrap;
   justify-content: space-between;
   width: 100%;
 }
@@ -266,4 +267,123 @@ main {
   border:none; 
   padding:.5rem .8rem; 
   border-radius:8px; 
+}
+
+.toast-notification {
+  position: fixed;
+  top: 2rem;       
+  right: 2rem;
+  background: #2a9d8f; 
+  color: white;
+  padding: 1rem 1.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 6px 15px rgba(42, 157, 143, 0.4);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  opacity: 1;
+  animation: fadeout 0.5s ease forwards;
+  animation-delay: 2.5s;
+  z-index: 1000;
+  cursor: pointer;
+}
+
+
+.toast-notification.success {
+  background-color: #2a9d8f;
+}
+
+.toast-notification.error {
+  background-color: #d90429;
+}
+
+.toast-icon {
+  font-size: 1.3rem;
+}
+
+@keyframes fadeout {
+  to {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.modal-overlay.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-box {
+  background: white;
+  border-radius: 1rem;
+  padding: 2rem 2.5rem;
+  max-width: 320px;
+  width: 90%;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  text-align: center;
+  font-family: "Roboto", sans-serif;
+}
+s
+.modal-box p {
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+  color: #333;
+  font-weight: 600;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.modal-btn {
+  padding: 0.6rem 1.5rem;
+  border-radius: 0.7rem;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.modal-btn.approve {
+  background-color: #2ecc71;
+  color: white;
+}
+
+.modal-btn.approve:hover {
+  background-color: #27ae60;
+}
+
+.modal-btn.reject {
+  background-color: #ff6b6b;
+  color: white;
+}
+
+.modal-btn.reject:hover {
+  background-color: #e55050;
+}
+
+.modal-btn.cancel {
+  background-color: #ccc;
+  color: #333;
+}
+
+.modal-btn.cancel:hover {
+  background-color: #bbb;
 }
