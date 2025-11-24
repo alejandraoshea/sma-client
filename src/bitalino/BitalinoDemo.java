@@ -121,10 +121,7 @@ public class BitalinoDemo {
                         int a2 = f.analog[0];
 
                         // Muestra canal por canal
-                        System.out.println(
-                                "t=" + timestamp +
-                                        " | A2=" + a2
-                        );
+                        System.out.println("t=" + timestamp + " | A2=" + a2);
                         writer.write(sampleIndex + "," + a2);
                         writer.newLine();
                         sampleIndex++;
@@ -198,10 +195,7 @@ public class BitalinoDemo {
                         int a1 = f.analog[0];
 
                         // Muestra canal por canal
-                        System.out.println(
-                                "t=" + timestamp +
-                                        " | A1=" + a1
-                        );
+                        System.out.println("t=" + timestamp + " | A1=" + a1);
                         writer.write(sampleIndex + "," + a1);
                         writer.newLine();
                         sampleIndex++;
