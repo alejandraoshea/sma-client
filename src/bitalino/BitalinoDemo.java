@@ -50,6 +50,7 @@ public class BitalinoDemo {
             Vector<RemoteDevice> devices = bitalino.findDevices();
             System.out.println(devices);
 
+            System.out.println("Connecting to BITalino...");
             bitalino.open(macAddress, SamplingRate);
 
             //combrobación de conexión con un bitalino
@@ -57,7 +58,7 @@ public class BitalinoDemo {
                 System.out.println("ERROR: BITalino not connected.");
                 return;
             }
-            System.out.println("BITalino connected!");
+            System.out.println("Successfull connection with BITalino (" + macAddress + ")");
 
             //ELEGIR TIPO DE GRABACIÓN
             System.out.println("Enter the corresponding test:\n" +
@@ -80,6 +81,9 @@ public class BitalinoDemo {
                 bitalino.start(channelsToAcquire);
                 //5 minutos máximo de grabación
                 recordSeconds = 5*60;
+
+                System.out.println("RECORDING ECG: ");
+                Thread.sleep(2000);
 
                 //un thread para poder manejar la obtención de datos y la parada por el usuario (cuando escribe x/X)
                 Thread inputThread = new Thread(() -> {
@@ -136,13 +140,12 @@ public class BitalinoDemo {
                 stopRequested.set(true);
                 bitalino.stop();
 
-                //TODO MANDAR EL FILE A SERVER ESTO ES UNA PRUEBA
-                String carpetaDestino = "C:/Users/Carlota/OneDrive - Fundación Universitaria San Pablo CEU/CUARTO ING.B/PRIMER CUATRI/TM/intento de grabaciones con bitalino/";
+                /*String carpetaDestino = "C:/Users/Carlota/OneDrive - Fundación Universitaria San Pablo CEU/CUARTO ING.B/PRIMER CUATRI/TM/intento de grabaciones con bitalino/";
                 File fileFinal = new File(carpetaDestino, "grabacionECG.txt");
                 //BufferedWriter w = new BufferedWriter(new FileWriter(fileFinal, true));
                 Files.copy(file.toPath(), fileFinal.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                System.out.println("Archivo guardado en: " + file.getAbsolutePath());*/
 
-                System.out.println("Archivo guardado en: " + file.getAbsolutePath());
                 //AQUI SE MANDA AL SERVER
                 DataUploader.sendECG(file);
 
@@ -157,6 +160,9 @@ public class BitalinoDemo {
                 bitalino.start(channelsToAcquire);
                 //1 minuto máximo de grabación (PARA UNA DEGLUCIÓN)
                 recordSeconds = 60;
+
+                System.out.println("RECORDING EMG: ");
+                Thread.sleep(2000);
 
                 Thread inputThread = new Thread(() -> {
                     try {
@@ -209,13 +215,11 @@ public class BitalinoDemo {
                 stopRequested.set(true);
                 bitalino.stop();
 
-                //TODO MANDAR EL FILE A SERVER ESTO ES UNA PRUEBA
-                String carpetaDestino = "C:/Users/Carlota/OneDrive - Fundación Universitaria San Pablo CEU/CUARTO ING.B/PRIMER CUATRI/TM/intento de grabaciones con bitalino/";
+                /*String carpetaDestino = "C:/Users/Carlota/OneDrive - Fundación Universitaria San Pablo CEU/CUARTO ING.B/PRIMER CUATRI/TM/intento de grabaciones con bitalino/";
                 File fileFinal = new File(carpetaDestino, "grabacionEMG.txt");
                 //BufferedWriter w = new BufferedWriter(new FileWriter(fileFinal, true));
                 Files.copy(file.toPath(), fileFinal.toPath(), StandardCopyOption.REPLACE_EXISTING);
-
-                System.out.println("Archivo guardado en: " + file.getAbsolutePath());
+                System.out.println("Archivo guardado en: " + file.getAbsolutePath());*/
 
                 //AQUI SE MANDA AL SERVER
                 DataUploader.sendEMG(file);

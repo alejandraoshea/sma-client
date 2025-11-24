@@ -33,7 +33,6 @@ public class DataUploader {
         System.out.println("Server response: " + conn.getResponseCode());
     }
 
-
     public static void sendECG(File file) throws Exception {
         URL url = new URL("https://localhost:8080/api/patient/ecg");
         sendFile(url, file);
