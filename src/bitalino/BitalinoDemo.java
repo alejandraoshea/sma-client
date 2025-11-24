@@ -76,6 +76,11 @@ public class BitalinoDemo {
                 file.deleteOnExit();
                 System.out.println("Archivo guardado en: " + file.getAbsolutePath());
                 BufferedWriter writer = new BufferedWriter(new FileWriter(file, true));
+
+                //escribe el sampling rate
+                writer.write("sampling_rate=" + SamplingRate);
+                writer.newLine();
+
                 //elige el channel del ecg
                 int[] channelsToAcquire = {1};
                 bitalino.start(channelsToAcquire);
@@ -152,6 +157,11 @@ public class BitalinoDemo {
                 file.deleteOnExit();
                 System.out.println("Archivo guardado en: " + file.getAbsolutePath());
                 BufferedWriter writer = new BufferedWriter(new FileWriter(file, true));
+
+                //escribe el sampling rate
+                writer.write("sampling_rate=" + SamplingRate);
+                writer.newLine();
+
                 //elige el channel del ecg
                 int[] channelsToAcquire = {0};
                 bitalino.start(channelsToAcquire);
