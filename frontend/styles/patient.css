@@ -422,3 +422,34 @@ main {
   width:100%;
   padding: 1.2rem;
 }
+
+
+.doctor-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.doctor-item {
+  background: white;
+  padding: 1rem;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.doctor-item input[type="checkbox"] {
+  transform: scale(1.3);
+}
+
+#see-doctors-btn {
+  margin-bottom: 2rem;
+}
+
+#doctors-list-container {
+  max-height: 60vh;        
+  overflow-y: auto;        
+  padding-right: 0.5rem;   
+}
