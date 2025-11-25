@@ -153,36 +153,30 @@
             </div>
           </div>
 
-          <div id="doctors" class="list-doctors">
-            <button id="see-doctors-btn" class="log-symptoms-button">
-              <img src="../assets/svgs/add.svg" alt="+" />
-              See All Doctors
-            </button>
-
-            <div id="doctors-list-container" class="floating-box hidden">
-              <h3 class="section-title">Available Doctors</h3>
-              <form id="doctors-form">
-                <div id="doctors-list" class="doctor-grid"></div>
-                <div
-                  style="
-                    display: flex;
-                    justify-content: flex-end;
-                    margin-top: 1rem;
-                  "
-                >
-                  <button type="submit" class="save-btn">
-                    Request Selected Doctor
-                  </button>
+          <div class="doctors-section">
+            Doctors!
+            <div class="doctors-split">
+              <div class="doctors-list">
+                List of Doctors
+                <div id="doctors-list-container">
+                  <h3 class="section-title">Available Doctors</h3>
+                  <form id="doctors-form">
+                    <div id="doctors-list" class="doctor-grid"></div>
+                    <div
+                      style="
+                        display: flex;
+                        justify-content: flex-end;
+                        margin-top: 1rem;
+                      "
+                    >
+                      <button type="submit" class="save-btn">
+                        Request Selected Doctor
+                      </button>
+                    </div>
+                  </form>
                 </div>
-              </form>
-            </div>
-            <div
-              id="doctor-status-box"
-              class="floating-box hidden"
-              style="margin-top: 1rem"
-            >
-              <h3 class="section-title">Doctor Request Status</h3>
-              <p id="doctor-status-text" style="font-size: 1.1rem"></p>
+              </div>
+              <div class="doctors-map">Map of Doctors</div>
             </div>
           </div>
         </article>

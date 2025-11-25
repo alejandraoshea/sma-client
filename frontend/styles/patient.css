@@ -148,7 +148,6 @@ main {
 
 .log-symptoms-button:hover {
   transform: translateY(-4px);
-  background: linear-gradient(135deg, #f05454, #4e0c0c);
 }
 
 .log-symptoms-button:hover img {
@@ -162,9 +161,10 @@ main {
 
 .main-div {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
   padding: 3rem;
   gap: 3rem;
+  padding-right: 1rem;
 }
 
 .site-footer {
@@ -283,10 +283,6 @@ main {
   background: #ddd;
 }
 
-.hidden {
-  display: none !important;
-}
-
 @keyframes fadeSlide {
   from {
     opacity: 0;
@@ -317,15 +313,6 @@ main {
 .btn-logout:focus {
   outline: none;
   box-shadow: 0 0 0 3px rgba(255, 77, 79, 0.5);
-}
-
-.floating-box {
-  width: 95%;
-  background: #ccc7c7;
-  padding: 1.5rem;
-  border-radius: 20px;
-  margin: 1rem auto;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
 }
 
 .symptom-grid {
@@ -515,7 +502,6 @@ main {
   background-size: 14px;
 }
 
-/* Remove outline on focus, optional */
 .form-group select:focus {
   outline: 2px solid #0077ff;
 }
@@ -571,4 +557,23 @@ main {
 .icon-circle img {
   width: 70%;
   height: auto;
+}
+
+.doctors-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  border: 1px solid pink;
+}
+
+.doctors-list {
+  max-height: 500px;
+  border: 1px solid thistle;
+  border-radius: 12px;
+}
+
+.doctors-map {
+  background-color: #4a90e2;
+  height: 500px;
+  border-radius: 12px;
 }
