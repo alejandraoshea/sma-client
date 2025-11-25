@@ -80,9 +80,6 @@ document.addEventListener("DOMContentLoaded", () => {
   async function loadSymptomsEnum() {
     symptomsCheckboxes.innerHTML = "";
     try {
-<<<<<<< HEAD
-      const res = await fetch("http://localhost:8443/api/sessions/enum");
-=======
       const res = await fetch("https://127.0.0.1:8443/api/sessions/enum");
       if (!res.ok) throw new Error("enum fetch failed");
       const list = await res.json();
@@ -92,7 +89,6 @@ document.addEventListener("DOMContentLoaded", () => {
         wrapper.style.display = "flex";
         wrapper.style.alignItems = "center";
         wrapper.style.gap = "0.6rem";
->>>>>>> 7786072babdc5b66176360568e09287ebc729cfe
 
         const cb = document.createElement("input");
         cb.type = "checkbox";
@@ -124,23 +120,11 @@ document.addEventListener("DOMContentLoaded", () => {
     if (selected.length === 0) { alert("Select at least one symptom"); return; }
 
     try {
-<<<<<<< HEAD
-      const res = await fetch(
-        `http://localhost:8443/api/sessions/${currentSessionId}/symptoms`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ symptomsSet: selectedSymptoms }),
-        }
-      );
-
-=======
       const res = await fetch(`https://127.0.0.1:8443/api/sessions/${currentSessionId}/symptoms`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ symptomsSet: selected })
       });
->>>>>>> 7786072babdc5b66176360568e09287ebc729cfe
       if (!res.ok) {
         const err = await res.json().catch(()=>({}));
         alert(err.error || "Failed to save symptoms.");
