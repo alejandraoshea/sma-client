@@ -1,7 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   const patientId = 1; // TODO: replace when login is connected
 
-  const seeDoctorsBtn = document.getElementById("see-doctors-btn");
   const doctorsListContainer = document.getElementById("doctors-list-container");
   const doctorsList = document.getElementById("doctors-list");
   const doctorsForm = document.getElementById("doctors-form");
@@ -9,14 +8,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const statusBox = document.getElementById("doctor-status-box");
   const statusText = document.getElementById("doctor-status-text");
 
+  loadDoctors();
   loadDoctorStatus();
-
-  seeDoctorsBtn.addEventListener("click", async () => {
-    doctorsListContainer.classList.toggle("hidden");
-    if (!doctorsListContainer.classList.contains("hidden")) {
-      await loadDoctors();
-    }
-  });
 
   async function loadDoctors() {
     doctorsList.innerHTML = "Loading doctors...";
@@ -41,7 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
         div.innerHTML = `
           <input type="checkbox" name="doctor" value="${doctor.doctorId}" id="doctor-${doctor.doctorId}" />
           <label for="doctor-${doctor.doctorId}">
-            <strong>Dr. ${doctor.name} ${doctor.surname}</strong><br/>
+            <strong>Dr. ${doctor.name} ${doctor.surname}</strong>
           </label>
         `;
         doctorsList.appendChild(div);
@@ -91,7 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const patient = await res.json();
 
-      if (!patient.selecteddoctorId) {
+      if (!patient.selectedDoctorId) {
         statusBox.classList.add("hidden");
         return;
       }
@@ -117,10 +110,7 @@ document.addEventListener("DOMContentLoaded", () => {
           <strong style="color:red">Declined</strong>.<br>
           You may request another doctor.
         `;
-
-        seeDoctorsBtn.disabled = false;
       }
-
     } catch (err) {
       console.error(err);
     }
