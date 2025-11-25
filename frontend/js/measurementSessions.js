@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
   startBtn.addEventListener("click", async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch(`https://127.0.0.1:8443/api/sessions/start/${patientId}`, {
+      const res = await fetch(`https://127.0.0.1:8443/api/patients/sessions/start/${patientId}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
       });
@@ -80,7 +80,7 @@ document.addEventListener("DOMContentLoaded", () => {
   async function loadSymptomsEnum() {
     symptomsCheckboxes.innerHTML = "";
     try {
-      const res = await fetch("https://127.0.0.1:8443/api/sessions/enum");
+      const res = await fetch("https://127.0.0.1:8443/api/patients/sessions/enum");
       if (!res.ok) throw new Error("enum fetch failed");
       const list = await res.json();
       list.forEach(sym => {
@@ -120,7 +120,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (selected.length === 0) { alert("Select at least one symptom"); return; }
 
     try {
-      const res = await fetch(`https://127.0.0.1:8443/api/sessions/${currentSessionId}/symptoms`, {
+      const res = await fetch(`https://127.0.0.1:8443/api/patients/sessions/${currentSessionId}/symptoms`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ symptomsSet: selected })
@@ -153,7 +153,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!currentSignalType) { alert("Choose a signal first"); return; }
 
     try {
-      const res = await fetch(`https://127.0.0.1:8443/api/sessions/${currentSessionId}/signals`, {
+      const res = await fetch(`https://127.0.0.1:8443/api/patients/sessions/${currentSessionId}/signals`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ signalType: currentSignalType, action: "start" })
@@ -177,7 +177,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!currentSignalType) { alert("Choose a signal first"); return; }
 
     try {
-      const res = await fetch(`https://127.0.0.1:8443/api/sessions/${currentSessionId}/signals`, {
+      const res = await fetch(`https://127.0.0.1:8443/api/patients/sessions/${currentSessionId}/signals`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ signalType: currentSignalType, action: "stop" })
