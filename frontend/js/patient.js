@@ -1,7 +1,19 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const patientId = 1; // TODO: replace when login is connected
+  const token = localStorage.getItem("token");
+  if (!token) window.location.href = "../../index.html";
 
-  const doctorsListContainer = document.getElementById("doctors-list-container");
+  const claims = jwt_decode(token);
+  if (claims.role !== "PATIENT") window.location.href = "../../index.html";
+
+  async function apiFetch(url, options = {}) {
+    const res = await fetch(url, {
+      ...options,
+      headers: { ...(options.headers || {}), Authorization: `Bearer ${token}` },
+    });
+    if (!res) return null;
+    return res;
+  }
+
   const doctorsList = document.getElementById("doctors-list");
   const doctorsForm = document.getElementById("doctors-form");
 
@@ -14,13 +26,18 @@ document.addEventListener("DOMContentLoaded", () => {
   async function loadDoctors() {
     doctorsList.innerHTML = "Loading doctors...";
     try {
-      const res = await fetch("https://127.0.0.1:8443/api/doctors");
+      const res = await apiFetch("https://127.0.0.1:8443/api/doctors");
+
+      if (!res) return;
+
       if (!res.ok) {
-        doctorsList.innerHTML = "<p style='color:red;'>Failed to load doctors.</p>";
+        doctorsList.innerHTML =
+          "<p style='color:red;'>Failed to load doctors.</p>";
         return;
       }
 
       const doctors = await res.json();
+
       if (!doctors.length) {
         doctorsList.innerHTML = "<p>No doctors available.</p>";
         return;
@@ -30,11 +47,10 @@ document.addEventListener("DOMContentLoaded", () => {
       doctors.forEach((doctor) => {
         const div = document.createElement("div");
         div.className = "doctor-item";
-
         div.innerHTML = `
-          <input type="checkbox" name="doctor" value="${doctor.doctorId}" id="doctor-${doctor.doctorId}" />
+          <input type="radio" name="doctor" value="${doctor.doctorId}" id="doctor-${doctor.doctorId}" />
           <label for="doctor-${doctor.doctorId}">
-            <strong>Dr. ${doctor.name} ${doctor.surname}</strong>
+            <p>Dr. ${doctor.name} ${doctor.surname}</p>
           </label>
         `;
         doctorsList.appendChild(div);
@@ -48,7 +64,9 @@ document.addEventListener("DOMContentLoaded", () => {
   doctorsForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const checked = [...doctorsForm.querySelectorAll('input[name="doctor"]:checked')];
+    const checked = [
+      ...doctorsForm.querySelectorAll('input[name="doctor"]:checked'),
+    ];
     if (checked.length !== 1) {
       alert("Please select exactly one doctor.");
       return;
@@ -57,9 +75,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const doctorId = checked[0].value;
 
     try {
-      const res = await fetch(`https://127.0.0.1:8443/api/patients/${patientId}/request/${doctorId}`, {
-        method: "POST",
-      });
+      const res = await apiFetch(
+        `https://127.0.0.1:8443/api/patients/request/${doctorId}`,
+        { method: "POST" }
+      );
 
       if (!res.ok) {
         alert("Failed to request doctor.");
@@ -75,39 +94,52 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  const submitButton = doctorsForm.querySelector('button[type="submit"]');
+
   async function loadDoctorStatus() {
     try {
-      const res = await fetch(`https://127.0.0.1:8443/api/patients/${patientId}`);
-      if (!res.ok) return;
+      const res = await apiFetch(`https://127.0.0.1:8443/api/patients/me`);
+      if (!res || !res.ok) return;
 
       const patient = await res.json();
+      const statusCircle = document.getElementById("doctor-status-box");
 
       if (!patient.selectedDoctorId) {
-        statusBox.classList.add("hidden");
+        statusCircle.style.backgroundColor = "blue";
+        statusText.innerHTML = "No doctor assigned";
+        statusCircle.classList.remove("hidden");
+        submitButton.disabled = false;
         return;
       }
 
-      statusBox.classList.remove("hidden");
-
+      statusCircle.classList.remove("hidden");
       const doctor = patient.selectedDoctor;
       const status = patient.doctorApprovalStatus;
 
-      if (status === "PENDING") {
-        statusText.innerHTML = `
-          Request Status for Dr. ${doctor.name} ${doctor.surname}: 
-          <strong style="color:orange">Pending</strong>
-        `;
-      } else if (status === "APPROVED") {
-        statusText.innerHTML = `
-          Your assigned doctor is <strong>Dr. ${doctor.name} ${doctor.surname}</strong>.
-          <span style="color:green; font-weight:bold;">Approved ✔</span>
-        `;
-      } else if (status === "DECLINED") {
-        statusText.innerHTML = `
-          Your request for Dr. ${doctor.name} ${doctor.surname} was 
-          <strong style="color:red">Declined</strong>.<br>
-          You may request another doctor.
-        `;
+      switch (status) {
+        case "PENDING":
+          statusText.innerHTML = `<p style="color:#d4a017">Pending</p>`;
+          statusCircle.style.backgroundColor = "#d4a017";
+          submitButton.disabled = true;
+          break;
+
+        case "APPROVED":
+          statusText.innerHTML = `<p style="color:#4a8c3b;">Approved ✔</p>`;
+          statusCircle.style.backgroundColor = "#4a8c3b";
+          submitButton.disabled = true;
+          break;
+
+        case "DECLINED":
+          statusText.innerHTML = `<p style="color:#c0392b">Declined</p>`;
+          statusCircle.style.backgroundColor = "#c0392b";
+          submitButton.disabled = false;
+          break;
+
+        default:
+          statusText.innerHTML = `<p style="color:#2e70b5">Unknown</p>`;
+          statusCircle.style.backgroundColor = "#2e70b5";
+          submitButton.disabled = false;
+          break;
       }
     } catch (err) {
       console.error(err);
