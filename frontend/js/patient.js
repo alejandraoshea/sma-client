@@ -68,8 +68,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
       alert("Doctor requested successfully!");
       doctorsForm.reset();
-      doctorsListContainer.classList.add("hidden");
-
       loadDoctorStatus();
     } catch (err) {
       console.error(err);

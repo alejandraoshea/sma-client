@@ -154,10 +154,12 @@
           </div>
 
           <div class="doctors-section">
-            Doctors!
             <div class="doctors-split">
               <div class="doctors-list">
-                List of Doctors
+                <h3 class="section-title">Current Doctor</h3>
+                <div id="current-doctor-info" class="current-doctor-info">
+                  <p>No doctor assigned.</p>
+                </div>
                 <div id="doctors-list-container">
                   <h3 class="section-title">Available Doctors</h3>
                   <form id="doctors-form">
@@ -170,13 +172,13 @@
                       "
                     >
                       <button type="submit" class="save-btn">
-                        Request Selected Doctor
+                        <p>Request Selected Doctor</p>
                       </button>
                     </div>
                   </form>
                 </div>
               </div>
-              <div class="doctors-map">Map of Doctors</div>
+              <div class="doctors-map"></div>
             </div>
           </div>
         </article>
@@ -212,9 +214,9 @@
         window.location.href = "../../index.html";
       }
     </script>
-
-    <script src="../js/logout.js"></script>
   -->
+    <script src="../js/logout.js"></script>
+
     <script src="../js/measurementSessions.js"></script>
     <script src="../js/patient.js"></script>
   </body>
