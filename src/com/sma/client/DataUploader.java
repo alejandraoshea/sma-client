@@ -33,14 +33,14 @@ public class DataUploader {
         System.out.println("Server response: " + conn.getResponseCode());
     }
 
-    public static void sendECG(File file, Long id) throws Exception {
-        URL url = new URL("https://localhost:8080/api/patient/" + id + "/ecg");
+    public static void sendECG(File file, Long sessionId, Long patientId) throws Exception {
+        URL url = new URL("https://localhost:8080/api/patient/" + sessionId + "/" + patientId + "/emg");
         sendFile(url, file);
     }
 
 
-    public static void sendEMG(File file, Long id) throws Exception {
-        URL url = new URL("https://localhost:8080/api/patient/" + id + "/emg");
+    public static void sendEMG(File file, Long sessionId, Long patientId) throws Exception {
+        URL url = new URL("https://localhost:8080/api/patient/" + sessionId + "/" + patientId + "/emg");
         sendFile(url, file);
     }
 

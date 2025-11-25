@@ -148,7 +148,7 @@ public class BitalinoDemo {
                 System.out.println("Archivo guardado en: " + file.getAbsolutePath());*/
 
                 //AQUI SE MANDA AL SERVER
-                DataUploader.sendECG(file, sessionId);
+                DataUploader.sendECG(file, sessionId, patientId);
 
             } else if (test.equals("B")||test.equals("emg")||test.equals("b")) {
                 //crea archivo temporal (no lo guarda en el sistema solo será mandado al server)
@@ -227,7 +227,7 @@ public class BitalinoDemo {
                 System.out.println("Archivo guardado en: " + file.getAbsolutePath());*/
 
                 //AQUI SE MANDA AL SERVER
-                DataUploader.sendEMG(file, sessionId);
+                DataUploader.sendECG(file, sessionId, patientId);
             }
 
         } catch (BITalinoException ex) {
