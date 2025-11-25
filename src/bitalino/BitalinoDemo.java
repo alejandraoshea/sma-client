@@ -78,7 +78,7 @@ public class BitalinoDemo {
                 BufferedWriter writer = new BufferedWriter(new FileWriter(file, true));
 
                 //escribe el sampling rate
-                writer.write("sampling_rate=" + SamplingRate);
+                writer.write(SamplingRate);
                 writer.newLine();
 
                 //elige el channel del ecg
@@ -114,26 +114,25 @@ public class BitalinoDemo {
                 long startTime = System.currentTimeMillis();
 
                 int blockSize = 10;
-                int sampleIndex = 0;
+                boolean firstSample = true;
 
                 //mientras no haya pasado más tiempo del establecido y no se haya solicitado la parada de la grabación
-                while (!stopRequested.get() &&
-                        (System.currentTimeMillis() - startTime) < durationMs) {
+                while (!stopRequested.get() && (System.currentTimeMillis() - startTime) < durationMs) {
                     frame = bitalino.read(blockSize);
-
                     for (Frame f : frame) {
                         long timestamp = System.currentTimeMillis();
                         int a2 = f.analog[0];
 
-                        // Muestra canal por canal
                         System.out.println("t=" + timestamp + " | A2=" + a2);
-                        writer.write(sampleIndex + "," + a2);
-                        writer.newLine();
-                        sampleIndex++;
 
+                        if (!firstSample) {
+                            writer.write(",");  // separador
+                        }
+                        writer.write(Integer.toString(a2));
+                        firstSample = false;
                     }
-
                 }
+                writer.newLine();
                 writer.flush();
                 writer.close();
 
@@ -149,7 +148,7 @@ public class BitalinoDemo {
                 System.out.println("Archivo guardado en: " + file.getAbsolutePath());*/
 
                 //AQUI SE MANDA AL SERVER
-                DataUploader.sendECG(file);
+                DataUploader.sendECG(file, sessionId);
 
             } else if (test.equals("B")||test.equals("emg")||test.equals("b")) {
                 //crea archivo temporal (no lo guarda en el sistema solo será mandado al server)
@@ -194,23 +193,25 @@ public class BitalinoDemo {
                 long startTime = System.currentTimeMillis();
 
                 int blockSize = 10;
-                int sampleIndex = 0;
+                boolean firstSample = true;
 
-                while (!stopRequested.get() &&
-                        (System.currentTimeMillis() - startTime) < durationMs) {
+                //mientras no haya pasado más tiempo del establecido y no se haya solicitado la parada de la grabación
+                while (!stopRequested.get() && (System.currentTimeMillis() - startTime) < durationMs) {
                     frame = bitalino.read(blockSize);
-
                     for (Frame f : frame) {
                         long timestamp = System.currentTimeMillis();
-                        int a1 = f.analog[0];
+                        int a2 = f.analog[0];
 
-                        // Muestra canal por canal
-                        System.out.println("t=" + timestamp + " | A1=" + a1);
-                        writer.write(sampleIndex + "," + a1);
-                        writer.newLine();
-                        sampleIndex++;
+                        System.out.println("t=" + timestamp + " | A2=" + a2);
+
+                        if (!firstSample) {
+                            writer.write(",");  // separador
+                        }
+                        writer.write(Integer.toString(a2));
+                        firstSample = false;
                     }
                 }
+                writer.newLine();
                 writer.flush();
                 writer.close();
 
@@ -226,7 +227,7 @@ public class BitalinoDemo {
                 System.out.println("Archivo guardado en: " + file.getAbsolutePath());*/
 
                 //AQUI SE MANDA AL SERVER
-                DataUploader.sendEMG(file);
+                DataUploader.sendEMG(file, sessionId);
             }
 
         } catch (BITalinoException ex) {

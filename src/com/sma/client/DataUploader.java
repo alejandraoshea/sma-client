@@ -33,13 +33,14 @@ public class DataUploader {
         System.out.println("Server response: " + conn.getResponseCode());
     }
 
-    public static void sendECG(File file) throws Exception {
-        URL url = new URL("https://localhost:8080/api/patient/ecg");
+    public static void sendECG(File file, Long id) throws Exception {
+        URL url = new URL("https://localhost:8080/api/patient/" + id + "/ecg");
         sendFile(url, file);
     }
 
-    public static void sendEMG(File file) throws Exception {
-        URL url = new URL("https://localhost:8080/api/patient/emg");
+
+    public static void sendEMG(File file, Long id) throws Exception {
+        URL url = new URL("https://localhost:8080/api/patient/" + id + "/emg");
         sendFile(url, file);
     }
 
