@@ -37,14 +37,26 @@
           <table id="patients-table" style="width:100%;border-collapse:collapse">
             <thead>
               <tr style="background:#eee">
-                <th style="padding:.6rem;border:1px solid #ddd">Patient ID</th>
                 <th style="padding:.6rem;border:1px solid #ddd">Name</th>
                 <th style="padding:.6rem;border:1px solid #ddd">Surname</th>
-                <th style="padding:.6rem;border:1px solid #ddd">Actions</th>
+                <th style="padding:.6rem;border:1px solid #ddd">Gender</th>
+                <th style="padding:.6rem;border:1px solid #ddd">Birth Date</th>
+                <th style="padding:.6rem;border:1px solid #ddd">Height</th>
+                <th style="padding:.6rem;border:1px solid #ddd">Weight</th>
               </tr>
             </thead>
             <tbody id="patients-body"></tbody>
           </table>
+        </div>
+        <div id="confirm-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-message" aria-hidden="true">
+          <div class="modal-box">
+            <p id="modal-message">Are you sure?</p>
+            <div class="modal-buttons">
+              <button id="modal-approve-btn" class="modal-btn approve">Approve</button>
+              <button id="modal-reject-btn" class="modal-btn reject" style="display:none;">Reject</button>
+              <button id="modal-cancel-btn" class="modal-btn cancel">Cancel</button>
+            </div>
+          </div>
         </div>
 
       </article>
