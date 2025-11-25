@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Patient Dashboard</title>
     <link rel="stylesheet" href="../styles/patient.css" />
   </head>
@@ -28,44 +28,92 @@
 
     <main style="height: 100vh">
       <section class="main-div">
-        <article class="patient-sidebar">Welcome, <br />Patient</article>
+        <article class="patient-sidebar">Welcome,<br />Patient</article>
 
         <article class="patient-dashboard-buttons">
           <button id="start-session-btn" class="log-symptoms-button">
-            <img src="../assets/svgs/add.svg" />
+            <img src="../assets/svgs/add.svg" alt="+" />
             Start Session
           </button>
 
-          <button id="log-symptoms-btn" class="log-symptoms-button">
-            <img src="../assets/svgs/add.svg" />
-            Log Symptoms
-          </button>
-
-          <!-- Inline Symptoms container -->
-          <div id="symptoms-container" class="hidden inline-section">
-            <h3 class="section-title">Log Symptoms</h3>
-
-            <form id="symptoms-form">
-              <div id="symptoms-checkboxes" class="checkbox-container"></div>
-
-              <button type="submit" class="save-symptoms-btn">
-                Save Symptoms
-              </button>
-            </form>
+          <div class="stacked">
+            <button id="log-symptoms-btn" class="log-symptoms-button hidden">
+              <img src="../assets/svgs/add.svg" alt="+" />
+              Log Symptoms
+            </button>
+            <div id="symptoms-container" class="floating-box hidden">
+              <h3 class="section-title">Log Symptoms</h3>
+              <form id="symptoms-form">
+                <div id="symptoms-checkboxes" class="symptom-grid"></div>
+                <div style="display: flex; justify-content: flex-end">
+                  <button type="submit" class="save-btn">Save Symptoms</button>
+                </div>
+              </form>
+            </div>
           </div>
 
-          <button id="log-signals-btn" class="log-symptoms-button">
-            <img src="../assets/svgs/add.svg" />
-            Log Signals
-          </button>
+          <div class="stacked">
+            <button id="log-signals-btn" class="log-symptoms-button hidden">
+              <img src="../assets/svgs/add.svg" alt="+" />
+              Log Signals
+            </button>
 
-          <!-- Inline Signals container -->
-          <div id="signals-container" class="hidden inline-section">
-            <h3 class="section-title">Log Signals</h3>
+            <div id="signals-container" class="floating-box hidden">
+              <h3 class="section-title">Log Signals</h3>
+              <div class="signal-grid">
+                <button class="signal-btn" data-signal="ECG">ECG</button>
+                <button class="signal-btn" data-signal="EMG">EMG</button>
+                <button class="signal-btn" data-signal="ACC">ACC</button>
+              </div>
+              <div id="record-area" class="record-area hidden">
+                <p
+                  id="recording-label"
+                  style="margin: 0 0 1rem 0; text-align: center; color: #333"
+                >
+                  Ready to record
+                </p>
+                <div
+                  style="display: flex; gap: 0.75rem; justify-content: center"
+                >
+                  <button id="record-btn" class="record-control">Record</button>
+                  <button id="stop-btn" class="record-control" disabled>
+                    Stop
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
 
-            <div class="signal-options">
-              <button class="signal-option">ECG</button>
-              <button class="signal-option">EMG</button>
+          <div id="doctors" class="list-doctors">
+            <button id="see-doctors-btn" class="log-symptoms-button">
+              <img src="../assets/svgs/add.svg" alt="+" />
+              See All Doctors
+            </button>
+
+            <div id="doctors-list-container" class="floating-box hidden">
+              <h3 class="section-title">Available Doctors</h3>
+              <form id="doctors-form">
+                <div id="doctors-list" class="doctor-grid"></div>
+                <div
+                  style="
+                    display: flex;
+                    justify-content: flex-end;
+                    margin-top: 1rem;
+                  "
+                >
+                  <button type="submit" class="save-btn">
+                    Request Selected Doctor
+                  </button>
+                </div>
+              </form>
+            </div>
+            <div
+              id="doctor-status-box"
+              class="floating-box hidden"
+              style="margin-top: 1rem"
+            >
+              <h3 class="section-title">Doctor Request Status</h3>
+              <p id="doctor-status-text" style="font-size: 1.1rem"></p>
             </div>
           </div>
         </article>
@@ -91,8 +139,7 @@
       </div>
     </footer>
 
-    <script src="../js/measurementSessions.js"></script>
-    <script>
+    <!--<script>
       const token = localStorage.getItem("token");
       const role = localStorage.getItem("role");
 
@@ -104,5 +151,8 @@
     </script>
 
     <script src="../js/logout.js"></script>
+  -->
+    <script src="../js/measurementSessions.js"></script>
+    <script src="../js/patient.js"></script>
   </body>
 </html>

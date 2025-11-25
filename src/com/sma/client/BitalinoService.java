@@ -1,6 +1,9 @@
 package com.sma.client;
 
-import java.bitalino.*;
+import bitalino.BITalino;
+import bitalino.BITalinoException;
+import bitalino.Frame;
+
 public class BitalinoService {
     private BITalino bitalino;
 

@@ -75,6 +75,7 @@ html {
 
 .patient-dashboard-header h3 {
   padding: 1.5rem 3%;
+  font-family: "Roboto", sans-serif;
 }
 
 .sidebar {
@@ -296,6 +297,7 @@ main {
     transform: translateY(0);
   }
 }
+
 .btn-logout {
   background-color: #ff4d4f;
   color: white;
@@ -315,4 +317,139 @@ main {
 .btn-logout:focus {
   outline: none;
   box-shadow: 0 0 0 3px rgba(255, 77, 79, 0.5);
+}
+
+.floating-box {
+  width: 95%;
+  background: #ccc7c7;
+  padding: 1.5rem;
+  border-radius: 20px;
+  margin: 1rem auto;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+}
+
+.symptom-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem 2.5rem;
+  align-items: start;
+}
+
+.symptom-grid label {
+  display: flex;
+  gap: .6rem;
+  align-items: center;
+  font-size: 1.05rem;
+  color: #222;
+  font-family: "Roboto", sans-serif;
+}
+
+.save-btn {
+  background: #e63946;
+  color: white;
+  border: none;
+  padding: 0.6rem 1rem;
+  border-radius: 10px;
+  font-weight: 600;
+  font-family: "Roboto", sans-serif;
+  cursor: pointer;
+}
+
+.save-btn:hover { 
+  background: #c82333; 
+}
+
+.signal-grid {
+  display:flex;
+  gap: .8rem;
+  justify-content:flex-start;
+  margin-bottom: 1rem;
+}
+
+.signal-btn {
+  background:#f05454;
+  color:white;
+  border:none;
+  padding:.5rem 1.2rem;
+  border-radius:18px;
+  cursor:pointer;
+  font-weight:700;
+  font-family: "Roboto", sans-serif;
+}
+.signal-btn:hover { 
+  background:#d94343; 
+}
+
+.record-area {
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: 12px;
+  background: rgba(0,0,0,0.03);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+
+.record-control {
+  background:#e63946;
+  color:white;
+  border:none;
+  padding:8px 14px;
+  border-radius:12px;
+  font-weight:600;
+  font-family: "Roboto", sans-serif;
+  cursor:pointer;
+}
+.record-control[disabled] { 
+  opacity: 0.5; 
+  cursor: not-allowed; 
+}
+
+.hidden { 
+  display:none !important; 
+}
+
+.stacked { 
+  display:flex; 
+  flex-direction:column; 
+  gap:8px; 
+}
+
+.patient-dashboard-buttons {
+  display:flex;
+  flex-direction:column;
+  gap:1rem;
+  width:100%;
+  padding: 1.2rem;
+}
+
+
+.doctor-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.doctor-item {
+  background: white;
+  padding: 1rem;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.doctor-item input[type="checkbox"] {
+  transform: scale(1.3);
+}
+
+#see-doctors-btn {
+  margin-bottom: 2rem;
+}
+
+#doctors-list-container {
+  max-height: 60vh;        
+  overflow-y: auto;        
+  padding-right: 0.5rem;   
 }
