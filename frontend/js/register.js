@@ -12,17 +12,28 @@ registerForm.addEventListener("submit", async (e) => {
   const payload = {
     email: document.getElementById("email").value.trim(),
     password: document.getElementById("password").value,
-    role
+    role,
   };
 
   try {
-    const res = await fetch("https://127.0.0.1:8443/api/authentication/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
-    });
+    const res = await fetch(
+      "https://127.0.0.1:8443/api/authentication/register",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      }
+    );
 
-    const data = await res.json();
+    let data = {};
+    if (res.headers.get("content-type")?.includes("application/json")) {
+      data = await res.json();
+    } else {
+      const text = await res.text();
+      console.error("Non-JSON response:", text);
+      alert("Registration failed: invalid response from server");
+      return;
+    }
 
     if (!res.ok) {
       alert(data.error || "Registration failed");

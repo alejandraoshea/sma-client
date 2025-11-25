@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     try {
       const res = await fetch(
-        `http://localhost:8080/api/sessions/start/${patientId}`,
+        `http://localhost:8443/api/sessions/start/${patientId}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -63,7 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
     checkboxesContainer.innerHTML = "";
 
     try {
-      const res = await fetch("http://localhost:8080/api/sessions/enum");
+      const res = await fetch("http://localhost:8443/api/sessions/enum");
 
       if (!res.ok) {
         throw new Error("Server returned an error while loading enum");
@@ -110,7 +110,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     try {
       const res = await fetch(
-        `http://localhost:8080/api/sessions/${currentSessionId}/symptoms`,
+        `http://localhost:8443/api/sessions/${currentSessionId}/symptoms`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
