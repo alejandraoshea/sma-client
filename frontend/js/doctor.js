@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
   async function loadRequests() {
     requestsList.innerHTML = "Loading requests...";
     try {
-      const res = await fetch(`https://localhost:8443/api/doctors/${doctorId}/requests`);
+      const res = await fetch(`https://127.0.0.1:8443/api/doctors/${doctorId}/requests`);
       if (!res.ok) {
         requestsList.innerHTML = `<div style="color:#811">No separate 'requests' endpoint found or none pending.</div>`;
         requestsTitle.textContent = `Requests (0)`;
@@ -207,7 +207,7 @@ document.addEventListener("DOMContentLoaded", () => {
     button.textContent = "Loading sessions...";
 
     try {
-      const res = await fetch(`https://localhost:8443/api/patients/${patientId}/sessions`);
+      const res = await fetch(`https://127.0.0.1:8443/api/patients/sessions/${patientId}`);
       if (!res.ok) {
         sessionsContainer.textContent = "Failed to load sessions";
         button.textContent = "View Sessions";
@@ -271,8 +271,8 @@ document.addEventListener("DOMContentLoaded", () => {
               details.textContent = "Loading session details...";
               try {
                 const [symptoms, signals] = await Promise.all([
-                  fetch(`https://localhost:8443/api/patients/session/${session.sessionId}/symptoms`).then(r => r.json()),
-                  fetch(`https://localhost:8443/api/patients/session/${session.sessionId}/signals`).then(r => r.json()),
+                  fetch(`https://127.0.0.1:8443/api/patients/sessions/${session.sessionId}/symptoms`).then(r => r.json()),
+                  fetch(`https://127.0.0.1:8443/api/patients/sessions/${session.sessionId}/signals`).then(r => r.json()),
                 ]);
 
                 details.innerHTML = "";
@@ -288,18 +288,13 @@ document.addEventListener("DOMContentLoaded", () => {
                   details.appendChild(noSymptoms);
                 } else {
                   const ul = document.createElement("ul");
-                  symptoms.forEach(sym => {
-                    // TODO: change symptoms for sets
-                    const symptomItems = Array.isArray(sym.symptomSet) ? sym.symptomSet : Array.from(sym.symptomSet);
-                    symptomItems.forEach(s => {
-                      const li = document.createElement("li");
-                      li.textContent = s;
-                      ul.appendChild(li);
-                    });
+                  symptoms.forEach(s => {
+                    const li = document.createElement("li");
+                    li.textContent = s;
+                    ul.appendChild(li);
                   });
                   details.appendChild(ul);
                 }
-
                 const signalsTitle = document.createElement("h4");
                 signalsTitle.textContent = "Signals:";
                 signalsTitle.style.margin = "1rem 0 0.4rem 0";
