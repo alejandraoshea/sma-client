@@ -406,9 +406,10 @@ s
 
 #sessions-container {
   margin-top: 1rem;
+  width: 100%;        
   max-height: 300px;
   overflow-y: auto;
-  background: white;
+  background: #ddd;  
   border-radius: 15px;
   padding: 1rem;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
@@ -429,7 +430,7 @@ s
 }
 
 .session-item:hover {
-  background-color: #f0f0ff;
+  background-color: #ddd; 
 }
 
 .session-details {

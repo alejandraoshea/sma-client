@@ -105,7 +105,7 @@ document.addEventListener("DOMContentLoaded", () => {
           <td style="padding:.6rem;border:1px solid #eee">${p.weight}</td>
           <td style="padding:.6rem;border:1px solid #eee; text-align:center;">
             <button class="view-sessions-btn" data-patient-id="${p.patientId}" 
-              style="background:#6c63ff; color:white; border:none; padding:0.4rem 0.8rem; border-radius: 12px; cursor:pointer;">
+              style="background:#e1445c; color:white; border:none; padding:0.4rem 0.8rem; border-radius: 12px; cursor:pointer;">
               View Sessions
             </button>
           </td>
@@ -190,21 +190,18 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    // Otherwise, remove old container and create new one
     if (sessionsContainer) {
       sessionsContainer.remove();
     }
 
-    // Create new container
     sessionsContainer = document.createElement("div");
-    sessionsContainer.style.background = "#f0f0ff";
+    sessionsContainer.style.background = "#ddd";
     sessionsContainer.style.padding = "1rem";
     sessionsContainer.style.borderRadius = "15px";
     sessionsContainer.style.margin = "1rem auto";
-    sessionsContainer.style.maxWidth = "95%";
+    sessionsContainer.style.width = "100%";
     sessionsContainer.dataset.patientId = patientId;
 
-    // Insert sessionsContainer right below patientsBox
     patientsBox.appendChild(sessionsContainer);
 
     button.textContent = "Loading sessions...";
@@ -226,7 +223,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
       button.textContent = "Hide Sessions";
 
-      // Build sessions list
       sessionsContainer.innerHTML = "";
       sessions.forEach(session => {
         const sessionDiv = document.createElement("div");
@@ -234,6 +230,8 @@ document.addEventListener("DOMContentLoaded", () => {
         sessionDiv.style.marginBottom = "1rem";
         sessionDiv.style.borderRadius = "10px";
         sessionDiv.style.background = "#fff";
+        sessionDiv.style.width = "100%";
+
 
         const header = document.createElement("div");
         header.style.cursor = "pointer";
@@ -244,7 +242,7 @@ document.addEventListener("DOMContentLoaded", () => {
         header.style.userSelect = "none";
 
         const arrow = document.createElement("span");
-        arrow.textContent = "▶"; // right arrow
+        arrow.textContent = "▶"; 
         arrow.style.transition = "transform 0.3s ease";
         arrow.style.display = "inline-block";
 
@@ -255,14 +253,12 @@ document.addEventListener("DOMContentLoaded", () => {
         header.appendChild(dateSpan);
         sessionDiv.appendChild(header);
 
-        // Details container hidden by default
         const details = document.createElement("div");
         details.style.padding = "0 1rem 1rem 2rem";
         details.style.display = "none";
 
         sessionDiv.appendChild(details);
 
-        // Expand/collapse on click
         header.addEventListener("click", async () => {
           if (details.style.display === "block") {
             details.style.display = "none";
@@ -270,7 +266,7 @@ document.addEventListener("DOMContentLoaded", () => {
           } else {
             details.style.display = "block";
             arrow.style.transform = "rotate(90deg)";
-            // If empty, load details
+
             if (!details.hasChildNodes()) {
               details.textContent = "Loading session details...";
               try {
@@ -281,7 +277,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 details.innerHTML = "";
 
-                // Symptoms list
                 const symptomsTitle = document.createElement("h4");
                 symptomsTitle.textContent = "Symptoms:";
                 symptomsTitle.style.marginBottom = "0.4rem";
@@ -294,7 +289,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 } else {
                   const ul = document.createElement("ul");
                   symptoms.forEach(sym => {
-                    // sym.symptomSet assumed to be array or set of strings
+                    // TODO: change symptoms for sets
                     const symptomItems = Array.isArray(sym.symptomSet) ? sym.symptomSet : Array.from(sym.symptomSet);
                     symptomItems.forEach(s => {
                       const li = document.createElement("li");
@@ -305,7 +300,6 @@ document.addEventListener("DOMContentLoaded", () => {
                   details.appendChild(ul);
                 }
 
-                // Signals
                 const signalsTitle = document.createElement("h4");
                 signalsTitle.textContent = "Signals:";
                 signalsTitle.style.margin = "1rem 0 0.4rem 0";
@@ -316,14 +310,13 @@ document.addEventListener("DOMContentLoaded", () => {
                   noSignals.textContent = "No signals recorded.";
                   details.appendChild(noSignals);
                 } else {
-                  // Render each signal
                   signals.forEach(signal => {
                     const signalDiv = document.createElement("div");
                     signalDiv.style.border = "1px solid #aaa";
                     signalDiv.style.marginBottom = "0.8rem";
                     signalDiv.style.borderRadius = "10px";
                     signalDiv.style.padding = "0.5rem";
-                    signalDiv.style.background = "#eef";
+                    signalDiv.style.background = "#ddd";
 
                     const signalHeader = document.createElement("div");
                     signalHeader.textContent = signal.signalType + " Signal";
@@ -332,7 +325,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     signalDiv.appendChild(signalHeader);
 
-                    // Simple canvas chart for signal data
                     const canvas = document.createElement("canvas");
                     canvas.width = 400;
                     canvas.height = 100;
@@ -377,14 +369,11 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    // Clear canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Find min/max for scaling
     const min = Math.min(...data);
     const max = Math.max(...data);
 
-    // Scale data to canvas height
     const scaleY = (max - min) === 0 ? 1 : canvas.height / (max - min);
     const stepX = canvas.width / (data.length - 1);
 
