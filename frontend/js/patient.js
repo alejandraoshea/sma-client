@@ -145,4 +145,65 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(err);
     }
   }
+
+  const patientForm = document.querySelector(".patient-info form");
+  const nameInput = document.getElementById("patient-name");
+  const surnameInput = document.getElementById("patient-surname");
+  const genderInput = document.getElementById("patient-gender");
+  const birthdateInput = document.getElementById("patient-birthdate");
+  const heightInput = document.getElementById("patient-height");
+  const weightInput = document.getElementById("patient-weight");
+
+  async function loadPatientInfo() {
+    try {
+      const res = await apiFetch("https://127.0.0.1:8443/api/patients/me");
+      if (!res || !res.ok) return;
+
+      const patient = await res.json();
+
+      nameInput.value = patient.name || "";
+      surnameInput.value = patient.surname || "";
+      genderInput.value = patient.gender || "";
+      birthdateInput.value = patient.birthDate || "";
+      heightInput.value = patient.height || "";
+      weightInput.value = patient.weight || "";
+    } catch (err) {
+      console.error("Error loading patient info:", err);
+    }
+  }
+
+  loadPatientInfo();
+
+  patientForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const payload = {
+      name: nameInput.value || undefined,
+      surname: surnameInput.value || undefined,
+      gender: genderInput.value || undefined,
+      birthDate: birthdateInput.value || undefined,
+      height: heightInput.value ? Number(heightInput.value) : undefined,
+      weight: weightInput.value ? Number(weightInput.value) : undefined,
+    };
+
+    try {
+      const res = await apiFetch("https://127.0.0.1:8443/api/patients/me", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) {
+        alert("Failed to update patient info.");
+        return;
+      }
+
+      const updatedPatient = await res.json();
+      alert("Patient info updated successfully!");
+      loadPatientInfo();
+    } catch (err) {
+      console.error(err);
+      alert("Network error.");
+    }
+  });
 });
