@@ -17,8 +17,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const doctorsList = document.getElementById("doctors-list");
   const doctorsForm = document.getElementById("doctors-form");
 
-  const statusBox = document.getElementById("doctor-status-box");
   const statusText = document.getElementById("doctor-status-text");
+  const doctorText = document.getElementById("doctor-name-text");
 
   loadDoctors();
   loadDoctorStatus();
@@ -131,6 +131,7 @@ document.addEventListener("DOMContentLoaded", () => {
           statusText.innerHTML = `<p style="color:#4a8c3b;">Approved ✔</p>`;
           statusCircle.style.backgroundColor = "#4a8c3b";
           submitButton.disabled = true;
+          doctorText.innerHTML = `Dr. ${doctor.name} ${doctor.surname}`;
           break;
 
         case "DECLINED":
