@@ -178,7 +178,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   async function toggleSessionsForPatient(patientId, button) {
-    // If sessionsContainer exists and belongs to this patient, toggle visibility and return
     if (sessionsContainer && sessionsContainer.dataset.patientId === patientId) {
       if (sessionsContainer.style.display === "none") {
         sessionsContainer.style.display = "block";
@@ -311,7 +310,10 @@ document.addEventListener("DOMContentLoaded", () => {
                     signalDiv.style.marginBottom = "0.8rem";
                     signalDiv.style.borderRadius = "10px";
                     signalDiv.style.padding = "0.5rem";
-                    signalDiv.style.background = "#ddd";
+                    signalDiv.style.background = "#f1efefff";
+                    signalDiv.style.width = "100%";   
+                    signalDiv.style.maxWidth = "550px"; 
+                    signalDiv.style.boxSizing = "border-box";
 
                     const signalHeader = document.createElement("div");
                     signalHeader.textContent = signal.signalType + " Signal";
@@ -321,10 +323,9 @@ document.addEventListener("DOMContentLoaded", () => {
                     signalDiv.appendChild(signalHeader);
 
                     const canvas = document.createElement("canvas");
-                    canvas.width = 400;
-                    canvas.height = 100;
+                    canvas.style.width = "100%";
+                    canvas.style.height = "120px";
                     signalDiv.appendChild(canvas);
-
                     renderSignalChart(canvas, signal.patientSignalData);
 
                     details.appendChild(signalDiv);
@@ -349,40 +350,98 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
     function renderSignalChart(canvas, dataStr) {
-    if (!dataStr) {
       const ctx = canvas.getContext("2d");
-      ctx.font = "16px Arial";
-      ctx.fillText("No data", 10, 50);
-      return;
+
+      let width = canvas.offsetWidth;
+      let height = canvas.offsetHeight;
+
+      if (width === 0) width = 600;
+      if (height === 0) height = 150;
+
+      canvas.width = width;
+      canvas.height = height;
+
+      if (!dataStr) {
+        ctx.font = "16px Arial";
+        ctx.fillText("No data", 10, 50);
+        return;
+      }
+
+      const data = dataStr
+        .split(",")
+        .map(x => parseFloat(x.trim()))
+        .filter(x => !isNaN(x));
+
+      if (data.length === 0) {
+        ctx.font = "16px Arial";
+        ctx.fillText("No valid data", 10, 50);
+        return;
+      }
+
+      ctx.clearRect(0, 0, width, height);
+
+      const maxPoints = width;
+      let plotData;
+
+      if (data.length > maxPoints) {
+        const blockSize = Math.floor(data.length / maxPoints);
+        plotData = [];
+
+        for (let i = 0; i < data.length; i += blockSize) {
+          const block = data.slice(i, i + blockSize);
+          const avg = block.reduce((a, b) => a + b, 0) / block.length;
+          plotData.push(avg);
+        }
+      } else {
+        plotData = data;
+      }
+
+      const min = Math.min(...plotData);
+      const max = Math.max(...plotData);
+      const range = max - min || 1;
+
+      const scaleY = height / range;
+      const stepX = width / (plotData.length - 1);
+
+      ctx.strokeStyle = "#c4c0c0ff";
+      ctx.lineWidth = 0.5;
+
+      for (let x = 0; x < width; x += 40) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, height);
+        ctx.stroke();
+      }
+
+      for (let y = 0; y < height; y += 20) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(width, y);
+        ctx.stroke();
+      }
+
+      ctx.strokeStyle = "#f36666";
+      ctx.lineWidth = 1.8;
+      ctx.beginPath();
+
+      plotData.forEach((val, i) => {
+        const x = i * stepX;
+        const y = height - (val - min) * scaleY;
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      });
+
+      ctx.stroke();
+
+      ctx.strokeStyle = "#bbb";
+      ctx.lineWidth = 0.7;
+      ctx.beginPath();
+      ctx.moveTo(0, height - (0 - min) * scaleY);
+      ctx.lineTo(width, height - (0 - min) * scaleY);
+      ctx.stroke();
     }
 
-    const ctx = canvas.getContext("2d");
-    const data = dataStr.split(",").map(x => parseFloat(x.trim())).filter(x => !isNaN(x));
-    if (!data.length) {
-      ctx.font = "16px Arial";
-      ctx.fillText("No valid data", 10, 50);
-      return;
-    }
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    const min = Math.min(...data);
-    const max = Math.max(...data);
-
-    const scaleY = (max - min) === 0 ? 1 : canvas.height / (max - min);
-    const stepX = canvas.width / (data.length - 1);
-
-    ctx.strokeStyle = "#6c63ff";
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    data.forEach((val, i) => {
-      const x = i * stepX;
-      const y = canvas.height - (val - min) * scaleY;
-      if (i === 0) ctx.moveTo(x, y);
-      else ctx.lineTo(x, y);
-    });
-    ctx.stroke();
-  }
 
   function closeModal() {
     modal.classList.remove('show');
