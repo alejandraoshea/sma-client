@@ -78,7 +78,8 @@ public class BitalinoDemo {
                 BufferedWriter writer = new BufferedWriter(new FileWriter(file, true));
 
                 //escribe el sampling rate
-                writer.write(SamplingRate);
+                writer.write(Integer.toString(SamplingRate));
+                //System.out.println(SamplingRate);
                 writer.newLine();
 
                 //elige el channel del ecg
@@ -142,7 +143,7 @@ public class BitalinoDemo {
                 bitalino.stop();
 
                 /*String carpetaDestino = "C:/Users/Carlota/OneDrive - Fundación Universitaria San Pablo CEU/CUARTO ING.B/PRIMER CUATRI/TM/intento de grabaciones con bitalino/";
-                File fileFinal = new File(carpetaDestino, "grabacionECG.txt");
+                File fileFinal = new File(carpetaDestino, "grabacionECG_2.txt");
                 //BufferedWriter w = new BufferedWriter(new FileWriter(fileFinal, true));
                 Files.copy(file.toPath(), fileFinal.toPath(), StandardCopyOption.REPLACE_EXISTING);
                 System.out.println("Archivo guardado en: " + file.getAbsolutePath());*/
@@ -158,7 +159,7 @@ public class BitalinoDemo {
                 BufferedWriter writer = new BufferedWriter(new FileWriter(file, true));
 
                 //escribe el sampling rate
-                writer.write("sampling_rate=" + SamplingRate);
+                writer.write(Integer.toString(SamplingRate));
                 writer.newLine();
 
                 //elige el channel del ecg

@@ -154,10 +154,36 @@
           </div>
 
           <div class="doctors-section">
-            Doctors!
             <div class="doctors-split">
               <div class="doctors-list">
-                List of Doctors
+                <h3 class="section-title">Current Doctor</h3>
+                <div
+                  id="current-doctor-info"
+                  class="current-doctor-info"
+                  style="padding: 20px"
+                >
+                  <p
+                    id="doctor-name-text"
+                    style="
+                      border-bottom: 1px solid #dadada;
+                      padding: 10px;
+                      margin-bottom: 10px;
+                      padding-top: 0;
+                    "
+                  >
+                    No doctor assigned.
+                  </p>
+
+                  <div class="doctor-status-container">
+                    <div
+                      id="doctor-status-box"
+                      class="doctor-status-circle"
+                    ></div>
+                    <div id="doctor-status-text" class="doctor-status-text">
+                      Unknown
+                    </div>
+                  </div>
+                </div>
                 <div id="doctors-list-container">
                   <h3 class="section-title">Available Doctors</h3>
                   <form id="doctors-form">
@@ -170,13 +196,13 @@
                       "
                     >
                       <button type="submit" class="save-btn">
-                        Request Selected Doctor
+                        <p>Request Selected Doctor</p>
                       </button>
                     </div>
                   </form>
                 </div>
               </div>
-              <div class="doctors-map">Map of Doctors</div>
+              <div class="doctors-map"></div>
             </div>
           </div>
         </article>
@@ -202,19 +228,25 @@
       </div>
     </footer>
 
-    <!--<script>
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
+
+    <script>
       const token = localStorage.getItem("token");
-      const role = localStorage.getItem("role");
 
       if (!token) {
         window.location.href = "../../index.html";
-      } else if (role !== "PATIENT") {
-        window.location.href = "../../index.html";
+      } else {
+        const claims = jwt_decode(token);
+
+        if (claims.role !== "PATIENT") {
+          window.location.href = "../../index.html";
+        }
+
+        console.log(claims);
       }
     </script>
 
     <script src="../js/logout.js"></script>
-  -->
     <script src="../js/measurementSessions.js"></script>
     <script src="../js/patient.js"></script>
   </body>

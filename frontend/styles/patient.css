@@ -332,18 +332,14 @@ main {
 }
 
 .save-btn {
-  background: #e63946;
+  background: #f05454;
   color: white;
   border: none;
   padding: 0.6rem 1rem;
+  width: 100%;
   border-radius: 10px;
-  font-weight: 600;
-  font-family: "Roboto", sans-serif;
   cursor: pointer;
-}
-
-.save-btn:hover {
-  background: #c82333;
+  font-size: 1rem;
 }
 
 .signal-grid {
@@ -405,6 +401,7 @@ main {
 .patient-dashboard-buttons {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   gap: 1rem;
   width: 100%;
 }
@@ -563,12 +560,10 @@ main {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 3rem;
-  border: 1px solid pink;
 }
 
 .doctors-list {
   max-height: 500px;
-  border: 1px solid thistle;
   border-radius: 12px;
 }
 
@@ -576,4 +571,43 @@ main {
   background-color: #4a90e2;
   height: 500px;
   border-radius: 12px;
+  width: 340px;
+}
+
+.current-doctor-info {
+  background-color: rgb(48, 54, 67);
+  background-color: #fafafa;
+  color: #3e4042;
+  padding: 30px 20px;
+  text-align: center;
+  border-radius: 12px;
+  margin-bottom: 3rem;
+}
+
+.current-doctor-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  gap: 0.5rem;
+}
+
+.doctor-status-container {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 0.5rem;
+}
+
+.doctor-status-circle {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: cadetblue;
+  flex-shrink: 0;
+}
+
+.doctor-status-text {
+  font-size: 0.9rem;
+  line-height: 16px;
 }

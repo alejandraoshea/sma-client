@@ -26,9 +26,21 @@ loginForm.addEventListener("submit", async (e) => {
 
     const data = await res.json().catch(() => ({}));
 
+    console.log("Login response data:", data);
+
     if (data.token) {
       localStorage.setItem("token", data.token);
+      console.log("Stored token:", data.token);
       localStorage.setItem("role", data.role);
+      console.log("Stored role:", data.role);
+
+      if (data.patientId) {
+        localStorage.setItem("patientId", data.patientId);
+        console.log("Stored patientId:", data.patientId);
+      } else if (data.doctorId) {
+        localStorage.setItem("doctorId", data.doctorId);
+        console.log("Stored doctorId:", data.doctorId);
+      }
     }
 
     if (data.role) {
@@ -36,7 +48,6 @@ loginForm.addEventListener("submit", async (e) => {
     } else {
       alert("Login successful, but role unknown");
     }
-
   } catch (err) {
     console.error(err);
     alert("Network or server error");
