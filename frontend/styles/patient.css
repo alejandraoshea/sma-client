@@ -402,14 +402,18 @@ main {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  grid-column: 2 / 3;
+  grid-row: 1 / 3;
   gap: 1rem;
   width: 100%;
 }
 
 .doctor-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 1rem;
+  padding: 10px;
+  max-height: 400px;
+  overflow-y: auto;
 }
 
 .doctor-item {
@@ -610,4 +614,91 @@ main {
 .doctor-status-text {
   font-size: 0.9rem;
   line-height: 16px;
+}
+
+.current-profile {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem;
+  gap: 3rem;
+  background: #ffffff;
+  border-radius: 12px;
+}
+
+.current-profile h2 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #f05454;
+  text-align: center;
+}
+
+.doctors-section {
+  padding: 3rem;
+  gap: 3rem;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.patient-details {
+  display: flex;
+  gap: 2rem;
+}
+
+.detail-group {
+  margin-bottom: 1rem;
+}
+
+.detail-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: #333;
+}
+
+.detail-value {
+  padding: 8px 12px;
+  background: #f4f4f4;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  color: #333;
+}
+
+.current-profile h2 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #f05454;
+  text-align: center;
+}
+
+.current-profile {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.patient-details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem;
+  width: 100%;
+}
+
+.detail-group p {
+  padding: 10px 12px;
+  font-size: 0.95rem;
+  border: none;
+  border-radius: 8px;
+  background-color: #fafafa;
+  height: 40px;
+  width: 100%;
+}
+
+.current-profile label {
+  margin-bottom: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #444;
 }

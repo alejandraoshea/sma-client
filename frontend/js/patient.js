@@ -161,12 +161,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const patient = await res.json();
 
-      nameInput.value = patient.name || "";
-      surnameInput.value = patient.surname || "";
-      genderInput.value = patient.gender || "";
-      birthdateInput.value = patient.birthDate || "";
-      heightInput.value = patient.height || "";
-      weightInput.value = patient.weight || "";
+      console.log("Returned patient object:", patient);
+
+        document.getElementById("detail-name").textContent = patient.name || "";
+        document.getElementById("detail-surname").textContent = patient.surname || "";
+        document.getElementById("detail-gender").textContent = patient.gender || "";
+        document.getElementById("detail-birthdate").textContent = patient.birthDate || "";
+        document.getElementById("detail-height").textContent =
+          patient.height ? patient.height + " cm" : "";
+        document.getElementById("detail-weight").textContent =
+          patient.weight ? patient.weight + " kg" : "";
     } catch (err) {
       console.error("Error loading patient info:", err);
     }

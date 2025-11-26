@@ -1,5 +1,20 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const patientId = 1; // replace with logged-in patient id
+  const token = localStorage.getItem("token");
+  if (!token) window.location.href = "../../index.html";
+
+  const claims = jwt_decode(token);
+  if (claims.role !== "PATIENT") window.location.href = "../../index.html";
+
+  async function apiFetch(url, options = {}) {
+    return fetch(url, {
+      ...options,
+      headers: {
+        ...(options.headers || {}),
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  }
+
   let currentSessionId = null;
   let currentSignalType = null;
 
@@ -17,53 +32,29 @@ document.addEventListener("DOMContentLoaded", () => {
   const stopBtn = document.getElementById("stop-btn");
   const recordingLabel = document.getElementById("recording-label");
 
-  logSymptomsBtn.classList.add("hidden");
-  logSignalsBtn.classList.add("hidden");
-
   startBtn.addEventListener("click", async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch(
-        `https://127.0.0.1:8443/api/patients/sessions/start/${patientId}`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-        }
+      const res = await apiFetch(
+        `https://127.0.0.1:8443/api/patients/sessions/start/me`,
+        { method: "POST" }
       );
+
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));
         alert(err.error || "Failed to start session");
         return;
       }
+
       const data = await res.json();
-      currentSessionId = data.sessionId || data.sessionId || data.sessionId;
-      if (
-        !currentSessionId &&
-        data.sessionId === undefined &&
-        data.sessionId === null
-      ) {
-        currentSessionId = data.sessionId || data.session_id || data.sessionId;
-      }
+      currentSessionId =
+        data.sessionId ||
+        data.session_id ||
+        data.id ||
+        Object.values(data)[0];
 
-      if (!currentSessionId && data) {
-        if (data.sessionId) currentSessionId = data.sessionId;
-        else if (data.session_id) currentSessionId = data.session_id;
-        else if (data.sessionId === 0) currentSessionId = data.sessionId;
-      }
+      alert("Session started! ID: " + currentSessionId);
 
-      if (!currentSessionId) {
-        const keys = Object.keys(data || {});
-        for (const k of keys) {
-          if (k.toLowerCase().includes("session")) {
-            currentSessionId = data[k];
-            break;
-          }
-        }
-      }
-
-      alert(
-        "Session started! ID: " + (currentSessionId ?? JSON.stringify(data))
-      );
       startBtn.classList.add("hidden");
       logSymptomsBtn.classList.remove("hidden");
       logSignalsBtn.classList.remove("hidden");
@@ -81,17 +72,16 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  logSignalsBtn.addEventListener("click", () => {
-    symptomsContainer.classList.add("hidden");
-    signalsContainer.classList.toggle("hidden");
-  });
-
   async function loadSymptomsEnum() {
     symptomsCheckboxes.innerHTML = "";
     try {
-      const res = await fetch("https://127.0.0.1:8443/api/patients/sessions/enum");
+      const res = await apiFetch(
+        "https://127.0.0.1:8443/api/patients/sessions/enum"
+      );
+
       if (!res.ok) throw new Error("enum fetch failed");
       const list = await res.json();
+
       list.forEach((sym) => {
         const labelText = sym.replaceAll("_", " ");
         const wrapper = document.createElement("label");
@@ -105,9 +95,7 @@ document.addEventListener("DOMContentLoaded", () => {
         cb.name = "symptom";
 
         wrapper.appendChild(cb);
-        const txt = document.createElement("span");
-        txt.textContent = labelText;
-        wrapper.appendChild(txt);
+        wrapper.appendChild(document.createTextNode(labelText));
 
         const cell = document.createElement("div");
         cell.appendChild(wrapper);
@@ -122,38 +110,48 @@ document.addEventListener("DOMContentLoaded", () => {
 
   symptomsForm.addEventListener("submit", async (e) => {
     e.preventDefault();
+
     if (!currentSessionId) {
       alert("Please start a session first.");
       return;
     }
+
     const selected = [
       ...document.querySelectorAll("input[name='symptom']:checked"),
     ].map((n) => n.value);
+
     if (selected.length === 0) {
       alert("Select at least one symptom");
       return;
     }
 
     try {
-      const res = await fetch(
+      const res = await apiFetch(
         `https://127.0.0.1:8443/api/patients/sessions/${currentSessionId}/symptoms`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ symptomsSet: selected }),
+          body: JSON.stringify( selected ),
         }
       );
+
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));
         alert(err.error || "Failed to save symptoms.");
         return;
       }
+
       alert("Symptoms saved");
       symptomsContainer.classList.add("hidden");
     } catch (err) {
       console.error(err);
       alert("Network/server error saving symptoms");
     }
+  });
+
+  logSignalsBtn.addEventListener("click", () => {
+    symptomsContainer.classList.add("hidden");
+    signalsContainer.classList.toggle("hidden");
   });
 
   document.querySelectorAll(".signal-btn").forEach((btn) => {
@@ -167,32 +165,25 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   recordBtn.addEventListener("click", async () => {
-    if (!currentSessionId) {
-      alert("Start a session first");
-      return;
-    }
-    if (!currentSignalType) {
-      alert("Choose a signal first");
-      return;
-    }
+    if (!currentSessionId) return alert("Start a session first");
+    if (!currentSignalType) return alert("Choose a signal first");
 
     try {
-      const res = await fetch(
+      const res = await apiFetch(
         `https://127.0.0.1:8443/api/patients/sessions/${currentSessionId}/signals`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            signalType: currentSignalType,
-            action: "start",
-          }),
+          body: JSON.stringify({ signalType: currentSignalType, action: "start" }),
         }
       );
+
       if (!res.ok) {
         const body = await res.json().catch(() => ({}));
         alert(body.error || "Failed to start recording");
         return;
       }
+
       recordingLabel.textContent = `${currentSignalType} recording...`;
       recordBtn.disabled = true;
       stopBtn.disabled = false;
@@ -203,32 +194,25 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   stopBtn.addEventListener("click", async () => {
-    if (!currentSessionId) {
-      alert("Start a session first");
-      return;
-    }
-    if (!currentSignalType) {
-      alert("Choose a signal first");
-      return;
-    }
+    if (!currentSessionId) return alert("Start a session first");
+    if (!currentSignalType) return alert("Choose a signal first");
 
     try {
-      const res = await fetch(
+      const res = await apiFetch(
         `https://127.0.0.1:8443/api/patients/sessions/${currentSessionId}/signals`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            signalType: currentSignalType,
-            action: "stop",
-          }),
+          body: JSON.stringify({ signalType: currentSignalType, action: "stop" }),
         }
       );
+
       if (!res.ok) {
         const body = await res.json().catch(() => ({}));
         alert(body.error || "Failed to stop recording");
         return;
       }
+
       recordingLabel.textContent = `Stopped ${currentSignalType}`;
       recordBtn.disabled = false;
       stopBtn.disabled = true;
@@ -238,5 +222,3 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
-
-//TODO: when backend for request, add notification when accepted/declined request
