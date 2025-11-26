@@ -108,6 +108,10 @@ document.addEventListener("DOMContentLoaded", () => {
               style="background:#e1445c; color:white; border:none; padding:0.4rem 0.8rem; border-radius: 12px; cursor:pointer;">
               View Sessions
             </button>
+            <button class="compare-sessions-btn" data-patient-id="${p.patientId}" 
+              style="background:#4a90e2; color:white; border:none; padding:0.4rem 0.8rem; border-radius: 12px; margin-left: 0.5rem; cursor:pointer;">
+              Compare 2 Sessions
+            </button>
           </td>
         `;
         patientsBody.appendChild(tr);
@@ -116,6 +120,12 @@ document.addEventListener("DOMContentLoaded", () => {
         btn.addEventListener("click", async (e) => {
           const patientId = btn.getAttribute("data-patient-id");
           await toggleSessionsForPatient(patientId, btn);
+        });
+        document.querySelectorAll(".compare-sessions-btn").forEach(btn => {
+          btn.addEventListener("click", async (e) => {
+            const patientId = btn.getAttribute("data-patient-id");
+            await showCompareSessions(patientId);
+          });
         });
       });
     } catch (err) {
@@ -138,6 +148,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       modal.classList.add('show');
       modal.setAttribute('aria-hidden', 'false');
+      btnApprove.focus(); 
 
       function cleanup() {
         btnApprove.removeEventListener('click', onApprove);
@@ -349,103 +360,258 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-    function renderSignalChart(canvas, dataStr) {
-      const ctx = canvas.getContext("2d");
+  async function showCompareSessions(patientId) {
+    const existingCompare = document.getElementById("compare-sessions-container");
+    if (existingCompare) existingCompare.remove();
 
-      let width = canvas.offsetWidth;
-      let height = canvas.offsetHeight;
+    const container = document.createElement("div");
+    container.id = "compare-sessions-container";
+    container.style.background = "#eee";
+    container.style.padding = "1rem";
+    container.style.borderRadius = "15px";
+    container.style.margin = "1rem auto";
+    container.style.width = "100%";
+    container.style.maxWidth = "700px";
+    container.style.boxSizing = "border-box";
 
-      if (width === 0) width = 600;
-      if (height === 0) height = 150;
+    patientsBox.appendChild(container);
 
-      canvas.width = width;
-      canvas.height = height;
+    container.innerHTML = `<h3>Compare Sessions for Patient: ${name} ${surname}</h3>
+      <p>Select exactly two sessions to compare:</p>
+      <div id="sessions-checkbox-list" style="max-height: 250px; overflow-y: auto; margin-bottom: 1rem;"></div>
+      <button id="compare-btn" disabled style="padding: 0.5rem 1rem; cursor: pointer; background: #4a90e2; color: white; border: none; border-radius: 8px;">Compare</button>
+      <div id="comparison-result" style="margin-top: 1rem;"></div>`;
 
-      if (!dataStr) {
-        ctx.font = "16px Arial";
-        ctx.fillText("No data", 10, 50);
+    const listDiv = container.querySelector("#sessions-checkbox-list");
+    const compareBtn = container.querySelector("#compare-btn");
+    const comparisonResult = container.querySelector("#comparison-result");
+
+    try {
+      const res = await fetch(`https://127.0.0.1:8443/api/patients/sessions/${patientId}`);
+      if (!res.ok) {
+        listDiv.textContent = "Failed to load sessions";
+        return;
+      }
+      const sessions = await res.json();
+
+      if (!sessions.length) {
+        listDiv.textContent = "No sessions found for this patient.";
         return;
       }
 
-      const data = dataStr
-        .split(",")
-        .map(x => parseFloat(x.trim()))
-        .filter(x => !isNaN(x));
+      sessions.forEach(session => {
+        const label = document.createElement("label");
+        label.style.display = "block";
+        label.style.marginBottom = "0.3rem";
+        label.style.cursor = "pointer";
 
-      if (data.length === 0) {
-        ctx.font = "16px Arial";
-        ctx.fillText("No valid data", 10, 50);
-        return;
-      }
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.value = session.sessionId;
+        checkbox.style.marginRight = "0.5rem";
 
-      ctx.clearRect(0, 0, width, height);
+        label.appendChild(checkbox);
+        label.append(`Session on ${new Date(session.timeStamp).toLocaleString()}`);
 
-      const maxPoints = width;
-      let plotData;
-
-      if (data.length > maxPoints) {
-        const blockSize = Math.floor(data.length / maxPoints);
-        plotData = [];
-
-        for (let i = 0; i < data.length; i += blockSize) {
-          const block = data.slice(i, i + blockSize);
-          const avg = block.reduce((a, b) => a + b, 0) / block.length;
-          plotData.push(avg);
-        }
-      } else {
-        plotData = data;
-      }
-
-      const min = Math.min(...plotData);
-      const max = Math.max(...plotData);
-      const range = max - min || 1;
-
-      const scaleY = height / range;
-      const stepX = width / (plotData.length - 1);
-
-      ctx.strokeStyle = "#c4c0c0ff";
-      ctx.lineWidth = 0.5;
-
-      for (let x = 0; x < width; x += 40) {
-        ctx.beginPath();
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, height);
-        ctx.stroke();
-      }
-
-      for (let y = 0; y < height; y += 20) {
-        ctx.beginPath();
-        ctx.moveTo(0, y);
-        ctx.lineTo(width, y);
-        ctx.stroke();
-      }
-
-      ctx.strokeStyle = "#f36666";
-      ctx.lineWidth = 1.8;
-      ctx.beginPath();
-
-      plotData.forEach((val, i) => {
-        const x = i * stepX;
-        const y = height - (val - min) * scaleY;
-        if (i === 0) ctx.moveTo(x, y);
-        else ctx.lineTo(x, y);
+        listDiv.appendChild(label);
       });
 
-      ctx.stroke();
+      listDiv.addEventListener("change", () => {
+        const checkedBoxes = listDiv.querySelectorAll("input[type='checkbox']:checked");
+        if (checkedBoxes.length === 2) {
+          compareBtn.disabled = false;
+          listDiv.querySelectorAll("input[type='checkbox']").forEach(cb => {
+            if (!cb.checked) cb.disabled = true;
+          });
+        } else {
+          compareBtn.disabled = true;
+          listDiv.querySelectorAll("input[type='checkbox']").forEach(cb => {
+            cb.disabled = false;
+          });
+        }
+      });
 
-      ctx.strokeStyle = "#bbb";
-      ctx.lineWidth = 0.7;
+      compareBtn.addEventListener("click", async () => {
+        const checkedBoxes = Array.from(listDiv.querySelectorAll("input[type='checkbox']:checked"));
+        if (checkedBoxes.length !== 2) return;
+
+        const sessionId1 = checkedBoxes[0].value;
+        const sessionId2 = checkedBoxes[1].value;
+
+        comparisonResult.innerHTML = "Loading comparison...";
+
+        try {
+          const [symptoms1, signals1, symptoms2, signals2] = await Promise.all([
+            fetch(`https://127.0.0.1:8443/api/patients/sessions/${sessionId1}/symptoms`).then(r => r.json()),
+            fetch(`https://127.0.0.1:8443/api/patients/sessions/${sessionId1}/signals`).then(r => r.json()),
+            fetch(`https://127.0.0.1:8443/api/patients/sessions/${sessionId2}/symptoms`).then(r => r.json()),
+            fetch(`https://127.0.0.1:8443/api/patients/sessions/${sessionId2}/signals`).then(r => r.json()),
+          ]);
+
+          comparisonResult.innerHTML = `
+            <div style="display:flex; gap:2rem;">
+              <div style="flex:1;">
+                <h4>Session 1 Symptoms</h4>
+                ${symptoms1.length === 0 ? "<p>No symptoms recorded.</p>" : "<ul>" + symptoms1.map(s => `<li>${s}</li>`).join("") + "</ul>"}
+              </div>
+              <div style="flex:1;">
+                <h4>Session 2 Symptoms</h4>
+                ${symptoms2.length === 0 ? "<p>No symptoms recorded.</p>" : "<ul>" + symptoms2.map(s => `<li>${s}</li>`).join("") + "</ul>"}
+              </div>
+            </div>
+            <div style="margin-top:2rem;">
+              <h4>Overlaid Signals Comparison</h4>
+            </div>
+          `;
+
+          const allSignalTypes = new Set([
+            ...signals1.map(s => s.signalType),
+            ...signals2.map(s => s.signalType)
+          ]);
+
+          allSignalTypes.forEach(signalType => {
+            const sig1 = signals1.find(s => s.signalType === signalType);
+            const sig2 = signals2.find(s => s.signalType === signalType);
+
+            const signalContainer = document.createElement("div");
+            signalContainer.style.border = "1px solid #aaa";
+            signalContainer.style.marginBottom = "1.5rem";
+            signalContainer.style.borderRadius = "10px";
+            signalContainer.style.padding = "0.5rem";
+            signalContainer.style.background = "#f1efefff";
+            signalContainer.style.width = "100%";   
+            signalContainer.style.maxWidth = "700px";
+            signalContainer.style.boxSizing = "border-box";
+
+            const signalHeader = document.createElement("div");
+            signalHeader.textContent = signalType + " Signal Comparison";
+            signalHeader.style.fontWeight = "600";
+            signalHeader.style.marginBottom = "0.5rem";
+
+            signalContainer.appendChild(signalHeader);
+
+            const canvas = document.createElement("canvas");
+            canvas.style.width = "100%";
+            canvas.style.height = "150px";
+            signalContainer.appendChild(canvas);
+
+            comparisonResult.appendChild(signalContainer);
+
+            const dataStr1 = sig1 ? sig1.patientSignalData : null;
+            const dataStr2 = sig2 ? sig2.patientSignalData : null;
+
+            renderOverlaySignalChart(canvas, dataStr1, dataStr2);
+          });
+
+        } catch (e) {
+          comparisonResult.textContent = "Failed to load session details.";
+          console.error(e);
+        }
+      });
+    } catch (err) {
+      listDiv.textContent = "Error loading sessions";
+      console.error(err);
+    }
+  }
+
+  function renderSignalChart(canvas, dataStr) {
+    const ctx = canvas.getContext("2d");
+
+    let width = canvas.offsetWidth;
+    let height = canvas.offsetHeight;
+
+    if (width === 0) width = 600;
+    if (height === 0) height = 150;
+
+    canvas.width = width;
+    canvas.height = height;
+
+    if (!dataStr) {
+      ctx.font = "16px Arial";
+      ctx.fillText("No data", 10, 50);
+      return;
+    }
+
+    const data = dataStr
+      .split(",")
+      .map(x => parseFloat(x.trim()))
+      .filter(x => !isNaN(x));
+
+    if (data.length === 0) {
+      ctx.font = "16px Arial";
+      ctx.fillText("No valid data", 10, 50);
+      return;
+    }
+
+    ctx.clearRect(0, 0, width, height);
+
+    const maxPoints = width;
+    let plotData;
+
+    if (data.length > maxPoints) {
+      const blockSize = Math.floor(data.length / maxPoints);
+      plotData = [];
+
+      for (let i = 0; i < data.length; i += blockSize) {
+        const block = data.slice(i, i + blockSize);
+        const avg = block.reduce((a, b) => a + b, 0) / block.length;
+        plotData.push(avg);
+      }
+    } else {
+      plotData = data;
+    }
+
+    const min = Math.min(...plotData);
+    const max = Math.max(...plotData);
+    const range = max - min || 1;
+
+    const scaleY = height / range;
+    const stepX = width / (plotData.length - 1);
+
+    ctx.strokeStyle = "#c4c0c0ff";
+    ctx.lineWidth = 0.5;
+
+    for (let x = 0; x < width; x += 40) {
       ctx.beginPath();
-      ctx.moveTo(0, height - (0 - min) * scaleY);
-      ctx.lineTo(width, height - (0 - min) * scaleY);
+      ctx.moveTo(x, 0);
+      ctx.lineTo(x, height);
       ctx.stroke();
     }
+
+    for (let y = 0; y < height; y += 20) {
+      ctx.beginPath();
+      ctx.moveTo(0, y);
+      ctx.lineTo(width, y);
+      ctx.stroke();
+    }
+
+    ctx.strokeStyle = "#f36666";
+    ctx.lineWidth = 1.8;
+    ctx.beginPath();
+
+    plotData.forEach((val, i) => {
+      const x = i * stepX;
+      const y = height - (val - min) * scaleY;
+      if (i === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    });
+
+    ctx.stroke();
+
+    ctx.strokeStyle = "#bbb";
+    ctx.lineWidth = 0.7;
+    ctx.beginPath();
+    ctx.moveTo(0, height - (0 - min) * scaleY);
+    ctx.lineTo(width, height - (0 - min) * scaleY);
+    ctx.stroke();
+  }
 
 
 
   function closeModal() {
     modal.classList.remove('show');
     modal.setAttribute('aria-hidden', 'true');
+    btnApprove.focus(); 
   }
 
   function showToast(message, type = "success") {
@@ -467,6 +633,113 @@ document.addEventListener("DOMContentLoaded", () => {
         toast.remove();
       });
     }, 2500);
+  }
+
+  function renderOverlaySignalChart(canvas, dataStr1, dataStr2) {
+    const ctx = canvas.getContext("2d");
+
+    let width = canvas.offsetWidth;
+    let height = canvas.offsetHeight;
+
+    if (width === 0) width = 600;
+    if (height === 0) height = 150;
+
+    canvas.width = width;
+    canvas.height = height;
+
+    ctx.clearRect(0, 0, width, height);
+
+    if (!dataStr1 && !dataStr2) {
+      ctx.font = "16px Arial";
+      ctx.fillText("No data", 10, 50);
+      return;
+    }
+
+    const parseData = (str) =>
+      str
+        ? str.split(",").map(x => parseFloat(x.trim())).filter(x => !isNaN(x))
+        : [];
+
+    let data1 = parseData(dataStr1);
+    let data2 = parseData(dataStr2);
+
+    if (data1.length === 0 && data2.length === 0) {
+      ctx.font = "16px Arial";
+      ctx.fillText("No valid data", 10, 50);
+      return;
+    }
+
+    const maxPoints = width;
+    const reduceData = (data) => {
+      if (data.length > maxPoints) {
+        const blockSize = Math.floor(data.length / maxPoints);
+        const reduced = [];
+        for (let i = 0; i < data.length; i += blockSize) {
+          const block = data.slice(i, i + blockSize);
+          const avg = block.reduce((a, b) => a + b, 0) / block.length;
+          reduced.push(avg);
+        }
+        return reduced;
+      }
+      return data;
+    };
+
+    data1 = reduceData(data1);
+    data2 = reduceData(data2);
+
+    const combined = [...data1, ...data2];
+    const min = Math.min(...combined);
+    const max = Math.max(...combined);
+    const range = max - min || 1;
+
+    const scaleY = height / range;
+    const stepX = width / (Math.max(data1.length, data2.length) - 1);
+
+    ctx.strokeStyle = "#c4c0c0ff";
+    ctx.lineWidth = 0.5;
+
+    for (let x = 0; x < width; x += 40) {
+      ctx.beginPath();
+      ctx.moveTo(x, 0);
+      ctx.lineTo(x, height);
+      ctx.stroke();
+    }
+
+    for (let y = 0; y < height; y += 20) {
+      ctx.beginPath();
+      ctx.moveTo(0, y);
+      ctx.lineTo(width, y);
+      ctx.stroke();
+    }
+
+    ctx.strokeStyle = "#f36666";
+    ctx.lineWidth = 1.8;
+    ctx.beginPath();
+    data1.forEach((val, i) => {
+      const x = i * stepX;
+      const y = height - (val - min) * scaleY;
+      if (i === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+
+    ctx.strokeStyle = "#1b3560ff";
+    ctx.lineWidth = 1.8;
+    ctx.beginPath();
+    data2.forEach((val, i) => {
+      const x = i * stepX;
+      const y = height - (val - min) * scaleY;
+      if (i === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+
+    ctx.strokeStyle = "#bbb";
+    ctx.lineWidth = 0.7;
+    ctx.beginPath();
+    ctx.moveTo(0, height - (0 - min) * scaleY);
+    ctx.lineTo(width, height - (0 - min) * scaleY);
+    ctx.stroke();
   }
 
   async function handleApprove(patientId) {
