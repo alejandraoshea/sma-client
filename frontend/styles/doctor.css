@@ -387,3 +387,53 @@ s
 .modal-btn.cancel:hover {
   background-color: #bbb;
 }
+
+.view-sessions-btn {
+  background-color: #f36666;
+  color: white;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.2s ease;
+  font-size: 0.9rem;
+}
+
+.view-sessions-btn:hover {
+  background-color: #c94f4f;
+}
+
+#sessions-container {
+  margin-top: 1rem;
+  width: 100%;        
+  max-height: 300px;
+  overflow-y: auto;
+  background: #ddd;  
+  border-radius: 15px;
+  padding: 1rem;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+  font-family: "Roboto", sans-serif;
+}
+
+.session-item {
+  padding: 0.7rem 1rem;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+.session-item:last-child {
+  border-bottom: none;
+}
+
+.session-item:hover {
+  background-color: #ddd; 
+}
+
+.session-details {
+  font-size: 0.85rem;
+  color: #555;
+}

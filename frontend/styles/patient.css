@@ -102,12 +102,6 @@ main {
   width: 100%;
 }
 
-.main-div {
-  display: flex;
-  align-items: flex-start;
-  width: 100%;
-}
-
 .patient-sidebar {
   display: flex;
   flex-direction: column;
@@ -126,18 +120,23 @@ main {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin: 1rem;
-  width: 25%;
   min-width: 200px;
   min-height: 200px;
+  max-width: 200px;
+  max-height: 200px;
   background-color: #ffffff;
-  color: #1a1a1a;
+  color: #f05454;
   font-size: 1.4rem;
   font-weight: 600;
   letter-spacing: 0.5px;
-  border: 1px solid rgb(0, 0, 0);
+  border: none;
   cursor: pointer;
   transition: all 0.3s ease;
+
+  padding: 25px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .log-symptoms-button img {
@@ -149,8 +148,6 @@ main {
 
 .log-symptoms-button:hover {
   transform: translateY(-4px);
-  background: linear-gradient(135deg, #d94343, #b13232);
-  box-shadow: 0 14px 30px rgba(240, 84, 84, 0.4);
 }
 
 .log-symptoms-button:hover img {
@@ -162,9 +159,12 @@ main {
   box-shadow: 0 5px 15px rgba(240, 84, 84, 0.2);
 }
 
-.patient-dashboard-buttons {
+.main-div {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  padding: 3rem;
+  gap: 3rem;
+  padding-right: 1rem;
 }
 
 .site-footer {
@@ -176,7 +176,7 @@ main {
   align-items: center;
   flex-direction: column;
   text-align: center;
-  border-top: 2px solid #333;
+  border-top: 2px solid #3e4042;
 }
 
 .footer-content {
@@ -235,7 +235,7 @@ main {
   font-size: 1.3rem;
   font-weight: bold;
   margin-bottom: 1rem;
-  color: #333;
+  color: #3e4042;
 }
 
 .checkbox-container {
@@ -283,10 +283,6 @@ main {
   background: #ddd;
 }
 
-.hidden {
-  display: none !important;
-}
-
 @keyframes fadeSlide {
   from {
     opacity: 0;
@@ -319,15 +315,6 @@ main {
   box-shadow: 0 0 0 3px rgba(255, 77, 79, 0.5);
 }
 
-.floating-box {
-  width: 95%;
-  background: #ccc7c7;
-  padding: 1.5rem;
-  border-radius: 20px;
-  margin: 1rem auto;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
-}
-
 .symptom-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -337,7 +324,7 @@ main {
 
 .symptom-grid label {
   display: flex;
-  gap: .6rem;
+  gap: 0.6rem;
   align-items: center;
   font-size: 1.05rem;
   color: #222;
@@ -345,80 +332,282 @@ main {
 }
 
 .save-btn {
-  background: #e63946;
+  background: #f05454;
   color: white;
   border: none;
   padding: 0.6rem 1rem;
+  width: 100%;
   border-radius: 10px;
-  font-weight: 600;
-  font-family: "Roboto", sans-serif;
   cursor: pointer;
-}
-
-.save-btn:hover { 
-  background: #c82333; 
+  font-size: 1rem;
 }
 
 .signal-grid {
-  display:flex;
-  gap: .8rem;
-  justify-content:flex-start;
+  display: flex;
+  gap: 0.8rem;
+  justify-content: flex-start;
   margin-bottom: 1rem;
 }
 
 .signal-btn {
-  background:#f05454;
-  color:white;
-  border:none;
-  padding:.5rem 1.2rem;
-  border-radius:18px;
-  cursor:pointer;
-  font-weight:700;
+  background: #f05454;
+  color: white;
+  border: none;
+  padding: 0.5rem 1.2rem;
+  border-radius: 18px;
+  cursor: pointer;
+  font-weight: 700;
   font-family: "Roboto", sans-serif;
 }
-.signal-btn:hover { 
-  background:#d94343; 
+.signal-btn:hover {
+  background: #d94343;
 }
 
 .record-area {
   margin-top: 1rem;
   padding: 1rem;
   border-radius: 12px;
-  background: rgba(0,0,0,0.03);
-  display:flex;
-  flex-direction:column;
-  align-items:center;
+  background: rgba(0, 0, 0, 0.03);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .record-control {
-  background:#e63946;
-  color:white;
-  border:none;
-  padding:8px 14px;
-  border-radius:12px;
-  font-weight:600;
+  background: #e63946;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 12px;
+  font-weight: 600;
   font-family: "Roboto", sans-serif;
-  cursor:pointer;
+  cursor: pointer;
 }
-.record-control[disabled] { 
-  opacity: 0.5; 
-  cursor: not-allowed; 
-}
-
-.hidden { 
-  display:none !important; 
+.record-control[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
-.stacked { 
-  display:flex; 
-  flex-direction:column; 
-  gap:8px; 
+.hidden {
+  display: none !important;
+}
+
+.stacked {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .patient-dashboard-buttons {
-  display:flex;
-  flex-direction:column;
-  gap:1rem;
-  width:100%;
-  padding: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+}
+
+.doctor-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.doctor-item {
+  background: white;
+  padding: 1rem;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.doctor-item input[type="checkbox"] {
+  transform: scale(1.3);
+}
+
+#see-doctors-btn {
+  margin-bottom: 2rem;
+}
+
+#doctors-list-container {
+  max-height: 60vh;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+}
+
+.patient-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem;
+  gap: 3rem;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.patient-info h2 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #f05454;
+  text-align: center;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  margin-bottom: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #444;
+}
+
+.form-group input,
+.form-group select {
+  padding: 10px 12px;
+  font-size: 0.95rem;
+  border: none;
+  border-radius: 8px;
+  background-color: #fafafa;
+  height: 40px;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-group select {
+  padding: 10px 40px 10px 12px;
+  font-size: 0.95rem;
+  border: none;
+  border-radius: 8px;
+  background-color: #fafafa;
+  height: 40px;
+  width: 100%;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+
+  background-image: url("data:image/svg+xml;utf8,<svg fill='grey' height='16' width='16' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'><polygon points='0,0 20,0 10,10'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 14px;
+}
+
+.form-group select:focus {
+  outline: 2px solid #0077ff;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #4a90e2;
+  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+  outline: none;
+  background-color: #fff;
+}
+
+.form-actions {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.form-actions button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  background-color: #f05454;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.25s ease;
+}
+
+.form-actions button:hover {
+  transform: translateY(-2px);
+}
+
+.patient-info-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.patient-info-form div {
+  margin: 1rem;
+}
+
+.icon-circle {
+  width: 300px;
+  height: 300px;
+  background-color: #f05454;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.icon-circle img {
+  width: 70%;
+  height: auto;
+}
+
+.doctors-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+}
+
+.doctors-list {
+  max-height: 500px;
+  border-radius: 12px;
+}
+
+.doctors-map {
+  background-color: #4a90e2;
+  height: 500px;
+  border-radius: 12px;
+  width: 340px;
+}
+
+.current-doctor-info {
+  background-color: rgb(48, 54, 67);
+  background-color: #fafafa;
+  color: #3e4042;
+  padding: 30px 20px;
+  text-align: center;
+  border-radius: 12px;
+  margin-bottom: 3rem;
+}
+
+.current-doctor-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  gap: 0.5rem;
+}
+
+.doctor-status-container {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 0.5rem;
+}
+
+.doctor-status-circle {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: cadetblue;
+  flex-shrink: 0;
+}
+
+.doctor-status-text {
+  font-size: 0.9rem;
+  line-height: 16px;
 }

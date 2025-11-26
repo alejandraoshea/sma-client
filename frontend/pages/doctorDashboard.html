@@ -18,7 +18,7 @@
     <div class="sidebar"></div>
   </div>
 
-  <main style="height:100vh">
+  <main>
     <section class="main-div">
       <article class="patient-sidebar">Welcome,<br/>Doctor</article>
 
@@ -43,11 +43,13 @@
                 <th style="padding:.6rem;border:1px solid #ddd">Birth Date</th>
                 <th style="padding:.6rem;border:1px solid #ddd">Height</th>
                 <th style="padding:.6rem;border:1px solid #ddd">Weight</th>
+                <th style="padding:.6rem;border:1px solid #ddd">Sessions</th>
               </tr>
             </thead>
             <tbody id="patients-body"></tbody>
           </table>
         </div>
+        <div id="sessions-container" class="hidden"></div>
         <div id="confirm-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-message" aria-hidden="true">
           <div class="modal-box">
             <p id="modal-message">Are you sure?</p>
@@ -58,7 +60,6 @@
             </div>
           </div>
         </div>
-
       </article>
     </section>
 
