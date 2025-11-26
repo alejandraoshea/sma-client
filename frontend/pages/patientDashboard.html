@@ -72,10 +72,10 @@
           </div>
         </div>
 
-        <article class="patient-dashboard-buttons">
-          <div class="doctors-section">
-            <div class="doctors-split">
-              <div class="doctors-list">
+        <div class="doctors-section">
+          <div class="doctors-split">
+            <div class="doctors-list">
+              <div>
                 <h3 class="section-title">Current Doctor</h3>
                 <div
                   id="current-doctor-info"
@@ -104,79 +104,29 @@
                     </div>
                   </div>
                 </div>
-                <div id="doctors-list-container">
-                  <h3 class="section-title">Available Doctors</h3>
-                  <form id="doctors-form">
-                    <div id="doctors-list" class="doctor-grid"></div>
-                    <div
-                      style="
-                        display: flex;
-                        justify-content: flex-end;
-                        margin-top: 1rem;
-                      "
-                    >
-                      <button type="submit" class="save-btn">
-                        <p>Request Selected Doctor</p>
-                      </button>
-                    </div>
-                  </form>
-                </div>
               </div>
-              <div class="doctors-map"></div>
-            </div>
-          </div>
-          <button id="start-session-btn" class="log-symptoms-button">
-            <img src="../assets/svgs/add.svg" alt="+" />
-            Start Session
-          </button>
 
-          <div class="stacked">
-            <button id="log-symptoms-btn" class="log-symptoms-button hidden">
-              <img src="../assets/svgs/add.svg" alt="+" />
-              Log Symptoms
-            </button>
-            <div id="symptoms-container" class="floating-box hidden">
-              <h3 class="section-title">Log Symptoms</h3>
-              <form id="symptoms-form">
-                <div id="symptoms-checkboxes" class="symptom-grid"></div>
-                <div style="display: flex; justify-content: flex-end">
-                  <button type="submit" class="save-btn">Save Symptoms</button>
-                </div>
-              </form>
-            </div>
-          </div>
-
-          <div class="stacked">
-            <button id="log-signals-btn" class="log-symptoms-button hidden">
-              <img src="../assets/svgs/add.svg" alt="+" />
-              Log Signals
-            </button>
-
-            <div id="signals-container" class="floating-box hidden">
-              <h3 class="section-title">Log Signals</h3>
-              <div class="signal-grid">
-                <button class="signal-btn" data-signal="ECG">ECG</button>
-                <button class="signal-btn" data-signal="EMG">EMG</button>
-              </div>
-              <div id="record-area" class="record-area hidden">
-                <p
-                  id="recording-label"
-                  style="margin: 0 0 1rem 0; text-align: center; color: #333"
-                >
-                  Ready to record
-                </p>
-                <div
-                  style="display: flex; gap: 0.75rem; justify-content: center"
-                >
-                  <button id="record-btn" class="record-control">Record</button>
-                  <button id="stop-btn" class="record-control" disabled>
-                    Stop
-                  </button>
-                </div>
+              <div id="doctors-list-container">
+                <h3 class="section-title">Available Doctors</h3>
+                <form id="doctors-form">
+                  <div id="doctors-list" class="doctor-grid"></div>
+                  <div
+                    style="
+                      display: flex;
+                      justify-content: flex-end;
+                      margin-top: 1rem;
+                    "
+                  >
+                    <button type="submit" class="save-btn">
+                      <p>Request Selected Doctor</p>
+                    </button>
+                  </div>
+                </form>
               </div>
             </div>
+            <div class="doctors-map"></div>
           </div>
-        </article>
+        </div>
 
         <div class="patient-info">
           <h2>Edit Profile</h2>
@@ -246,9 +196,59 @@
             </div>
           </form>
         </div>
-      </section>
 
-      <section class="sidebar sidebar-dark"></section>
+        <button id="start-session-btn" class="log-symptoms-button">
+          <img src="../assets/svgs/add.svg" alt="+" />
+          Start Session
+        </button>
+
+        <div>
+          <div class="stacked" style="margin-bottom: 3rem">
+            <button id="log-symptoms-btn" class="log-symptoms-button hidden">
+              <img src="../assets/svgs/add.svg" alt="+" />
+              Log Symptoms
+            </button>
+            <div id="symptoms-container" class="floating-box hidden">
+              <form id="symptoms-form">
+                <div id="symptoms-checkboxes" class="symptom-grid"></div>
+                <div style="display: flex; justify-content: flex-end">
+                  <button type="submit" class="save-btn">Save Symptoms</button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <div class="stacked">
+            <button id="log-signals-btn" class="log-symptoms-button hidden">
+              <img src="../assets/svgs/add.svg" alt="+" />
+              Log Signals
+            </button>
+
+            <div id="signals-container" class="floating-box hidden">
+              <div class="signal-grid">
+                <button class="signal-btn" data-signal="ECG">ECG</button>
+                <button class="signal-btn" data-signal="EMG">EMG</button>
+              </div>
+              <div id="record-area" class="record-area hidden">
+                <p
+                  id="recording-label"
+                  style="margin: 0 0 1rem 0; text-align: center; color: #333"
+                >
+                  Ready to record
+                </p>
+                <div
+                  style="display: flex; gap: 0.75rem; justify-content: center"
+                >
+                  <button id="record-btn" class="record-control">Record</button>
+                  <button id="stop-btn" class="record-control" disabled>
+                    Stop
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
 
     <footer class="site-footer">

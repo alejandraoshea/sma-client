@@ -45,6 +45,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
       doctorsList.innerHTML = "";
       doctors.forEach((doctor) => {
+        if (doctor.name === null || doctor.surname == null) {
+          return;
+        }
+
         const div = document.createElement("div");
         div.className = "doctor-item";
         div.innerHTML = `
