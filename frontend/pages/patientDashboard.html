@@ -32,8 +32,105 @@
           <div class="icon-circle">
             <img src="../assets/svgs/logo_white.svg" alt="Logo" />
           </div>
-          <h2>Patient Profile</h2>
-          <form>
+          <div class="current-profile">
+            <h2 class="section-title">Current Profile</h2>
+            <div class="patient-details">
+              <div>
+                <div class="detail-group">
+                  <label>Name:</label>
+                  <p id="detail-name" class="detail-value"></p>
+                </div>
+
+                <div class="detail-group">
+                  <label>Surname:</label>
+                  <p id="detail-surname" class="detail-value"></p>
+                </div>
+
+                <div class="detail-group">
+                  <label>Gender:</label>
+                  <p id="detail-gender" class="detail-value"></p>
+                </div>
+              </div>
+
+              <div>
+                <div class="detail-group">
+                  <label>Birthdate:</label>
+                  <p id="detail-birthdate" class="detail-value"></p>
+                </div>
+
+                <div class="detail-group">
+                  <label>Height (cm):</label>
+                  <p id="detail-height" class="detail-value"></p>
+                </div>
+
+                <div class="detail-group">
+                  <label>Weight (kg):</label>
+                  <p id="detail-weight" class="detail-value"></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="doctors-section">
+          <div class="doctors-split">
+            <div class="doctors-list">
+              <div>
+                <h3 class="section-title">Current Doctor</h3>
+                <div
+                  id="current-doctor-info"
+                  class="current-doctor-info"
+                  style="padding: 20px"
+                >
+                  <p
+                    id="doctor-name-text"
+                    style="
+                      border-bottom: 1px solid #dadada;
+                      padding: 10px;
+                      margin-bottom: 10px;
+                      padding-top: 0;
+                    "
+                  >
+                    No doctor assigned.
+                  </p>
+
+                  <div class="doctor-status-container">
+                    <div
+                      id="doctor-status-box"
+                      class="doctor-status-circle"
+                    ></div>
+                    <div id="doctor-status-text" class="doctor-status-text">
+                      Unknown
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div id="doctors-list-container">
+                <h3 class="section-title">Available Doctors</h3>
+                <form id="doctors-form">
+                  <div id="doctors-list" class="doctor-grid"></div>
+                  <div
+                    style="
+                      display: flex;
+                      justify-content: flex-end;
+                      margin-top: 1rem;
+                    "
+                  >
+                    <button type="submit" class="save-btn">
+                      <p>Request Selected Doctor</p>
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <div class="doctors-map"></div>
+          </div>
+        </div>
+
+        <div class="patient-info">
+          <h2>Edit Profile</h2>
+          <form id="patient-form">
             <div class="patient-info-form">
               <div>
                 <div class="form-group">
@@ -99,19 +196,19 @@
             </div>
           </form>
         </div>
-        <article class="patient-dashboard-buttons">
-          <button id="start-session-btn" class="log-symptoms-button">
-            <img src="../assets/svgs/add.svg" alt="+" />
-            Start Session
-          </button>
 
-          <div class="stacked">
+        <button id="start-session-btn" class="log-symptoms-button">
+          <img src="../assets/svgs/add.svg" alt="+" />
+          Start Session
+        </button>
+
+        <div>
+          <div class="stacked" style="margin-bottom: 3rem">
             <button id="log-symptoms-btn" class="log-symptoms-button hidden">
               <img src="../assets/svgs/add.svg" alt="+" />
               Log Symptoms
             </button>
             <div id="symptoms-container" class="floating-box hidden">
-              <h3 class="section-title">Log Symptoms</h3>
               <form id="symptoms-form">
                 <div id="symptoms-checkboxes" class="symptom-grid"></div>
                 <div style="display: flex; justify-content: flex-end">
@@ -128,11 +225,9 @@
             </button>
 
             <div id="signals-container" class="floating-box hidden">
-              <h3 class="section-title">Log Signals</h3>
               <div class="signal-grid">
                 <button class="signal-btn" data-signal="ECG">ECG</button>
                 <button class="signal-btn" data-signal="EMG">EMG</button>
-                <button class="signal-btn" data-signal="ACC">ACC</button>
               </div>
               <div id="record-area" class="record-area hidden">
                 <p
@@ -152,63 +247,8 @@
               </div>
             </div>
           </div>
-
-          <div class="doctors-section">
-            <div class="doctors-split">
-              <div class="doctors-list">
-                <h3 class="section-title">Current Doctor</h3>
-                <div
-                  id="current-doctor-info"
-                  class="current-doctor-info"
-                  style="padding: 20px"
-                >
-                  <p
-                    id="doctor-name-text"
-                    style="
-                      border-bottom: 1px solid #dadada;
-                      padding: 10px;
-                      margin-bottom: 10px;
-                      padding-top: 0;
-                    "
-                  >
-                    No doctor assigned.
-                  </p>
-
-                  <div class="doctor-status-container">
-                    <div
-                      id="doctor-status-box"
-                      class="doctor-status-circle"
-                    ></div>
-                    <div id="doctor-status-text" class="doctor-status-text">
-                      Unknown
-                    </div>
-                  </div>
-                </div>
-                <div id="doctors-list-container">
-                  <h3 class="section-title">Available Doctors</h3>
-                  <form id="doctors-form">
-                    <div id="doctors-list" class="doctor-grid"></div>
-                    <div
-                      style="
-                        display: flex;
-                        justify-content: flex-end;
-                        margin-top: 1rem;
-                      "
-                    >
-                      <button type="submit" class="save-btn">
-                        <p>Request Selected Doctor</p>
-                      </button>
-                    </div>
-                  </form>
-                </div>
-              </div>
-              <div class="doctors-map"></div>
-            </div>
-          </div>
-        </article>
+        </div>
       </section>
-
-      <section class="sidebar sidebar-dark"></section>
     </main>
 
     <footer class="site-footer">
