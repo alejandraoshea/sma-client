@@ -203,6 +203,11 @@
         </button>
 
         <div>
+          <div class="stacked">
+            <h2 style="margin-bottom: 1rem; margin-top: 3rem">MAC Address</h2>
+            <input id="macInput" type="text" placeholder="AA:BB:CC:DD:EE:FF" />
+            <button onclick="submitMac()">Submit MAC</button>
+          </div>
           <div class="stacked" style="margin-bottom: 3rem">
             <button id="log-symptoms-btn" class="log-symptoms-button hidden">
               <img src="../assets/svgs/add.svg" alt="+" />
@@ -283,6 +288,36 @@
         }
 
         console.log(claims);
+      }
+    </script>
+
+    <script>
+      function sendMac() {
+        const mac = document.getElementById("macInput").value.trim();
+
+        if (!isValidMac(mac)) {
+          alert("Invalid MAC format!");
+          return;
+        }
+
+        fetch("/api/device/mac", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ macAddress: mac }),
+        })
+          .then((response) => response.text())
+          .then((text) => {
+            document.getElementById("result").innerText = text;
+          })
+          .catch((err) => {
+            document.getElementById("result").innerText = "Error: " + err;
+          });
+      }
+
+      function isValidMac(mac) {
+        return /^([0-9A-Fa-f]{2}:){5}[0-9A-Fa-f]{2}$/.test(mac);
       }
     </script>
 
