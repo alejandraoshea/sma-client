@@ -15,7 +15,9 @@
           style="margin-right: 1rem; width: 40px"
         />MotivSMA
       </h1>
-      <div class="links"><button class="btn-logout">Logout</button></div>
+      <div class="links">
+        <button id="logout-button" class="btn-logout">Logout</button>
+      </div>
     </nav>
 
     <div class="patient-dashboard-header">
@@ -25,6 +27,33 @@
 
     <main>
       <section class="main-div">
+        <div class="doctor-info">
+          <div class="icon-circle">
+            <img src="../assets/svgs/logo_white.svg" alt="Logo" />
+          </div>
+          <div class="current-profile">
+            <h2 class="section-title">Current Profile</h2>
+            <div class="doctor-details">
+              <div>
+                <div class="detail-group">
+                  <label>Name:</label>
+                  <p id="detail-name" class="detail-value"></p>
+                </div>
+
+                <div class="detail-group">
+                  <label>Surname:</label>
+                  <p id="detail-surname" class="detail-value"></p>
+                </div>
+
+                <div class="detail-group">
+                  <label>Gender:</label>
+                  <p id="detail-gender" class="detail-value"></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <article class="patient-dashboard-buttons">
           <button id="see-patients-btn" class="log-symptoms-button">
             <img src="../assets/svgs/add.svg" /> See all patients
@@ -96,6 +125,40 @@
             </div>
           </div>
         </article>
+
+        <div class="doctor-info">
+          <h2>Edit Profile</h2>
+          <form id="doctor-form">
+            <div class="doctor-info-form">
+                <div class="form-group">
+                  <label for="doctor-name">Name:</label>
+                  <input type="text" id="doctor-name" name="doctor-name" />
+                </div>
+
+                <div class="form-group">
+                  <label for="doctor-surname">Surname:</label>
+                  <input
+                    type="text"
+                    id="doctor-surname"
+                    name="doctor-surname"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="doctor-gender">Gender:</label>
+                  <select id="doctor-gender" name="doctor-gender">
+                    <option value="">Select gender</option>
+                    <option value="MALE">Male</option>
+                    <option value="FEMALE">Female</option>
+                  </select>
+                </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit">Save</button>
+            </div>
+          </form>
+        </div>
       </section>
     </main>
 
@@ -116,17 +179,18 @@
       </div>
     </footer>
 
-    <!--<script>
-    const token = localStorage.getItem("token");
-    const role = localStorage.getItem("role");
+    <script>
+      const token = localStorage.getItem("token");
+      const role = localStorage.getItem("role");
 
-    if (!token) {
-      window.location.href = "../../index.html";
-    } else if (role !== "DOCTOR") {
-      window.location.href = "../../index.html";
-    }
-  </script>
--->
+      if (!token) {
+        window.location.href = "../../index.html";
+      } else if (role !== "DOCTOR") {
+        window.location.href = "../../index.html";
+      }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/build/jwt-decode.min.js"></script>
     <script src="../js/logout.js"></script>
     <script src="../js/doctor.js"></script>
   </body>

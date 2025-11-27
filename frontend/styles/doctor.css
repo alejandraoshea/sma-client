@@ -437,3 +437,45 @@ s
   font-size: 0.85rem;
   color: #555;
 }
+
+.doctor-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem;
+  padding-left: 5rem;
+  padding-right: 5rem;
+  gap: 3rem;
+  max-width: 450px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.doctor-info h2 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #f05454;
+  text-align: center;
+}
+
+.doctor-info-form {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.doctor-info-form div {
+  margin: 1rem;
+}
+
+.detail-group p {
+  width: 100%;
+}
+
+.doctor-details {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 5rem;
+  width: 100%;
+}

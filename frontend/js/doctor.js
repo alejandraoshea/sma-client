@@ -1,5 +1,18 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const doctorId = 4; 
+  const token = localStorage.getItem("token");
+  if (!token) window.location.href = "../../index.html";
+
+  const claims = jwt_decode(token);
+  if (claims.role !== "DOCTOR") window.location.href = "../../index.html";
+
+  async function apiFetch(url, options = {}) {
+    const res = await fetch(url, {
+      ...options,
+      headers: { ...(options.headers || {}), Authorization: `Bearer ${token}` },
+    });
+    if (!res) return null;
+    return res;
+  }
 
   const seePatientsBtn = document.getElementById("see-patients-btn");
   const requestsBox = document.getElementById("requests-box");
@@ -8,13 +21,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const requestsTitle = document.getElementById("requests-title");
   const patientsBody = document.getElementById("patients-body");
 
-  let sessionsContainer = null; 
+  let sessionsContainer = null;
 
-  const modal = document.getElementById('confirm-modal');
-  const modalMessage = document.getElementById('modal-message');
-  const btnApprove = document.getElementById('modal-approve-btn');
-  const btnReject = document.getElementById('modal-reject-btn');
-  const btnCancel = document.getElementById('modal-cancel-btn');
+  const modal = document.getElementById("confirm-modal");
+  const modalMessage = document.getElementById("modal-message");
+  const btnApprove = document.getElementById("modal-approve-btn");
+  const btnReject = document.getElementById("modal-reject-btn");
+  const btnCancel = document.getElementById("modal-cancel-btn");
 
   seePatientsBtn.addEventListener("click", async () => {
     requestsBox.classList.toggle("hidden");
@@ -27,17 +40,21 @@ document.addEventListener("DOMContentLoaded", () => {
   async function loadRequests() {
     requestsList.innerHTML = "Loading requests...";
     try {
-      const res = await fetch(`https://127.0.0.1:8443/api/doctors/${doctorId}/requests`);
+      const res = await apiFetch(
+        `https://127.0.0.1:8443/api/doctors/me/requests`
+      );
+
       if (!res.ok) {
         requestsList.innerHTML = `<div style="color:#811">No separate 'requests' endpoint found or none pending.</div>`;
         requestsTitle.textContent = `Requests (0)`;
         return;
       }
+
       const list = await res.json();
       requestsTitle.textContent = `Requests (${list.length})`;
       requestsList.innerHTML = "";
 
-      list.forEach(req => {
+      list.forEach((req) => {
         const row = document.createElement("div");
         row.className = "request-row";
 
@@ -72,7 +89,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         requestsList.appendChild(row);
       });
-
     } catch (err) {
       console.error(err);
       requestsList.innerHTML = `<div>Error loading requests.</div>`;
@@ -82,19 +98,26 @@ document.addEventListener("DOMContentLoaded", () => {
   async function loadPatients() {
     patientsBody.innerHTML = "<tr><td colspan='7'>Loading...</td></tr>";
     try {
-      const res = await fetch(`https://127.0.0.1:8443/api/doctors/${doctorId}/patients`);
+      const res = await apiFetch(
+        `https://127.0.0.1:8443/api/doctors/me/patients`
+      );
+
       if (!res.ok) {
-        patientsBody.innerHTML = "<tr><td colspan='7'>Could not load patients</td></tr>";
-        return;
-      }
-      const list = await res.json();
-      patientsBody.innerHTML = "";
-      if (!Array.isArray(list) || list.length === 0) {
-        patientsBody.innerHTML = "<tr><td colspan='7'>No patients yet</td></tr>";
+        patientsBody.innerHTML =
+          "<tr><td colspan='7'>Could not load patients</td></tr>";
         return;
       }
 
-      list.forEach(p => {
+      const list = await res.json();
+      patientsBody.innerHTML = "";
+
+      if (!Array.isArray(list) || list.length === 0) {
+        patientsBody.innerHTML =
+          "<tr><td colspan='7'>No patients yet</td></tr>";
+        return;
+      }
+
+      list.forEach((p) => {
         const tr = document.createElement("tr");
         tr.innerHTML = `
           <td style="padding:.6rem;border:1px solid #eee">${p.name}</td>
@@ -116,12 +139,14 @@ document.addEventListener("DOMContentLoaded", () => {
         `;
         patientsBody.appendChild(tr);
       });
-        document.querySelectorAll(".view-sessions-btn").forEach(btn => {
+
+      document.querySelectorAll(".view-sessions-btn").forEach((btn) => {
         btn.addEventListener("click", async (e) => {
           const patientId = btn.getAttribute("data-patient-id");
           await toggleSessionsForPatient(patientId, btn);
         });
-        document.querySelectorAll(".compare-sessions-btn").forEach(btn => {
+
+        document.querySelectorAll(".compare-sessions-btn").forEach((btn) => {
           btn.addEventListener("click", async (e) => {
             const patientId = btn.getAttribute("data-patient-id");
             await showCompareSessions(patientId);
@@ -130,31 +155,32 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     } catch (err) {
       console.error(err);
-      patientsBody.innerHTML = "<tr><td colspan='7'>Error loading patients</td></tr>";
+      patientsBody.innerHTML =
+        "<tr><td colspan='7'>Error loading patients</td></tr>";
     }
   }
 
-  function showConfirmModal({ message, type = 'approve' }) {
+  function showConfirmModal({ message, type = "approve" }) {
     return new Promise((resolve) => {
       modalMessage.textContent = message;
 
-      if (type === 'approve') {
-        btnApprove.style.display = 'inline-block';
-        btnReject.style.display = 'none';
-      } else if (type === 'reject') {
-        btnApprove.style.display = 'none';
-        btnReject.style.display = 'inline-block';
+      if (type === "approve") {
+        btnApprove.style.display = "inline-block";
+        btnReject.style.display = "none";
+      } else if (type === "reject") {
+        btnApprove.style.display = "none";
+        btnReject.style.display = "inline-block";
       }
 
-      modal.classList.add('show');
-      modal.setAttribute('aria-hidden', 'false');
-      btnApprove.focus(); 
+      modal.classList.add("show");
+      modal.setAttribute("aria-hidden", "false");
+      btnApprove.focus();
 
       function cleanup() {
-        btnApprove.removeEventListener('click', onApprove);
-        btnReject.removeEventListener('click', onReject);
-        btnCancel.removeEventListener('click', onCancel);
-        modal.removeEventListener('click', onBackdropClick);
+        btnApprove.removeEventListener("click", onApprove);
+        btnReject.removeEventListener("click", onReject);
+        btnCancel.removeEventListener("click", onCancel);
+        modal.removeEventListener("click", onBackdropClick);
       }
 
       function onApprove() {
@@ -181,15 +207,18 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
 
-      btnApprove.addEventListener('click', onApprove);
-      btnReject.addEventListener('click', onReject);
-      btnCancel.addEventListener('click', onCancel);
-      modal.addEventListener('click', onBackdropClick);
+      btnApprove.addEventListener("click", onApprove);
+      btnReject.addEventListener("click", onReject);
+      btnCancel.addEventListener("click", onCancel);
+      modal.addEventListener("click", onBackdropClick);
     });
   }
 
   async function toggleSessionsForPatient(patientId, button) {
-    if (sessionsContainer && sessionsContainer.dataset.patientId === patientId) {
+    if (
+      sessionsContainer &&
+      sessionsContainer.dataset.patientId === patientId
+    ) {
       if (sessionsContainer.style.display === "none") {
         sessionsContainer.style.display = "block";
         button.textContent = "Hide Sessions";
@@ -217,7 +246,9 @@ document.addEventListener("DOMContentLoaded", () => {
     button.textContent = "Loading sessions...";
 
     try {
-      const res = await fetch(`https://127.0.0.1:8443/api/patients/sessions/${patientId}`);
+      const res = await apiFetch(
+        `https://127.0.0.1:8443/api/patients/sessions/${patientId}`
+      );
       if (!res.ok) {
         sessionsContainer.textContent = "Failed to load sessions";
         button.textContent = "View Sessions";
@@ -234,14 +265,13 @@ document.addEventListener("DOMContentLoaded", () => {
       button.textContent = "Hide Sessions";
 
       sessionsContainer.innerHTML = "";
-      sessions.forEach(session => {
+      sessions.forEach((session) => {
         const sessionDiv = document.createElement("div");
         sessionDiv.style.border = "1px solid #ccc";
         sessionDiv.style.marginBottom = "1rem";
         sessionDiv.style.borderRadius = "10px";
         sessionDiv.style.background = "#fff";
         sessionDiv.style.width = "100%";
-
 
         const header = document.createElement("div");
         header.style.cursor = "pointer";
@@ -252,7 +282,7 @@ document.addEventListener("DOMContentLoaded", () => {
         header.style.userSelect = "none";
 
         const arrow = document.createElement("span");
-        arrow.textContent = "▶"; 
+        arrow.textContent = "▶";
         arrow.style.transition = "transform 0.3s ease";
         arrow.style.display = "inline-block";
 
@@ -281,8 +311,12 @@ document.addEventListener("DOMContentLoaded", () => {
               details.textContent = "Loading session details...";
               try {
                 const [symptoms, signals] = await Promise.all([
-                  fetch(`https://127.0.0.1:8443/api/patients/sessions/${session.sessionId}/symptoms`).then(r => r.json()),
-                  fetch(`https://127.0.0.1:8443/api/patients/sessions/${session.sessionId}/signals`).then(r => r.json()),
+                  apiFetch(
+                    `https://127.0.0.1:8443/api/patients/sessions/${session.sessionId}/symptoms`
+                  ).then((r) => r.json()),
+                  apiFetch(
+                    `https://127.0.0.1:8443/api/patients/sessions/${session.sessionId}/signals`
+                  ).then((r) => r.json()),
                 ]);
 
                 details.innerHTML = "";
@@ -298,7 +332,7 @@ document.addEventListener("DOMContentLoaded", () => {
                   details.appendChild(noSymptoms);
                 } else {
                   const ul = document.createElement("ul");
-                  symptoms.forEach(s => {
+                  symptoms.forEach((s) => {
                     const li = document.createElement("li");
                     li.textContent = s;
                     ul.appendChild(li);
@@ -315,15 +349,15 @@ document.addEventListener("DOMContentLoaded", () => {
                   noSignals.textContent = "No signals recorded.";
                   details.appendChild(noSignals);
                 } else {
-                  signals.forEach(signal => {
+                  signals.forEach((signal) => {
                     const signalDiv = document.createElement("div");
                     signalDiv.style.border = "1px solid #aaa";
                     signalDiv.style.marginBottom = "0.8rem";
                     signalDiv.style.borderRadius = "10px";
                     signalDiv.style.padding = "0.5rem";
                     signalDiv.style.background = "#f1efefff";
-                    signalDiv.style.width = "100%";   
-                    signalDiv.style.maxWidth = "550px"; 
+                    signalDiv.style.width = "100%";
+                    signalDiv.style.maxWidth = "550px";
                     signalDiv.style.boxSizing = "border-box";
 
                     const signalHeader = document.createElement("div");
@@ -342,7 +376,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     details.appendChild(signalDiv);
                   });
                 }
-
               } catch (e) {
                 details.textContent = "Failed to load session details.";
                 console.error(e);
@@ -361,7 +394,9 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   async function showCompareSessions(patientId) {
-    const existingCompare = document.getElementById("compare-sessions-container");
+    const existingCompare = document.getElementById(
+      "compare-sessions-container"
+    );
     if (existingCompare) existingCompare.remove();
 
     const container = document.createElement("div");
@@ -387,7 +422,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const comparisonResult = container.querySelector("#comparison-result");
 
     try {
-      const res = await fetch(`https://127.0.0.1:8443/api/patients/sessions/${patientId}`);
+      const res = await fetch(
+        `https://127.0.0.1:8443/api/patients/sessions/${patientId}`
+      );
       if (!res.ok) {
         listDiv.textContent = "Failed to load sessions";
         return;
@@ -399,7 +436,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      sessions.forEach(session => {
+      sessions.forEach((session) => {
         const label = document.createElement("label");
         label.style.display = "block";
         label.style.marginBottom = "0.3rem";
@@ -411,28 +448,34 @@ document.addEventListener("DOMContentLoaded", () => {
         checkbox.style.marginRight = "0.5rem";
 
         label.appendChild(checkbox);
-        label.append(`Session on ${new Date(session.timeStamp).toLocaleString()}`);
+        label.append(
+          `Session on ${new Date(session.timeStamp).toLocaleString()}`
+        );
 
         listDiv.appendChild(label);
       });
 
       listDiv.addEventListener("change", () => {
-        const checkedBoxes = listDiv.querySelectorAll("input[type='checkbox']:checked");
+        const checkedBoxes = listDiv.querySelectorAll(
+          "input[type='checkbox']:checked"
+        );
         if (checkedBoxes.length === 2) {
           compareBtn.disabled = false;
-          listDiv.querySelectorAll("input[type='checkbox']").forEach(cb => {
+          listDiv.querySelectorAll("input[type='checkbox']").forEach((cb) => {
             if (!cb.checked) cb.disabled = true;
           });
         } else {
           compareBtn.disabled = true;
-          listDiv.querySelectorAll("input[type='checkbox']").forEach(cb => {
+          listDiv.querySelectorAll("input[type='checkbox']").forEach((cb) => {
             cb.disabled = false;
           });
         }
       });
 
       compareBtn.addEventListener("click", async () => {
-        const checkedBoxes = Array.from(listDiv.querySelectorAll("input[type='checkbox']:checked"));
+        const checkedBoxes = Array.from(
+          listDiv.querySelectorAll("input[type='checkbox']:checked")
+        );
         if (checkedBoxes.length !== 2) return;
 
         const sessionId1 = checkedBoxes[0].value;
@@ -442,21 +485,41 @@ document.addEventListener("DOMContentLoaded", () => {
 
         try {
           const [symptoms1, signals1, symptoms2, signals2] = await Promise.all([
-            fetch(`https://127.0.0.1:8443/api/patients/sessions/${sessionId1}/symptoms`).then(r => r.json()),
-            fetch(`https://127.0.0.1:8443/api/patients/sessions/${sessionId1}/signals`).then(r => r.json()),
-            fetch(`https://127.0.0.1:8443/api/patients/sessions/${sessionId2}/symptoms`).then(r => r.json()),
-            fetch(`https://127.0.0.1:8443/api/patients/sessions/${sessionId2}/signals`).then(r => r.json()),
+            fetch(
+              `https://127.0.0.1:8443/api/patients/sessions/${sessionId1}/symptoms`
+            ).then((r) => r.json()),
+            fetch(
+              `https://127.0.0.1:8443/api/patients/sessions/${sessionId1}/signals`
+            ).then((r) => r.json()),
+            fetch(
+              `https://127.0.0.1:8443/api/patients/sessions/${sessionId2}/symptoms`
+            ).then((r) => r.json()),
+            fetch(
+              `https://127.0.0.1:8443/api/patients/sessions/${sessionId2}/signals`
+            ).then((r) => r.json()),
           ]);
 
           comparisonResult.innerHTML = `
             <div style="display:flex; gap:2rem;">
               <div style="flex:1;">
                 <h4>Session 1 Symptoms</h4>
-                ${symptoms1.length === 0 ? "<p>No symptoms recorded.</p>" : "<ul>" + symptoms1.map(s => `<li>${s}</li>`).join("") + "</ul>"}
+                ${
+                  symptoms1.length === 0
+                    ? "<p>No symptoms recorded.</p>"
+                    : "<ul>" +
+                      symptoms1.map((s) => `<li>${s}</li>`).join("") +
+                      "</ul>"
+                }
               </div>
               <div style="flex:1;">
                 <h4>Session 2 Symptoms</h4>
-                ${symptoms2.length === 0 ? "<p>No symptoms recorded.</p>" : "<ul>" + symptoms2.map(s => `<li>${s}</li>`).join("") + "</ul>"}
+                ${
+                  symptoms2.length === 0
+                    ? "<p>No symptoms recorded.</p>"
+                    : "<ul>" +
+                      symptoms2.map((s) => `<li>${s}</li>`).join("") +
+                      "</ul>"
+                }
               </div>
             </div>
             <div style="margin-top:2rem;">
@@ -465,13 +528,13 @@ document.addEventListener("DOMContentLoaded", () => {
           `;
 
           const allSignalTypes = new Set([
-            ...signals1.map(s => s.signalType),
-            ...signals2.map(s => s.signalType)
+            ...signals1.map((s) => s.signalType),
+            ...signals2.map((s) => s.signalType),
           ]);
 
-          allSignalTypes.forEach(signalType => {
-            const sig1 = signals1.find(s => s.signalType === signalType);
-            const sig2 = signals2.find(s => s.signalType === signalType);
+          allSignalTypes.forEach((signalType) => {
+            const sig1 = signals1.find((s) => s.signalType === signalType);
+            const sig2 = signals2.find((s) => s.signalType === signalType);
 
             const signalContainer = document.createElement("div");
             signalContainer.style.border = "1px solid #aaa";
@@ -479,7 +542,7 @@ document.addEventListener("DOMContentLoaded", () => {
             signalContainer.style.borderRadius = "10px";
             signalContainer.style.padding = "0.5rem";
             signalContainer.style.background = "#f1efefff";
-            signalContainer.style.width = "100%";   
+            signalContainer.style.width = "100%";
             signalContainer.style.maxWidth = "700px";
             signalContainer.style.boxSizing = "border-box";
 
@@ -502,7 +565,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
             renderOverlaySignalChart(canvas, dataStr1, dataStr2);
           });
-
         } catch (e) {
           comparisonResult.textContent = "Failed to load session details.";
           console.error(e);
@@ -534,8 +596,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const data = dataStr
       .split(",")
-      .map(x => parseFloat(x.trim()))
-      .filter(x => !isNaN(x));
+      .map((x) => parseFloat(x.trim()))
+      .filter((x) => !isNaN(x));
 
     if (data.length === 0) {
       ctx.font = "16px Arial";
@@ -606,12 +668,10 @@ document.addEventListener("DOMContentLoaded", () => {
     ctx.stroke();
   }
 
-
-
   function closeModal() {
-    modal.classList.remove('show');
-    modal.setAttribute('aria-hidden', 'true');
-    btnApprove.focus(); 
+    modal.classList.remove("show");
+    modal.setAttribute("aria-hidden", "true");
+    btnApprove.focus();
   }
 
   function showToast(message, type = "success") {
@@ -657,7 +717,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const parseData = (str) =>
       str
-        ? str.split(",").map(x => parseFloat(x.trim())).filter(x => !isNaN(x))
+        ? str
+            .split(",")
+            .map((x) => parseFloat(x.trim()))
+            .filter((x) => !isNaN(x))
         : [];
 
     let data1 = parseData(dataStr1);
@@ -750,9 +813,12 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!confirmed) return;
 
     try {
-      const res = await fetch(`https://127.0.0.1:8443/api/doctors/${doctorId}/approve/${patientId}`, {
-        method: "POST",
-      });
+      const res = await apiFetch(
+        `https://127.0.0.1:8443/api/doctors/me/approve/${patientId}`,
+        {
+          method: "POST",
+        }
+      );
       if (!res.ok) {
         showToast("Failed to approve", "error");
         return;
@@ -774,9 +840,12 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!confirmed) return;
 
     try {
-      const res = await fetch(`https://127.0.0.1:8443/api/doctors/${doctorId}/reject/${patientId}`, {
-        method: "POST",
-      });
+      const res = await apiFetch(
+        `https://127.0.0.1:8443/api/doctors/me/reject/${patientId}`,
+        {
+          method: "POST",
+        }
+      );
       if (!res.ok) {
         showToast("Failed to reject", "error");
         return;
@@ -789,5 +858,59 @@ document.addEventListener("DOMContentLoaded", () => {
       showToast("Network error, please try again.", "error");
     }
   }
-});
 
+  const doctorForm = document.querySelector(".doctor-info form");
+  const nameInput = document.getElementById("doctor-name");
+  const surnameInput = document.getElementById("doctor-surname");
+  const genderInput = document.getElementById("doctor-gender");
+
+  async function loadDoctorInfo() {
+    try {
+      const res = await apiFetch("https://127.0.0.1:8443/api/doctors/me");
+      if (!res || !res.ok) return;
+
+      const doctor = await res.json();
+
+      console.log("Returned doctor object:", doctor);
+
+      document.getElementById("detail-name").textContent = doctor.name || "";
+      document.getElementById("detail-surname").textContent =
+        doctor.surname || "";
+      document.getElementById("detail-gender").textContent =
+        doctor.gender || "";
+    } catch (err) {
+      console.error("Error loading doctor info:", err);
+    }
+  }
+
+  loadDoctorInfo();
+
+  doctorForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const payload = {};
+    if (nameInput.value) payload.name = nameInput.value;
+    if (surnameInput.value) payload.surname = surnameInput.value;
+    if (genderInput.value) payload.gender = genderInput.value;
+
+    try {
+      const res = await apiFetch("https://127.0.0.1:8443/api/doctors/me", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) {
+        alert("Failed to update doctor info.");
+        return;
+      }
+
+      const updatedDoctor = await res.json();
+      alert("Doctor info updated successfully!");
+      loadDoctorInfo();
+    } catch (err) {
+      console.error(err);
+      alert("Network error.");
+    }
+  });
+});
