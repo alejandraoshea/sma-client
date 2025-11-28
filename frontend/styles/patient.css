@@ -428,12 +428,8 @@ main {
   font-family: "Roboto", sans-serif;
   cursor: pointer;
 }
-<<<<<<< HEAD
-.upload-file-control[disabled] {
-=======
 
-.record-control[disabled] {
->>>>>>> 4aa4625c293b74abe2820664fc8a0097788aea28
+.upload-file-control[disabled] {
   opacity: 0.5;
   cursor: not-allowed;
 }
