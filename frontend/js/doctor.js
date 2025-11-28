@@ -57,11 +57,11 @@ document.addEventListener("DOMContentLoaded", () => {
         left.innerHTML = `
           <strong>${req.name} ${req.surname}</strong><br>
           <div>
-          Gender: ${req.gender}<br/><br/>
+          Gender: ${req.gender}<br/>
           Birthdate: ${req.birthDate}<br/>
           </div>
           <div>
-          Height: ${req.height} cm<br/><br/>
+          Height: ${req.height} cm<br/>
           Weight: ${req.weight} kg
           </div>
         `;

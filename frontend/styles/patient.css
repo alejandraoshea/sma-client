@@ -385,6 +385,7 @@ main {
   font-family: "Roboto", sans-serif;
   cursor: pointer;
 }
+
 .record-control[disabled] {
   opacity: 0.5;
   cursor: not-allowed;
@@ -404,12 +405,12 @@ main {
   display: grid;
   gap: 1rem;
   padding: 10px;
-  max-height: 150px;
+  max-height: 165px;
   overflow-y: auto;
 }
 
 .doctor-item {
-  background: white;
+  background: #fafafa;
   padding: 1rem;
   border-radius: 15px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
