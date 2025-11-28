@@ -5,6 +5,15 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Patient Dashboard</title>
     <link rel="stylesheet" href="../styles/patient.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css"
+    />
   </head>
 
   <body>
@@ -124,7 +133,7 @@
                 </form>
               </div>
             </div>
-            <div class="doctors-map"></div>
+            <div id="doctors-map" class="doctors-map"></div>
           </div>
         </div>
 
@@ -316,6 +325,9 @@
       }
     </script>
 
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+    <script src="https://unpkg.com/@mapbox/polyline"></script>
     <script src="../js/logout.js"></script>
     <script src="../js/measurementSessions.js"></script>
     <script src="../js/patient.js"></script>

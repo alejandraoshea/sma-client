@@ -1,3 +1,4 @@
+
 document.addEventListener("DOMContentLoaded", () => {
   const token = localStorage.getItem("token");
   if (!token) window.location.href = "../../index.html";
@@ -168,14 +169,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
       console.log("Returned patient object:", patient);
 
-        document.getElementById("detail-name").textContent = patient.name || "";
-        document.getElementById("detail-surname").textContent = patient.surname || "";
-        document.getElementById("detail-gender").textContent = patient.gender || "";
-        document.getElementById("detail-birthdate").textContent = patient.birthDate || "";
-        document.getElementById("detail-height").textContent =
-          patient.height ? patient.height + " cm" : "";
-        document.getElementById("detail-weight").textContent =
-          patient.weight ? patient.weight + " kg" : "";
+      document.getElementById("detail-name").textContent = patient.name || "";
+      document.getElementById("detail-surname").textContent = patient.surname || "";
+      document.getElementById("detail-gender").textContent = patient.gender || "";
+      document.getElementById("detail-birthdate").textContent = patient.birthDate || "";
+      document.getElementById("detail-height").textContent =
+        patient.height ? patient.height + " cm" : "";
+      document.getElementById("detail-weight").textContent =
+        patient.weight ? patient.weight + " kg" : "";
     } catch (err) {
       console.error("Error loading patient info:", err);
     }
@@ -215,4 +216,93 @@ document.addEventListener("DOMContentLoaded", () => {
       alert("Network error.");
     }
   });
+
+   const doctorIcon = new L.Icon({
+    iconUrl: "../assets/images/marker-icon-2x-red.png",
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+  });
+
+  const map = L.map("doctors-map").setView([40.4168, -3.7038], 6);
+
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    maxZoom: 19,
+  }).addTo(map);
+
+  async function loadDoctorsOnMap() {
+    try {
+      const res = await apiFetch("https://127.0.0.1:8443/api/patients/me/map-doctors");
+      if (!res || !res.ok) return;
+
+      const doctors = await res.json();
+
+      doctors.forEach((doctor) => {
+        if (doctor.locality && doctor.locality.latitude && doctor.locality.longitude) {
+          const marker = L.marker(
+            [doctor.locality.latitude, doctor.locality.longitude],
+            { icon: doctorIcon }
+          ).addTo(map);
+
+          marker.bindPopup(
+            `<b>Dr. ${doctor.name} ${doctor.surname}</b><br>${doctor.locality.name}`
+          );
+        }
+      });
+    } catch (err) {
+      console.error("Error loading doctors on map:", err);
+    }
+  }
+  async function loadPatientAndDoctor() {
+  try {
+    const patientRes = await fetch('/api/patients/me', {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+
+    if (!patientRes.ok) {
+      throw new Error(`Failed to fetch patient: ${patientRes.status} ${patientRes.statusText}`);
+    }
+
+    const patient = await patientRes.json();
+    patientInfoEl.textContent = `Patient: ${patient.name} ${patient.surname}`;
+
+    const doctorId = patient.selectedDoctorId;
+
+    if (!doctorId) {
+      doctorInfoEl.textContent = 'No selected doctor.';
+      return;
+    }
+
+    const doctorRes = await fetch(`/api/doctors/${doctorId}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+
+    if (!doctorRes.ok) {
+      if (doctorRes.status === 404) {
+        doctorInfoEl.textContent = 'Selected doctor not found.';
+      } else {
+        throw new Error(`Failed to fetch doctor: ${doctorRes.status} ${doctorRes.statusText}`);
+      }
+      return;
+    }
+
+    const doctor = await doctorRes.json();
+    doctorInfoEl.textContent = `Doctor: Dr. ${doctor.name} ${doctor.surname}`;
+
+  } catch (error) {
+    patientInfoEl.textContent = 'Error loading patient info.';
+    doctorInfoEl.textContent = '';
+    console.error('Error:', error);
+  }
+}
+
+  loadDoctors();
+  loadDoctorStatus();
+  loadPatientInfo();
+  loadDoctorsOnMap();
+  loadPatientAndDoctor();
 });
