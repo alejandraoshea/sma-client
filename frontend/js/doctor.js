@@ -899,7 +899,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (nameInput.value) payload.name = nameInput.value;
     if (surnameInput.value) payload.surname = surnameInput.value;
     if (genderInput.value) payload.gender = genderInput.value;
-    if (localityInput.value) payload.localidad = localityInput.value;
+    if (localityInput.value) payload.locality = { name: localityInput.value };
 
     try {
       const res = await apiFetch("https://127.0.0.1:8443/api/doctors/me", {
