@@ -479,3 +479,10 @@ s
   gap: 5rem;
   width: 100%;
 }
+
+#doctors-map {
+  width: 100%;
+  height: 400px;
+  border-radius: 10px;
+  margin-top: 10px;
+}
