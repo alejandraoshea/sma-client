@@ -49,48 +49,37 @@
                   <label>Gender:</label>
                   <p id="detail-gender" class="detail-value"></p>
                 </div>
+
+                <div class="detail-group">
+                  <label>Locality:</label>
+                  <p id="detail-locality" class="detail-value"></p>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        <article class="patient-dashboard-buttons">
-          <button id="see-patients-btn" class="log-symptoms-button">
-            <img src="../assets/svgs/add.svg" /> See all patients
-          </button>
-
-          <div id="requests-box" class="floating-box hidden">
-            <h3 id="requests-title">Requests (0)</h3>
+        <article class="doctor-dashboard-buttons">
+          <div id="requests-box" class="floating-box">
+            <h3 id="requests-title">Patient Requests (0)</h3>
             <div id="requests-list">Loading requests...</div>
           </div>
 
-          <div id="patients-box" class="floating-box hidden">
-            <h3>Your Patients</h3>
+          <div id="patients-box" class="floating-box">
+            <h3>Current Patients</h3>
             <table
               id="patients-table"
               style="width: 100%; border-collapse: collapse"
             >
               <thead>
-                <tr style="background: #eee">
-                  <th style="padding: 0.6rem; border: 1px solid #ddd">Name</th>
-                  <th style="padding: 0.6rem; border: 1px solid #ddd">
-                    Surname
-                  </th>
-                  <th style="padding: 0.6rem; border: 1px solid #ddd">
-                    Gender
-                  </th>
-                  <th style="padding: 0.6rem; border: 1px solid #ddd">
-                    Birth Date
-                  </th>
-                  <th style="padding: 0.6rem; border: 1px solid #ddd">
-                    Height
-                  </th>
-                  <th style="padding: 0.6rem; border: 1px solid #ddd">
-                    Weight
-                  </th>
-                  <th style="padding: 0.6rem; border: 1px solid #ddd">
-                    Sessions
-                  </th>
+                <tr>
+                  <th>Name</th>
+                  <th>Surname</th>
+                  <th>Gender</th>
+                  <th>Birth Date</th>
+                  <th>Height (cm)</th>
+                  <th>Weight (kg)</th>
+                  <th>Sessions</th>
                 </tr>
               </thead>
               <tbody id="patients-body"></tbody>
@@ -130,28 +119,76 @@
           <h2>Edit Profile</h2>
           <form id="doctor-form">
             <div class="doctor-info-form">
-                <div class="form-group">
-                  <label for="doctor-name">Name:</label>
-                  <input type="text" id="doctor-name" name="doctor-name" />
-                </div>
+              <div class="form-group">
+                <label for="doctor-name">Name:</label>
+                <input type="text" id="doctor-name" name="doctor-name" />
+              </div>
 
-                <div class="form-group">
-                  <label for="doctor-surname">Surname:</label>
-                  <input
-                    type="text"
-                    id="doctor-surname"
-                    name="doctor-surname"
-                  />
-                </div>
+              <div class="form-group">
+                <label for="doctor-surname">Surname:</label>
+                <input type="text" id="doctor-surname" name="doctor-surname" />
+              </div>
 
-                <div class="form-group">
-                  <label for="doctor-gender">Gender:</label>
-                  <select id="doctor-gender" name="doctor-gender">
-                    <option value="">Select gender</option>
-                    <option value="MALE">Male</option>
-                    <option value="FEMALE">Female</option>
-                  </select>
-                </div>
+              <div class="form-group">
+                <label for="doctor-gender">Gender:</label>
+                <select id="doctor-gender" name="doctor-gender">
+                  <option value="">Select gender</option>
+                  <option value="MALE">Male</option>
+                  <option value="FEMALE">Female</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="doctor-locality">Locality:</label>
+                <select id="doctor-locality" name="doctor-locality">
+                  <option value="">Select locality</option>
+                  <option value="Madrid">Madrid</option>
+                  <option value="Barcelona">Barcelona</option>
+                  <option value="Valencia">Valencia</option>
+                  <option value="Sevilla">Sevilla</option>
+                  <option value="Zaragoza">Zaragoza</option>
+                  <option value="Málaga">Málaga</option>
+                  <option value="Murcia">Murcia</option>
+                  <option value="Palma de Mallorca">Palma de Mallorca</option>
+                  <option value="Bilbao">Bilbao</option>
+                  <option value="Alicante">Alicante</option>
+                  <option value="Córdoba">Córdoba</option>
+                  <option value="Valladolid">Valladolid</option>
+                  <option value="Vigo">Vigo</option>
+                  <option value="Gijón">Gijón</option>
+                  <option value="A Coruña">A Coruña</option>
+                  <option value="Granada">Granada</option>
+                  <option value="Santander">Santander</option>
+                  <option value="Pamplona">Pamplona</option>
+                  <option value="Logroño">Logroño</option>
+                  <option value="Salamanca">Salamanca</option>
+                  <option value="Cáceres">Cáceres</option>
+                  <option value="Badajoz">Badajoz</option>
+                  <option value="Cádiz">Cádiz</option>
+                  <option value="Almería">Almería</option>
+                  <option value="Huelva">Huelva</option>
+                  <option value="León">León</option>
+                  <option value="Burgos">Burgos</option>
+                  <option value="San Sebastián">San Sebastián</option>
+                  <option value="Oviedo">Oviedo</option>
+                  <option value="Tarragona">Tarragona</option>
+                  <option value="Lleida">Lleida</option>
+                  <option value="Girona">Girona</option>
+                  <option value="Marbella">Marbella</option>
+                  <option value="Benidorm">Benidorm</option>
+                  <option value="Elche">Elche</option>
+                  <option value="Terrassa">Terrassa</option>
+                  <option value="Sabadell">Sabadell</option>
+                  <option value="Getafe">Getafe</option>
+                  <option value="Leganés">Leganés</option>
+                  <option value="Móstoles">Móstoles</option>
+                  <option value="Fuenlabrada">Fuenlabrada</option>
+                  <option value="Alcalá de Henares">Alcalá de Henares</option>
+                  <option value="Alcobendas">Alcobendas</option>
+                  <option value="Pozuelo de Alarcón">Pozuelo de Alarcón</option>
+                  <option value="Rivas-Vaciamadrid">Rivas-Vaciamadrid</option>
+                </select>
+              </div>
             </div>
 
             <div class="form-actions">

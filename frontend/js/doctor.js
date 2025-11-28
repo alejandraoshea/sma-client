@@ -14,7 +14,6 @@ document.addEventListener("DOMContentLoaded", () => {
     return res;
   }
 
-  const seePatientsBtn = document.getElementById("see-patients-btn");
   const requestsBox = document.getElementById("requests-box");
   const patientsBox = document.getElementById("patients-box");
   const requestsList = document.getElementById("requests-list");
@@ -29,13 +28,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnReject = document.getElementById("modal-reject-btn");
   const btnCancel = document.getElementById("modal-cancel-btn");
 
-  seePatientsBtn.addEventListener("click", async () => {
-    requestsBox.classList.toggle("hidden");
-    patientsBox.classList.toggle("hidden");
-
-    await loadRequests();
-    await loadPatients();
-  });
+  loadRequests();
+  loadPatients();
 
   async function loadRequests() {
     requestsList.innerHTML = "Loading requests...";
@@ -46,12 +40,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (!res.ok) {
         requestsList.innerHTML = `<div style="color:#811">No separate 'requests' endpoint found or none pending.</div>`;
-        requestsTitle.textContent = `Requests (0)`;
+        requestsTitle.textContent = `Patient Requests (0)`;
         return;
       }
 
       const list = await res.json();
-      requestsTitle.textContent = `Requests (${list.length})`;
+      requestsTitle.textContent = `Patient Requests (${list.length})`;
       requestsList.innerHTML = "";
 
       list.forEach((req) => {
@@ -62,10 +56,14 @@ document.addEventListener("DOMContentLoaded", () => {
         left.className = "request-left";
         left.innerHTML = `
           <strong>${req.name} ${req.surname}</strong><br>
-          Gender: ${req.gender}<br>
-          Birthdate: ${req.birthDate}<br>
-          Height: ${req.height} cm<br>
+          <div>
+          Gender: ${req.gender}<br/><br/>
+          Birthdate: ${req.birthDate}<br/>
+          </div>
+          <div>
+          Height: ${req.height} cm<br/><br/>
           Weight: ${req.weight} kg
+          </div>
         `;
 
         const actions = document.createElement("div");
@@ -128,7 +126,7 @@ document.addEventListener("DOMContentLoaded", () => {
           <td style="padding:.6rem;border:1px solid #eee">${p.weight}</td>
           <td style="padding:.6rem;border:1px solid #eee; text-align:center;">
             <button class="view-sessions-btn" data-patient-id="${p.patientId}" 
-              style="background:#e1445c; color:white; border:none; padding:0.4rem 0.8rem; border-radius: 12px; cursor:pointer;">
+              style="background:#f05454; color:white; border:none; padding:0.4rem 0.8rem; border-radius: 12px; cursor:pointer;">
               View Sessions
             </button>
             <button class="compare-sessions-btn" data-patient-id="${p.patientId}" 
@@ -234,11 +232,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     sessionsContainer = document.createElement("div");
-    sessionsContainer.style.background = "#ddd";
+    sessionsContainer.style.background = "#ffffff";
     sessionsContainer.style.padding = "1rem";
-    sessionsContainer.style.borderRadius = "15px";
+    sessionsContainer.style.borderRadius = "12px";
     sessionsContainer.style.margin = "1rem auto";
     sessionsContainer.style.width = "100%";
+    sessionsContainer.style.color = "#3e4042";
+    sessionsContainer.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.08)";
     sessionsContainer.dataset.patientId = patientId;
 
     patientsBox.appendChild(sessionsContainer);
@@ -401,17 +401,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const container = document.createElement("div");
     container.id = "compare-sessions-container";
-    container.style.background = "#eee";
+    container.style.display = "flex";
+    container.style.flexDirection = "column";
+    container.style.justifyContent = "center";
+    container.style.alignItems = "center";
+    container.style.background = "#ffffff";
     container.style.padding = "1rem";
-    container.style.borderRadius = "15px";
+    container.style.borderRadius = "12px";
     container.style.margin = "1rem auto";
     container.style.width = "100%";
-    container.style.maxWidth = "700px";
-    container.style.boxSizing = "border-box";
+    container.style.color = "#3e4042";
+    container.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.08)";
 
     patientsBox.appendChild(container);
 
-    container.innerHTML = `<h3>Compare Sessions for Patient: ${name} ${surname}</h3>
+    container.innerHTML = `
       <p>Select exactly two sessions to compare:</p>
       <div id="sessions-checkbox-list" style="max-height: 250px; overflow-y: auto; margin-bottom: 1rem;"></div>
       <button id="compare-btn" disabled style="padding: 0.5rem 1rem; cursor: pointer; background: #4a90e2; color: white; border: none; border-radius: 8px;">Compare</button>
@@ -422,7 +426,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const comparisonResult = container.querySelector("#comparison-result");
 
     try {
-      const res = await fetch(
+      const res = await apiFetch(
         `https://127.0.0.1:8443/api/patients/sessions/${patientId}`
       );
       if (!res.ok) {
@@ -485,16 +489,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
         try {
           const [symptoms1, signals1, symptoms2, signals2] = await Promise.all([
-            fetch(
+            apiFetch(
               `https://127.0.0.1:8443/api/patients/sessions/${sessionId1}/symptoms`
             ).then((r) => r.json()),
-            fetch(
+            apiFetch(
               `https://127.0.0.1:8443/api/patients/sessions/${sessionId1}/signals`
             ).then((r) => r.json()),
-            fetch(
+            apiFetch(
               `https://127.0.0.1:8443/api/patients/sessions/${sessionId2}/symptoms`
             ).then((r) => r.json()),
-            fetch(
+            apiFetch(
               `https://127.0.0.1:8443/api/patients/sessions/${sessionId2}/signals`
             ).then((r) => r.json()),
           ]);
@@ -863,6 +867,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const nameInput = document.getElementById("doctor-name");
   const surnameInput = document.getElementById("doctor-surname");
   const genderInput = document.getElementById("doctor-gender");
+  const localityInput = document.getElementById("doctor-locality");
 
   async function loadDoctorInfo() {
     try {
@@ -878,6 +883,9 @@ document.addEventListener("DOMContentLoaded", () => {
         doctor.surname || "";
       document.getElementById("detail-gender").textContent =
         doctor.gender || "";
+      document.getElementById("detail-locality").textContent = doctor.locality
+        ? doctor.locality.name
+        : "";
     } catch (err) {
       console.error("Error loading doctor info:", err);
     }
@@ -892,6 +900,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (nameInput.value) payload.name = nameInput.value;
     if (surnameInput.value) payload.surname = surnameInput.value;
     if (genderInput.value) payload.gender = genderInput.value;
+    if (localityInput.value) payload.localidad = localityInput.value;
 
     try {
       const res = await apiFetch("https://127.0.0.1:8443/api/doctors/me", {
