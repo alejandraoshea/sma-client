@@ -57,11 +57,11 @@ document.addEventListener("DOMContentLoaded", () => {
         left.innerHTML = `
           <strong>${req.name} ${req.surname}</strong><br>
           <div>
-          Gender: ${req.gender}<br/><br/>
+          Gender: ${req.gender}<br/>
           Birthdate: ${req.birthDate}<br/>
           </div>
           <div>
-          Height: ${req.height} cm<br/><br/>
+          Height: ${req.height} cm<br/>
           Weight: ${req.weight} kg
           </div>
         `;
@@ -118,6 +118,7 @@ document.addEventListener("DOMContentLoaded", () => {
       list.forEach((p) => {
         const tr = document.createElement("tr");
         tr.innerHTML = `
+          <td style="padding:.6rem;border:1px solid #eee">${p.patientId}</td>
           <td style="padding:.6rem;border:1px solid #eee">${p.name}</td>
           <td style="padding:.6rem;border:1px solid #eee">${p.surname}</td>
           <td style="padding:.6rem;border:1px solid #eee">${p.gender}</td>
@@ -233,12 +234,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     sessionsContainer = document.createElement("div");
     sessionsContainer.style.background = "#ffffff";
-    sessionsContainer.style.padding = "1rem";
     sessionsContainer.style.borderRadius = "12px";
     sessionsContainer.style.margin = "1rem auto";
     sessionsContainer.style.width = "100%";
     sessionsContainer.style.color = "#3e4042";
-    sessionsContainer.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.08)";
     sessionsContainer.dataset.patientId = patientId;
 
     patientsBox.appendChild(sessionsContainer);
@@ -267,11 +266,11 @@ document.addEventListener("DOMContentLoaded", () => {
       sessionsContainer.innerHTML = "";
       sessions.forEach((session) => {
         const sessionDiv = document.createElement("div");
-        sessionDiv.style.border = "1px solid #ccc";
         sessionDiv.style.marginBottom = "1rem";
         sessionDiv.style.borderRadius = "10px";
         sessionDiv.style.background = "#fff";
         sessionDiv.style.width = "100%";
+        sessionDiv.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.08)";
 
         const header = document.createElement("div");
         header.style.cursor = "pointer";
@@ -324,6 +323,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 const symptomsTitle = document.createElement("h4");
                 symptomsTitle.textContent = "Symptoms:";
                 symptomsTitle.style.marginBottom = "0.4rem";
+                symptomsTitle.style.color = "#3e4042";
+
                 details.appendChild(symptomsTitle);
 
                 if (symptoms.length === 0) {
@@ -335,14 +336,13 @@ document.addEventListener("DOMContentLoaded", () => {
                   symptoms.forEach((s) => {
                     const li = document.createElement("li");
                     li.textContent = s;
+                    li.style.marginLeft = "1.5rem";
+                    li.style.marginBottom = "0.3rem";
+                    li.style.color = "#3e4042";
                     ul.appendChild(li);
                   });
                   details.appendChild(ul);
                 }
-                const signalsTitle = document.createElement("h4");
-                signalsTitle.textContent = "Signals:";
-                signalsTitle.style.margin = "1rem 0 0.4rem 0";
-                details.appendChild(signalsTitle);
 
                 if (signals.length === 0) {
                   const noSignals = document.createElement("p");
@@ -351,14 +351,15 @@ document.addEventListener("DOMContentLoaded", () => {
                 } else {
                   signals.forEach((signal) => {
                     const signalDiv = document.createElement("div");
-                    signalDiv.style.border = "1px solid #aaa";
                     signalDiv.style.marginBottom = "0.8rem";
                     signalDiv.style.borderRadius = "10px";
-                    signalDiv.style.padding = "0.5rem";
-                    signalDiv.style.background = "#f1efefff";
+                    signalDiv.style.padding = "1.5rem";
+                    signalDiv.style.background = "#fafafa";
+                    signalDiv.style.boxShadow =
+                      "0 4px 12px rgba(0, 0, 0, 0.08)";
                     signalDiv.style.width = "100%";
-                    signalDiv.style.maxWidth = "550px";
                     signalDiv.style.boxSizing = "border-box";
+                    signalDiv.style.marginTop = "1rem";
 
                     const signalHeader = document.createElement("div");
                     signalHeader.textContent = signal.signalType + " Signal";
@@ -541,13 +542,11 @@ document.addEventListener("DOMContentLoaded", () => {
             const sig2 = signals2.find((s) => s.signalType === signalType);
 
             const signalContainer = document.createElement("div");
-            signalContainer.style.border = "1px solid #aaa";
             signalContainer.style.marginBottom = "1.5rem";
             signalContainer.style.borderRadius = "10px";
             signalContainer.style.padding = "0.5rem";
-            signalContainer.style.background = "#f1efefff";
+            signalContainer.style.background = "#fafafa";
             signalContainer.style.width = "100%";
-            signalContainer.style.maxWidth = "700px";
             signalContainer.style.boxSizing = "border-box";
 
             const signalHeader = document.createElement("div");
@@ -900,7 +899,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (nameInput.value) payload.name = nameInput.value;
     if (surnameInput.value) payload.surname = surnameInput.value;
     if (genderInput.value) payload.gender = genderInput.value;
-    if (localityInput.value) payload.localidad = localityInput.value;
+    if (localityInput.value) payload.locality = { name: localityInput.value };
 
     try {
       const res = await apiFetch("https://127.0.0.1:8443/api/doctors/me", {

@@ -428,7 +428,12 @@ main {
   font-family: "Roboto", sans-serif;
   cursor: pointer;
 }
+<<<<<<< HEAD
 .upload-file-control[disabled] {
+=======
+
+.record-control[disabled] {
+>>>>>>> 4aa4625c293b74abe2820664fc8a0097788aea28
   opacity: 0.5;
   cursor: not-allowed;
 }
@@ -447,12 +452,12 @@ main {
   display: grid;
   gap: 1rem;
   padding: 10px;
-  max-height: 150px;
+  max-height: 165px;
   overflow-y: auto;
 }
 
 .doctor-item {
-  background: white;
+  background: #fafafa;
   padding: 1rem;
   border-radius: 15px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
