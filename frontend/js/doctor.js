@@ -991,4 +991,88 @@ document.addEventListener("DOMContentLoaded", () => {
       alert("Network error while generating/downloading report");
     }
   }
+
+  async function loadReports() {
+    const container = document.getElementById("reports-container");
+    container.innerHTML = "Loading reports...";
+    container.style.display = "grid";
+    container.style.gridTemplateColumns =
+      "repeat(auto-fill, minmax(100px, 1fr))";
+    container.style.gap = "1rem";
+    container.style.padding = "1rem";
+
+    try {
+      const res = await apiFetch(
+        "https://127.0.0.1:8443/api/doctors/me/reports"
+      );
+      if (!res.ok) {
+        container.innerHTML = "No reports found.";
+        return;
+      }
+
+      const reports = await res.json();
+      container.innerHTML = "";
+
+      reports.forEach((report) => {
+        const card = document.createElement("div");
+        card.className = "report-card";
+        card.style.borderRadius = "12px";
+        card.style.padding = "1rem 0.5rem";
+        card.style.textAlign = "center";
+        card.style.background = "#fafafa";
+        card.style.cursor = "pointer";
+        card.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.08)";
+        card.style.transition = "transform 0.2s, box-shadow 0.2s";
+        card.style.display = "flex";
+        card.style.flexDirection = "column";
+        card.style.alignItems = "center";
+        card.style.justifyContent = "center";
+
+        card.innerHTML = `
+          <img src="../assets/svgs/file.svg" />
+          <div style="margin-top:0.5rem; font-size:0.85rem; color:grey;">
+            ${new Date(report.createdAt).toLocaleDateString()}
+          </div>
+        `;
+
+        card.addEventListener("mouseover", () => {
+          card.style.transform = "scale(1.05)";
+          card.style.boxShadow = "0 6px 15px rgba(0,0,0,0.15)";
+        });
+        card.addEventListener("mouseout", () => {
+          card.style.transform = "scale(1)";
+          card.style.boxShadow = "0 3px 8px rgba(0,0,0,0.1)";
+        });
+
+        card.addEventListener("click", async () => {
+          try {
+            const downloadRes = await apiFetch(
+              `https://127.0.0.1:8443/api/doctors/reports/${report.reportId}`
+            );
+            if (!downloadRes.ok) throw new Error("Failed to download report");
+
+            const blob = await downloadRes.blob();
+            const url = window.URL.createObjectURL(blob);
+
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = `report_${report.reportId}.pdf`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            window.URL.revokeObjectURL(url);
+          } catch (err) {
+            alert(err.message);
+          }
+        });
+
+        container.appendChild(card);
+      });
+    } catch (err) {
+      console.error(err);
+      container.innerHTML = "Error loading reports.";
+    }
+  }
+
+  loadReports();
 });
