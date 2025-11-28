@@ -118,6 +118,7 @@ document.addEventListener("DOMContentLoaded", () => {
       list.forEach((p) => {
         const tr = document.createElement("tr");
         tr.innerHTML = `
+          <td style="padding:.6rem;border:1px solid #eee">${p.patientId}</td>
           <td style="padding:.6rem;border:1px solid #eee">${p.name}</td>
           <td style="padding:.6rem;border:1px solid #eee">${p.surname}</td>
           <td style="padding:.6rem;border:1px solid #eee">${p.gender}</td>
