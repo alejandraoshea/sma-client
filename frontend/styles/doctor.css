@@ -256,19 +256,19 @@ html {
 }
 
 .accept-btn {
-  background: #558958;
+  background: #8A9A5B;
   color: white;
   border: none;
   padding: 0.5rem 0.8rem;
-  border-radius: 8px;
+  border-radius: 20px;
 }
 
 .decline-btn {
-  background: #ff6b6b;
+  background: #f05454;
   color: white;
   border: none;
   padding: 0.5rem 0.8rem;
-  border-radius: 8px;
+  border-radius: 20px;
 }
 
 .toast-notification {

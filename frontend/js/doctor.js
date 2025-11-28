@@ -5,6 +5,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const claims = jwt_decode(token);
   if (claims.role !== "DOCTOR") window.location.href = "../../index.html";
 
+  const currentDoctorId = claims.doctorId;
+
   async function apiFetch(url, options = {}) {
     const res = await fetch(url, {
       ...options,
@@ -131,7 +133,7 @@ document.addEventListener("DOMContentLoaded", () => {
               View Sessions
             </button>
             <button class="compare-sessions-btn" data-patient-id="${p.patientId}" 
-              style="background:#4a90e2; color:white; border:none; padding:0.4rem 0.8rem; border-radius: 12px; margin-left: 0.5rem; cursor:pointer;">
+              style="background:#72bdd4; color:white; border:none; padding:0.4rem 0.8rem; border-radius: 12px; margin-left: 0.5rem; cursor:pointer;">
               Compare 2 Sessions
             </button>
           </td>
@@ -351,6 +353,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 } else {
                   signals.forEach((signal) => {
                     const signalDiv = document.createElement("div");
+
                     signalDiv.style.marginBottom = "0.8rem";
                     signalDiv.style.borderRadius = "10px";
                     signalDiv.style.padding = "1.5rem";
@@ -376,6 +379,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     details.appendChild(signalDiv);
                   });
+                  const createReportButton = document.createElement("button");
+                  createReportButton.style.width = "100%";
+                  createReportButton.style.padding = "0.6rem";
+                  createReportButton.style.marginTop = "1rem";
+                  createReportButton.style.background = "#72bdd4";
+                  createReportButton.style.color = "#ffffff";
+                  createReportButton.style.borderRadius = "12px";
+                  createReportButton.style.border = "none";
+                  createReportButton.style.boxShadow =
+                    "0 4px 12px rgba(0, 0, 0, 0.08)";
+                  createReportButton.textContent = "Create Report";
+                  createReportButton.style.cursor = "pointer";
+                  createReportButton.onclick = () =>
+                    createReport(currentDoctorId, session.sessionId);
+                  details.appendChild(createReportButton);
                 }
               } catch (e) {
                 details.textContent = "Failed to load session details.";
@@ -921,4 +939,56 @@ document.addEventListener("DOMContentLoaded", () => {
       alert("Network error.");
     }
   });
+
+  async function createReport(doctorId, sessionId) {
+    try {
+      const generateRes = await fetch(
+        `https://127.0.0.1:8443/api/doctors/${doctorId}/report/${sessionId}/generate`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (!generateRes.ok) {
+        alert("Failed to generate report");
+        return;
+      }
+
+      const report = await generateRes.json();
+      const reportId = report.reportId;
+
+      const downloadRes = await fetch(
+        `https://127.0.0.1:8443/api/doctors/reports/${reportId}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      if (!downloadRes.ok) {
+        alert("Failed to download report");
+        return;
+      }
+
+      const blob = await downloadRes.blob();
+      const url = window.URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `report_${reportId}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error(err);
+      alert("Network error while generating/downloading report");
+    }
+  }
 });
