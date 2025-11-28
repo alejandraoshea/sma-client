@@ -243,21 +243,16 @@
                 <button class="signal-btn" data-signal="ECG">ECG</button>
                 <button class="signal-btn" data-signal="EMG">EMG</button>
               </div>
-              <div id="record-area" class="record-area hidden">
-                <p
-                  id="recording-label"
-                  style="margin: 0 0 1rem 0; text-align: center; color: #333"
-                >
-                  Ready to record
-                </p>
-                <div
-                  style="display: flex; gap: 0.75rem; justify-content: center"
-                >
-                  <button id="record-btn" class="record-control">Record</button>
-                  <button id="stop-btn" class="record-control" disabled>
-                    Stop
+              <div id="upload-file-area" class="upload-file-area hidden">
+                <p id="recording-label" style="margin: 0 0 1rem 0; text-align: center; color: #333">Ready to record</p>
+                <div style="display: flex; gap: 0.75rem; justify-content: center">
+                  <input type="file" id="signal-file" accept=".txt"/>
+                  <button id="select-file-btn" type="button" class="custom-file-btn">
+                    Select .txt File
                   </button>
+                  <button id="upload-file-btn" type="button" class="upload-file-btn hidden" disabled>Upload File</button>
                 </div>
+                <p id="selected-file-name" style="margin-top: 0.5rem; font-size: 0.9rem; color:#444;"></p>
               </div>
             </div>
           </div>

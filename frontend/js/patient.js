@@ -102,65 +102,63 @@ document.addEventListener("DOMContentLoaded", () => {
 
   async function loadDoctorStatus() {
     try {
-      const res = await apiFetch(`https://127.0.0.1:8443/api/patients/me`);
-      if (!res || !res.ok) return;
+        const res = await apiFetch(`https://127.0.0.1:8443/api/patients/me`);
+        if (!res || !res.ok) return;
 
-      const patient = await res.json();
-      const statusCircle = document.getElementById("doctor-status-box");
+        const patient = await res.json();
+        const statusCircle = document.getElementById("doctor-status-box");
 
-      if (!patient.selectedDoctorId) {
+        if (!patient.selectedDoctorId) {
         statusCircle.style.backgroundColor = "blue";
         statusText.innerHTML = "No doctor assigned";
+        doctorText.innerHTML = "";
         statusCircle.classList.remove("hidden");
         submitButton.disabled = false;
         return;
-      }
+        }
 
-      statusCircle.classList.remove("hidden");
+        statusCircle.classList.remove("hidden");
 
-      const status = patient.doctorApprovalStatus;
+        const status = patient.doctorApprovalStatus;
 
-      switch (status) {
+        switch (status) {
         case "PENDING":
-          statusText.innerHTML = `<p style="color:#d4a017">Pending</p>`;
-          statusCircle.style.backgroundColor = "#d4a017";
-          submitButton.disabled = true;
-          break;
+            statusText.innerHTML = `<p style="color:#d4a017">Pending</p>`;
+            statusCircle.style.backgroundColor = "#d4a017";
+            submitButton.disabled = true;
+            if (patient.selectedDoctorId) {
+            await loadDoctorInfo(patient.selectedDoctorId);
+            }
+            break;
 
         case "APPROVED":
-          statusText.innerHTML = `<p style="color:#4a8c3b;">Approved ✔</p>`;
-          statusCircle.style.backgroundColor = "#4a8c3b";
-          submitButton.disabled = true;
-
-          if (patient.selectedDoctorId) {
-            const res = await apiFetch(
-              `https://127.0.0.1:8443/api/patients/me/doctor`
-            );
-
-            if (res.ok) {
-              const doctor = await res.json();
-              doctorText.innerHTML = `Dr. ${doctor.name} ${doctor.surname}`;
+            statusText.innerHTML = `<p style="color:#4a8c3b;">Approved ✔</p>`;
+            statusCircle.style.backgroundColor = "#4a8c3b";
+            submitButton.disabled = true;
+            if (patient.selectedDoctorId) {
+            await loadDoctorInfo(patient.selectedDoctorId);
             }
-          }
-
-          break;
+            break;
 
         case "DECLINED":
-          statusText.innerHTML = `<p style="color:#c0392b">Declined</p>`;
-          statusCircle.style.backgroundColor = "#c0392b";
-          submitButton.disabled = false;
-          break;
+            statusText.innerHTML = `<p style="color:#c0392b">Declined</p>`;
+            statusCircle.style.backgroundColor = "#c0392b";
+            submitButton.disabled = false;
+            doctorText.innerHTML = "";
+            break;
 
         default:
-          statusText.innerHTML = `<p style="color:#2e70b5">Unknown</p>`;
-          statusCircle.style.backgroundColor = "#2e70b5";
-          submitButton.disabled = false;
-          break;
-      }
+            statusText.innerHTML = `<p style="color:#2e70b5">Unknown</p>`;
+            statusCircle.style.backgroundColor = "#2e70b5";
+            submitButton.disabled = false;
+            doctorText.innerHTML = "";
+            break;
+        }
     } catch (err) {
-      console.error(err);
+        console.error(err);
     }
-  }
+    }
+
 
   const patientForm = document.querySelector(".patient-info form");
   const nameInput = document.getElementById("patient-name");
@@ -196,6 +194,20 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error("Error loading patient info:", err);
     }
   }
+  async function loadDoctorInfo(doctorId) {
+    try {
+        const res = await apiFetch(`https://127.0.0.1:8443/api/doctors/${doctorId}`);
+        if (!res || !res.ok) {
+        doctorText.innerHTML = "Failed to load doctor info.";
+        return;
+        }
+        const doctor = await res.json();
+        doctorText.innerHTML = `Dr. ${doctor.name} ${doctor.surname}`;
+    } catch (err) {
+        console.error(err);
+        doctorText.innerHTML = "Error loading doctor info.";
+    }
+    }
 
   loadPatientInfo();
 
