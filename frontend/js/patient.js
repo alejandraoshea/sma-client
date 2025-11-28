@@ -134,8 +134,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
           if (patient.selectedDoctorId) {
             const res = await apiFetch(
-              `/api/doctors/${patient.selectedDoctorId}`
+              `https://127.0.0.1:8443/api/patients/me/doctor`
             );
+
             if (res.ok) {
               const doctor = await res.json();
               doctorText.innerHTML = `Dr. ${doctor.name} ${doctor.surname}`;
@@ -273,100 +274,9 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error("Error loading doctors on map:", err);
     }
   }
-  async function loadPatientAndDoctor() {
-    try {
-      const patientRes = await fetch("/api/patients/me", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (!patientRes.ok) {
-        throw new Error(
-          `Failed to fetch patient: ${patientRes.status} ${patientRes.statusText}`
-        );
-      }
-
-      const patient = await patientRes.json();
-      patientInfoEl.textContent = `Patient: ${patient.name} ${patient.surname}`;
-
-      const doctorId = patient.selectedDoctorId;
-
-      if (!doctorId) {
-        doctorInfoEl.textContent = "No selected doctor.";
-        return;
-      }
-
-      const doctorRes = await fetch(`/api/doctors/${doctorId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (!doctorRes.ok) {
-        if (doctorRes.status === 404) {
-          doctorInfoEl.textContent = "Selected doctor not found.";
-        } else {
-          throw new Error(
-            `Failed to fetch doctor: ${doctorRes.status} ${doctorRes.statusText}`
-          );
-        }
-        return;
-      }
-
-      const doctor = await doctorRes.json();
-      doctorInfoEl.textContent = `Doctor: Dr. ${doctor.name} ${doctor.surname}`;
-    } catch (error) {
-      patientInfoEl.textContent = "Error loading patient info.";
-      doctorInfoEl.textContent = "";
-      console.error("Error:", error);
-    }
-  }
-
-  async function loadCurrentDoctor() {
-    const doctorText = document.getElementById("doctor-name-text");
-    const statusText = document.getElementById("doctor-status-text");
-    const submitButton = document.querySelector(
-      "#doctors-form button[type='submit']"
-    );
-
-    try {
-      const res = await fetch("https://127.0.0.1:8443/api/patients/me/doctor", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-
-      if (res.status === 204) {
-        // No doctor assigned
-        statusText.innerHTML = "No doctor assigned";
-        doctorText.innerHTML = "";
-        submitButton.disabled = false;
-        return;
-      }
-
-      if (!res.ok) {
-        throw new Error(`Failed to load doctor: ${res.status}`);
-      }
-
-      const doctor = await res.json();
-
-      // Update frontend with doctor info
-      doctorText.innerHTML = `Dr. ${doctor.name} ${doctor.surname}`;
-      statusText.innerHTML = `<p style="color:#4a8c3b;">Assigned</p>`;
-      submitButton.disabled = true;
-    } catch (err) {
-      console.error("Error loading current doctor:", err);
-      statusText.innerHTML = "Error loading doctor";
-      doctorText.innerHTML = "";
-      submitButton.disabled = false;
-    }
-  }
 
   loadDoctors();
   loadDoctorStatus();
   loadPatientInfo();
   loadDoctorsOnMap();
-  loadCurrentDoctor();
-  loadPatientAndDoctor();
 });
