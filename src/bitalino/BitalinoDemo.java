@@ -24,8 +24,8 @@ public class BitalinoDemo {
         BITalino bitalino = null;
 
         try {
-            //MAC ADRESS
-            System.out.println("Please enter BITalino MAc adress:");
+            //MAC ADRESS: format: 98:D3:41:FD:4E:E8
+            System.out.println("Please enter BITalino MAc adress with the format: XX:XX:XX:XX:XX:XX");
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
             String macAddress = br.readLine();
 
@@ -70,7 +70,7 @@ public class BitalinoDemo {
             AtomicBoolean stopRequested = new AtomicBoolean(false);
             int recordSeconds = 0;
 
-            if (test.equals("A")||test.equals("ecg")||test.equals("a")) {
+            if (test.equals("A") || test.equals("ecg") || test.equals("a")) {
                 //crea archivo temporal (no lo guarda en el sistema solo será mandado al server)
                 File file = File.createTempFile("grabaciones_bitalinoECG", ".txt");
                 file.deleteOnExit();
@@ -86,7 +86,7 @@ public class BitalinoDemo {
                 int[] channelsToAcquire = {1};
                 bitalino.start(channelsToAcquire);
                 //5 minutos máximo de grabación
-                recordSeconds = 5*60;
+                recordSeconds = 5 * 60;
 
                 System.out.println("RECORDING ECG: ");
                 Thread.sleep(2000);
@@ -122,7 +122,7 @@ public class BitalinoDemo {
                     frame = bitalino.read(blockSize);
                     for (Frame f : frame) {
                         long timestamp = System.currentTimeMillis();
-                        int a2 = f.analog[0];
+                        int a2 = f.analog[1];
 
                         System.out.println("t=" + timestamp + " | A2=" + a2);
 
@@ -142,6 +142,10 @@ public class BitalinoDemo {
                 stopRequested.set(true);
                 bitalino.stop();
 
+                //Variables locales de testeo
+                Long sessionId = 1L;
+                Long patientId = 12345L;
+
                 /*String carpetaDestino = "C:/Users/Carlota/OneDrive - Fundación Universitaria San Pablo CEU/CUARTO ING.B/PRIMER CUATRI/TM/intento de grabaciones con bitalino/";
                 File fileFinal = new File(carpetaDestino, "grabacionECG_2.txt");
                 //BufferedWriter w = new BufferedWriter(new FileWriter(fileFinal, true));
@@ -151,7 +155,7 @@ public class BitalinoDemo {
                 //AQUI SE MANDA AL SERVER
                 DataUploader.sendECG(file, sessionId, patientId);
 
-            } else if (test.equals("B")||test.equals("emg")||test.equals("b")) {
+            } else if (test.equals("B") || test.equals("emg") || test.equals("b")) {
                 //crea archivo temporal (no lo guarda en el sistema solo será mandado al server)
                 File file = File.createTempFile("grabaciones_bitalinoEMG", ".txt");
                 file.deleteOnExit();
@@ -201,14 +205,14 @@ public class BitalinoDemo {
                     frame = bitalino.read(blockSize);
                     for (Frame f : frame) {
                         long timestamp = System.currentTimeMillis();
-                        int a2 = f.analog[0];
+                        int a1 = f.analog[0];
 
-                        System.out.println("t=" + timestamp + " | A2=" + a2);
+                        System.out.println("t=" + timestamp + " | A1=" + a1);
 
                         if (!firstSample) {
                             writer.write(",");  // separador
                         }
-                        writer.write(Integer.toString(a2));
+                        writer.write(Integer.toString(a1));
                         firstSample = false;
                     }
                 }
@@ -228,7 +232,7 @@ public class BitalinoDemo {
                 System.out.println("Archivo guardado en: " + file.getAbsolutePath());*/
 
                 //AQUI SE MANDA AL SERVER
-                DataUploader.sendECG(file, sessionId, patientId);
+                //DataUploader.sendECG(file, sessionId, patientId); //Lo comente porque daba error por los IDS
             }
 
         } catch (BITalinoException ex) {
