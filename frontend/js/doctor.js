@@ -379,6 +379,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     details.appendChild(signalDiv);
                   });
+
+                  const commentsTextarea = document.createElement("textarea");
+                  commentsTextarea.placeholder = "Doctor's notes here ...";
+                  commentsTextarea.style.width = "100%";
+                  commentsTextarea.style.height = "80px";
+                  commentsTextarea.style.marginTop = "1rem";
+                  commentsTextarea.style.padding = "0.5rem";
+                  commentsTextarea.style.borderRadius = "8px";
+                  commentsTextarea.style.border = "1px solid #ccc";
+                  commentsTextarea.style.resize = "vertical";
+                  commentsTextarea.style.fontSize = "1rem";
+                  commentsTextarea.style.fontFamily = "inherit";
+                  details.appendChild(commentsTextarea);
+
                   const createReportButton = document.createElement("button");
                   createReportButton.style.width = "100%";
                   createReportButton.style.padding = "0.6rem";
@@ -391,8 +405,19 @@ document.addEventListener("DOMContentLoaded", () => {
                     "0 4px 12px rgba(0, 0, 0, 0.08)";
                   createReportButton.textContent = "Create Report";
                   createReportButton.style.cursor = "pointer";
-                  createReportButton.onclick = () =>
-                    createReport(currentDoctorId, session.sessionId);
+
+                  createReportButton.onclick = async () => {
+                    const success = await createReport(
+                      currentDoctorId,
+                      session.sessionId,
+                      commentsTextarea.value
+                    );
+
+                    if (success) {
+                      commentsTextarea.value = "";  
+                    }
+                  };
+
                   details.appendChild(createReportButton);
                 }
               } catch (e) {
@@ -940,10 +965,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  async function createReport(doctorId, sessionId) {
+  async function createReport(doctorId, sessionId, comments = "") {
     try {
       const generateRes = await fetch(
-        `https://127.0.0.1:8443/api/doctors/${doctorId}/report/${sessionId}/generate`,
+        `https://127.0.0.1:8443/api/doctors/${doctorId}/report/${sessionId}/generate?doctorsComments=${encodeURIComponent(comments)}`,
         {
           method: "POST",
           headers: {
@@ -955,7 +980,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (!generateRes.ok) {
         alert("Failed to generate report");
-        return;
+        return false;
       }
 
       const report = await generateRes.json();
@@ -973,7 +998,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (!downloadRes.ok) {
         alert("Failed to download report");
-        return;
+        return false;
       }
 
       const blob = await downloadRes.blob();
@@ -986,9 +1011,11 @@ document.addEventListener("DOMContentLoaded", () => {
       a.click();
       a.remove();
       window.URL.revokeObjectURL(url);
+      return true;
     } catch (err) {
       console.error(err);
       alert("Network error while generating/downloading report");
+      return false;
     }
   }
 
