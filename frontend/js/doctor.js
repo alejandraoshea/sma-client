@@ -323,6 +323,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 const symptomsTitle = document.createElement("h4");
                 symptomsTitle.textContent = "Symptoms:";
                 symptomsTitle.style.marginBottom = "0.4rem";
+                symptomsTitle.style.color = "#3e4042";
+
                 details.appendChild(symptomsTitle);
 
                 if (symptoms.length === 0) {
@@ -334,14 +336,13 @@ document.addEventListener("DOMContentLoaded", () => {
                   symptoms.forEach((s) => {
                     const li = document.createElement("li");
                     li.textContent = s;
+                    li.style.marginLeft = "1.5rem";
+                    li.style.marginBottom = "0.3rem";
+                    li.style.color = "#3e4042";
                     ul.appendChild(li);
                   });
                   details.appendChild(ul);
                 }
-                const signalsTitle = document.createElement("h4");
-                signalsTitle.textContent = "Signals:";
-                signalsTitle.style.margin = "1rem 0 0.4rem 0";
-                details.appendChild(signalsTitle);
 
                 if (signals.length === 0) {
                   const noSignals = document.createElement("p");
@@ -354,9 +355,11 @@ document.addEventListener("DOMContentLoaded", () => {
                     signalDiv.style.borderRadius = "10px";
                     signalDiv.style.padding = "1.5rem";
                     signalDiv.style.background = "#fafafa";
-                    signalDiv.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.08)";
+                    signalDiv.style.boxShadow =
+                      "0 4px 12px rgba(0, 0, 0, 0.08)";
                     signalDiv.style.width = "100%";
                     signalDiv.style.boxSizing = "border-box";
+                    signalDiv.style.marginTop = "1rem";
 
                     const signalHeader = document.createElement("div");
                     signalHeader.textContent = signal.signalType + " Signal";
