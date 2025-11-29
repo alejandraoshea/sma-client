@@ -407,7 +407,6 @@ main {
   cursor: not-allowed;
 }
 
-
 .upload-file-area {
   margin-top: 1rem;
   padding: 1rem;
@@ -741,4 +740,16 @@ main {
   font-size: 0.9rem;
   font-weight: 500;
   color: #444;
+}
+
+.left-column {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.right-column {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
 }

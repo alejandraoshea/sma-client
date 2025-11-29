@@ -42,217 +42,252 @@
 
     <main>
       <section class="main-div">
-        <div class="patient-info">
-          <div class="icon-circle">
-            <img src="../assets/svgs/logo_white.svg" alt="Logo" />
-          </div>
-          <div class="current-profile">
-            <h2 class="section-title">Current Profile</h2>
-            <div class="patient-details">
-              <div>
-                <div class="detail-group">
-                  <label>Name:</label>
-                  <p id="detail-name" class="detail-value"></p>
+        <div class="left-column">
+          <div class="patient-info">
+            <div class="icon-circle">
+              <img src="../assets/svgs/logo_white.svg" alt="Logo" />
+            </div>
+
+            <div class="current-profile">
+              <h2 class="section-title">Current Profile</h2>
+              <div class="patient-details">
+                <div>
+                  <div class="detail-group">
+                    <label>Name:</label>
+                    <p id="detail-name" class="detail-value"></p>
+                  </div>
+
+                  <div class="detail-group">
+                    <label>Surname:</label>
+                    <p id="detail-surname" class="detail-value"></p>
+                  </div>
+
+                  <div class="detail-group">
+                    <label>Gender:</label>
+                    <p id="detail-gender" class="detail-value"></p>
+                  </div>
                 </div>
 
-                <div class="detail-group">
-                  <label>Surname:</label>
-                  <p id="detail-surname" class="detail-value"></p>
-                </div>
+                <div>
+                  <div class="detail-group">
+                    <label>Birthdate:</label>
+                    <p id="detail-birthdate" class="detail-value"></p>
+                  </div>
 
-                <div class="detail-group">
-                  <label>Gender:</label>
-                  <p id="detail-gender" class="detail-value"></p>
-                </div>
-              </div>
+                  <div class="detail-group">
+                    <label>Height (cm):</label>
+                    <p id="detail-height" class="detail-value"></p>
+                  </div>
 
-              <div>
-                <div class="detail-group">
-                  <label>Birthdate:</label>
-                  <p id="detail-birthdate" class="detail-value"></p>
-                </div>
-
-                <div class="detail-group">
-                  <label>Height (cm):</label>
-                  <p id="detail-height" class="detail-value"></p>
-                </div>
-
-                <div class="detail-group">
-                  <label>Weight (kg):</label>
-                  <p id="detail-weight" class="detail-value"></p>
+                  <div class="detail-group">
+                    <label>Weight (kg):</label>
+                    <p id="detail-weight" class="detail-value"></p>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <div class="doctors-section">
-          <div class="doctors-split">
-            <div class="doctors-list">
-              <div>
-                <h3 class="section-title">Current Doctor</h3>
-                <div
-                  id="current-doctor-info"
-                  class="current-doctor-info"
-                  style="padding: 20px"
-                >
-                  <p
-                    id="doctor-name-text"
-                    style="
-                      border-bottom: 1px solid #dadada;
-                      padding: 10px;
-                      margin-bottom: 10px;
-                      padding-top: 0;
-                    "
-                  >
-                    No doctor assigned.
-                  </p>
+          <div class="patient-info">
+            <h2>Edit Profile</h2>
+            <form id="patient-form">
+              <div class="patient-info-form">
+                <div>
+                  <div class="form-group">
+                    <label for="patient-name">Name:</label>
+                    <input type="text" id="patient-name" name="patient-name" />
+                  </div>
 
-                  <div class="doctor-status-container">
-                    <div
-                      id="doctor-status-box"
-                      class="doctor-status-circle"
-                    ></div>
-                    <div id="doctor-status-text" class="doctor-status-text">
-                      Unknown
-                    </div>
+                  <div class="form-group">
+                    <label for="patient-surname">Surname:</label>
+                    <input
+                      type="text"
+                      id="patient-surname"
+                      name="patient-surname"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="patient-gender">Gender:</label>
+                    <select id="patient-gender" name="patient-gender">
+                      <option value="">Select gender</option>
+                      <option value="MALE">Male</option>
+                      <option value="FEMALE">Female</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div>
+                  <div class="form-group">
+                    <label for="patient-birthdate">Birthdate:</label>
+                    <input
+                      type="date"
+                      id="patient-birthdate"
+                      name="patient-birthdate"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="patient-height">Height (cm):</label>
+                    <input
+                      type="number"
+                      id="patient-height"
+                      name="patient-height"
+                      step="0.1"
+                      min="0"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="patient-weight">Weight (kg):</label>
+                    <input
+                      type="number"
+                      id="patient-weight"
+                      name="patient-weight"
+                      step="0.1"
+                      min="0"
+                    />
                   </div>
                 </div>
               </div>
 
-              <div id="doctors-list-container">
-                <h3 class="section-title">Available Doctors</h3>
-                <form id="doctors-form">
-                  <div id="doctors-list" class="doctor-grid"></div>
+              <div class="form-actions">
+                <button type="submit">Save</button>
+              </div>
+            </form>
+          </div>
+
+          <div>
+            <h2 class="section-title">Medical Reports</h2>
+            <div id="medical-history" class="medical-history">
+              <p>No medical history available.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="right-column">
+          <div class="doctors-section">
+            <div class="doctors-split">
+              <div class="doctors-list">
+                <div>
+                  <h3 class="section-title">Current Doctor</h3>
                   <div
-                    style="
-                      display: flex;
-                      justify-content: flex-end;
-                      margin-top: 1rem;
-                    "
+                    id="current-doctor-info"
+                    class="current-doctor-info"
+                    style="padding: 20px"
                   >
+                    <p
+                      id="doctor-name-text"
+                      style="
+                        border-bottom: 1px solid #dadada;
+                        padding: 10px;
+                        margin-bottom: 10px;
+                        padding-top: 0;
+                      "
+                    >
+                      No doctor assigned.
+                    </p>
+
+                    <div class="doctor-status-container">
+                      <div
+                        id="doctor-status-box"
+                        class="doctor-status-circle"
+                      ></div>
+                      <div id="doctor-status-text" class="doctor-status-text">
+                        Unknown
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div id="doctors-list-container">
+                  <h3 class="section-title">Available Doctors</h3>
+                  <form id="doctors-form">
+                    <div id="doctors-list" class="doctor-grid"></div>
+                    <div
+                      style="
+                        display: flex;
+                        justify-content: flex-end;
+                        margin-top: 1rem;
+                      "
+                    >
+                      <button type="submit" class="save-btn">
+                        <p>Request Selected Doctor</p>
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+              <div id="doctors-map" class="doctors-map"></div>
+            </div>
+          </div>
+
+          <button id="start-session-btn" class="log-symptoms-button">
+            <img src="../assets/svgs/add.svg" alt="+" />
+            Start Session
+          </button>
+
+          <div>
+            <div class="stacked" style="margin-bottom: 3rem">
+              <button id="log-symptoms-btn" class="log-symptoms-button hidden">
+                <img src="../assets/svgs/add.svg" alt="+" />
+                Log Symptoms
+              </button>
+              <div id="symptoms-container" class="floating-box hidden">
+                <form id="symptoms-form">
+                  <div id="symptoms-checkboxes" class="symptom-grid"></div>
+                  <div style="display: flex; justify-content: flex-end">
                     <button type="submit" class="save-btn">
-                      <p>Request Selected Doctor</p>
+                      Save Symptoms
                     </button>
                   </div>
                 </form>
               </div>
             </div>
-            <div id="doctors-map" class="doctors-map"></div>
-          </div>
-        </div>
 
-        <div class="patient-info">
-          <h2>Edit Profile</h2>
-          <form id="patient-form">
-            <div class="patient-info-form">
-              <div>
-                <div class="form-group">
-                  <label for="patient-name">Name:</label>
-                  <input type="text" id="patient-name" name="patient-name" />
+            <div class="stacked">
+              <button id="log-signals-btn" class="log-symptoms-button hidden">
+                <img src="../assets/svgs/add.svg" alt="+" />
+                Log Signals
+              </button>
+
+              <div id="signals-container" class="floating-box hidden">
+                <div class="signal-grid">
+                  <button class="signal-btn" data-signal="ECG">ECG</button>
+                  <button class="signal-btn" data-signal="EMG">EMG</button>
                 </div>
-
-                <div class="form-group">
-                  <label for="patient-surname">Surname:</label>
-                  <input
-                    type="text"
-                    id="patient-surname"
-                    name="patient-surname"
-                  />
+                <div id="upload-file-area" class="upload-file-area hidden">
+                  <p
+                    id="recording-label"
+                    style="margin: 0 0 1rem 0; text-align: center; color: #333"
+                  >
+                    Ready to record
+                  </p>
+                  <div
+                    style="display: flex; gap: 0.75rem; justify-content: center"
+                  >
+                    <input type="file" id="signal-file" accept=".txt" />
+                    <button
+                      id="select-file-btn"
+                      type="button"
+                      class="custom-file-btn"
+                    >
+                      Select .txt File
+                    </button>
+                    <button
+                      id="upload-file-btn"
+                      type="button"
+                      class="upload-file-btn hidden"
+                      disabled
+                    >
+                      Upload File
+                    </button>
+                  </div>
+                  <p
+                    id="selected-file-name"
+                    style="margin-top: 0.5rem; font-size: 0.9rem; color: #444"
+                  ></p>
                 </div>
-
-                <div class="form-group">
-                  <label for="patient-gender">Gender:</label>
-                  <select id="patient-gender" name="patient-gender">
-                    <option value="">Select gender</option>
-                    <option value="MALE">Male</option>
-                    <option value="FEMALE">Female</option>
-                  </select>
-                </div>
-              </div>
-
-              <div>
-                <div class="form-group">
-                  <label for="patient-birthdate">Birthdate:</label>
-                  <input
-                    type="date"
-                    id="patient-birthdate"
-                    name="patient-birthdate"
-                  />
-                </div>
-
-                <div class="form-group">
-                  <label for="patient-height">Height (cm):</label>
-                  <input
-                    type="number"
-                    id="patient-height"
-                    name="patient-height"
-                    step="0.1"
-                    min="0"
-                  />
-                </div>
-
-                <div class="form-group">
-                  <label for="patient-weight">Weight (kg):</label>
-                  <input
-                    type="number"
-                    id="patient-weight"
-                    name="patient-weight"
-                    step="0.1"
-                    min="0"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div class="form-actions">
-              <button type="submit">Save</button>
-            </div>
-          </form>
-        </div>
-
-        <button id="start-session-btn" class="log-symptoms-button">
-          <img src="../assets/svgs/add.svg" alt="+" />
-          Start Session
-        </button>
-
-        <div>
-          <div class="stacked" style="margin-bottom: 3rem">
-            <button id="log-symptoms-btn" class="log-symptoms-button hidden">
-              <img src="../assets/svgs/add.svg" alt="+" />
-              Log Symptoms
-            </button>
-            <div id="symptoms-container" class="floating-box hidden">
-              <form id="symptoms-form">
-                <div id="symptoms-checkboxes" class="symptom-grid"></div>
-                <div style="display: flex; justify-content: flex-end">
-                  <button type="submit" class="save-btn">Save Symptoms</button>
-                </div>
-              </form>
-            </div>
-          </div>
-
-          <div class="stacked">
-            <button id="log-signals-btn" class="log-symptoms-button hidden">
-              <img src="../assets/svgs/add.svg" alt="+" />
-              Log Signals
-            </button>
-
-            <div id="signals-container" class="floating-box hidden">
-              <div class="signal-grid">
-                <button class="signal-btn" data-signal="ECG">ECG</button>
-                <button class="signal-btn" data-signal="EMG">EMG</button>
-              </div>
-              <div id="upload-file-area" class="upload-file-area hidden">
-                <p id="recording-label" style="margin: 0 0 1rem 0; text-align: center; color: #333">Ready to record</p>
-                <div style="display: flex; gap: 0.75rem; justify-content: center">
-                  <input type="file" id="signal-file" accept=".txt"/>
-                  <button id="select-file-btn" type="button" class="custom-file-btn">
-                    Select .txt File
-                  </button>
-                  <button id="upload-file-btn" type="button" class="upload-file-btn hidden" disabled>Upload File</button>
-                </div>
-                <p id="selected-file-name" style="margin-top: 0.5rem; font-size: 0.9rem; color:#444;"></p>
               </div>
             </div>
           </div>
@@ -292,36 +327,6 @@
         }
 
         console.log(claims);
-      }
-    </script>
-
-    <script>
-      function sendMac() {
-        const mac = document.getElementById("macInput").value.trim();
-
-        if (!isValidMac(mac)) {
-          alert("Invalid MAC format!");
-          return;
-        }
-
-        fetch("/api/device/mac", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ macAddress: mac }),
-        })
-          .then((response) => response.text())
-          .then((text) => {
-            document.getElementById("result").innerText = text;
-          })
-          .catch((err) => {
-            document.getElementById("result").innerText = "Error: " + err;
-          });
-      }
-
-      function isValidMac(mac) {
-        return /^([0-9A-Fa-f]{2}:){5}[0-9A-Fa-f]{2}$/.test(mac);
       }
     </script>
 

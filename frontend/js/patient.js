@@ -102,63 +102,62 @@ document.addEventListener("DOMContentLoaded", () => {
 
   async function loadDoctorStatus() {
     try {
-        const res = await apiFetch(`https://127.0.0.1:8443/api/patients/me`);
-        if (!res || !res.ok) return;
+      const res = await apiFetch(`https://127.0.0.1:8443/api/patients/me`);
+      if (!res || !res.ok) return;
 
-        const patient = await res.json();
-        const statusCircle = document.getElementById("doctor-status-box");
+      const patient = await res.json();
+      const statusCircle = document.getElementById("doctor-status-box");
 
-        if (!patient.selectedDoctorId) {
+      if (!patient.selectedDoctorId) {
         statusCircle.style.backgroundColor = "blue";
         statusText.innerHTML = "No doctor assigned";
         doctorText.innerHTML = "";
         statusCircle.classList.remove("hidden");
         submitButton.disabled = false;
         return;
-        }
+      }
 
-        statusCircle.classList.remove("hidden");
+      statusCircle.classList.remove("hidden");
 
-        const status = patient.doctorApprovalStatus;
+      const status = patient.doctorApprovalStatus;
 
-        switch (status) {
+      switch (status) {
         case "PENDING":
-            statusText.innerHTML = `<p style="color:#d4a017">Pending</p>`;
-            statusCircle.style.backgroundColor = "#d4a017";
-            submitButton.disabled = true;
-            if (patient.selectedDoctorId) {
+          statusText.innerHTML = `<p style="color:#d4a017">Pending</p>`;
+          statusCircle.style.backgroundColor = "#d4a017";
+          submitButton.disabled = true;
+          if (patient.selectedDoctorId) {
             await loadDoctorInfo(patient.selectedDoctorId);
-            }
-            break;
+          }
+          break;
 
         case "APPROVED":
-            statusText.innerHTML = `<p style="color:#4a8c3b;">Approved ✔</p>`;
-            statusCircle.style.backgroundColor = "#4a8c3b";
-            submitButton.disabled = true;
-            if (patient.selectedDoctorId) {
+          statusText.innerHTML = `<p style="color:#4a8c3b;">Approved ✔</p>`;
+          statusCircle.style.backgroundColor = "#4a8c3b";
+          submitButton.disabled = true;
+          if (patient.selectedDoctorId) {
             await loadDoctorInfo(patient.selectedDoctorId);
-            }
-            break;
+          }
+          break;
 
         case "DECLINED":
-            statusText.innerHTML = `<p style="color:#c0392b">Declined</p>`;
-            statusCircle.style.backgroundColor = "#c0392b";
-            submitButton.disabled = false;
-            doctorText.innerHTML = "";
-            break;
+          statusText.innerHTML = `<p style="color:#c0392b">Declined</p>`;
+          statusCircle.style.backgroundColor = "#c0392b";
+          submitButton.disabled = false;
+          doctorText.innerHTML = "";
+          break;
 
         default:
-            statusText.innerHTML = `<p style="color:#2e70b5">Unknown</p>`;
-            statusCircle.style.backgroundColor = "#2e70b5";
-            submitButton.disabled = false;
-            doctorText.innerHTML = "";
-            break;
-        }
+          statusText.innerHTML = `<p style="color:#2e70b5">Unknown</p>`;
+          statusCircle.style.backgroundColor = "#2e70b5";
+          submitButton.disabled = false;
+          doctorText.innerHTML = "";
+          break;
+      }
     } catch (err) {
-        console.error(err);
+      console.error(err);
     }
-    }
-
+  }
 
   const patientForm = document.querySelector(".patient-info form");
   const nameInput = document.getElementById("patient-name");
@@ -196,18 +195,20 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   async function loadDoctorInfo(doctorId) {
     try {
-        const res = await apiFetch(`https://127.0.0.1:8443/api/doctors/${doctorId}`);
-        if (!res || !res.ok) {
+      const res = await apiFetch(
+        `https://127.0.0.1:8443/api/doctors/${doctorId}`
+      );
+      if (!res || !res.ok) {
         doctorText.innerHTML = "Failed to load doctor info.";
         return;
-        }
-        const doctor = await res.json();
-        doctorText.innerHTML = `Dr. ${doctor.name} ${doctor.surname}`;
+      }
+      const doctor = await res.json();
+      doctorText.innerHTML = `Dr. ${doctor.name} ${doctor.surname}`;
     } catch (err) {
-        console.error(err);
-        doctorText.innerHTML = "Error loading doctor info.";
+      console.error(err);
+      doctorText.innerHTML = "Error loading doctor info.";
     }
-    }
+  }
 
   loadPatientInfo();
 
@@ -287,6 +288,51 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  async function loadMedicalReports() {
+    const historyDiv = document.getElementById("medical-history");
+    historyDiv.innerHTML = "Loading medical reports...";
+
+    try {
+      const res = await apiFetch(
+        "https://127.0.0.1:8443/api/patients/me/reports"
+      );
+      if (!res || !res.ok) {
+        historyDiv.innerHTML =
+          "<p style='color:red;'>Failed to load reports.</p>";
+        return;
+      }
+
+      const reports = await res.json();
+
+      if (!reports.length) {
+        historyDiv.innerHTML = "<p>No medical history available.</p>";
+        return;
+      }
+
+      historyDiv.innerHTML = "";
+
+      reports.forEach((report) => {
+        const reportDiv = document.createElement("div");
+        reportDiv.className = "report-item";
+        reportDiv.style.border = "1px solid #ddd";
+        reportDiv.style.padding = "10px";
+        reportDiv.style.marginBottom = "10px";
+        reportDiv.style.borderRadius = "5px";
+        reportDiv.innerHTML = `
+          <p><strong>Date:</strong> ${report.date || "Unknown"}</p>
+          <p><strong>Doctor:</strong> ${report.doctorName || "Unknown"}</p>
+          <p><strong>Type:</strong> ${report.type || "General"}</p>
+          <p><strong>Details:</strong> ${report.details || "No details"}</p>
+        `;
+        historyDiv.appendChild(reportDiv);
+      });
+    } catch (err) {
+      console.error("Error loading medical reports:", err);
+      historyDiv.innerHTML = "<p style='color:red;'>Network error.</p>";
+    }
+  }
+
+  loadMedicalReports();
   loadDoctors();
   loadDoctorStatus();
   loadPatientInfo();

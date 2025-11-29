@@ -177,7 +177,6 @@ html {
   flex-direction: column;
   animation: fadeSlide 0.25s ease-out;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  margin-bottom: 2rem;
 }
 
 .floating-box h3 {
@@ -275,7 +274,7 @@ html {
   position: fixed;
   top: 2rem;
   right: 2rem;
-  background: #2a9d8f;
+  background: #8A9A5B;
   color: white;
   padding: 1rem 1.5rem;
   border-radius: 1rem;
@@ -292,7 +291,7 @@ html {
 }
 
 .toast-notification.success {
-  background-color: #2a9d8f;
+  background-color: #8A9A5B;
 }
 
 .toast-notification.error {
@@ -362,12 +361,12 @@ s .modal-box p {
 }
 
 .modal-btn.approve {
-  background-color: #46cc2e;
+  background-color: #8A9A5B;
   color: white;
 }
 
 .modal-btn.approve:hover {
-  background-color: #27ae60;
+  background-color: #636e43;
 }
 
 .modal-btn.reject {
@@ -386,6 +385,12 @@ s .modal-box p {
 
 .modal-btn.cancel:hover {
   background-color: #bbb;
+}
+
+#modal-message {
+  font-size: 1rem;
+  color: #5f6163;
+  margin-bottom: 1.5rem;
 }
 
 .view-sessions-btn {
@@ -531,5 +536,9 @@ table {
 .main-div {
   display: grid;
   grid-template-columns: 450px 1fr;
-  gap: 2rem;
+  gap: 3rem;
+}
+
+.right-column {
+  gap: 3rem;
 }
