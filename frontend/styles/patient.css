@@ -236,7 +236,7 @@ main {
   font-size: 1.3rem;
   font-weight: bold;
   margin-bottom: 1rem;
-  color: #3e4042;
+  color: #f05454;
 }
 
 .checkbox-container {
@@ -752,4 +752,14 @@ main {
   display: flex;
   flex-direction: column;
   gap: 2rem;
+}
+
+.medical-history {
+  max-height: 500px;
+  overflow-y: scroll;
+  padding: 20px;
+}
+
+.medical-history div {
+  margin-bottom: 20px;
 }

@@ -312,19 +312,68 @@ document.addEventListener("DOMContentLoaded", () => {
       historyDiv.innerHTML = "";
 
       reports.forEach((report) => {
-        const reportDiv = document.createElement("div");
-        reportDiv.className = "report-item";
-        reportDiv.style.border = "1px solid #ddd";
-        reportDiv.style.padding = "10px";
-        reportDiv.style.marginBottom = "10px";
-        reportDiv.style.borderRadius = "5px";
-        reportDiv.innerHTML = `
-          <p><strong>Date:</strong> ${report.date || "Unknown"}</p>
-          <p><strong>Doctor:</strong> ${report.doctorName || "Unknown"}</p>
-          <p><strong>Type:</strong> ${report.type || "General"}</p>
-          <p><strong>Details:</strong> ${report.details || "No details"}</p>
+        const card = document.createElement("div");
+        card.className = "report-card";
+        card.style.borderRadius = "12px";
+        card.style.padding = "1rem 0.5rem";
+        card.style.textAlign = "center";
+        card.style.background = "#fafafa";
+        card.style.cursor = "pointer";
+        card.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.08)";
+        card.style.transition = "transform 0.2s, box-shadow 0.2s";
+        card.style.display = "flex";
+        card.style.flexDirection = "column";
+        card.style.alignItems = "center";
+        card.style.justifyContent = "center";
+
+        const date = new Date(report.createdAt).toLocaleString(undefined, {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+
+        card.innerHTML = `
+          <img src="../assets/svgs/file.svg" />
+          <div style="margin-top:0.5rem; font-size:0.8rem; color:grey;">
+            ${date}
+          </div>
         `;
-        historyDiv.appendChild(reportDiv);
+
+        card.addEventListener("mouseover", () => {
+          card.style.transform = "scale(1.05)";
+          card.style.boxShadow = "0 6px 15px rgba(0,0,0,0.15)";
+        });
+        card.addEventListener("mouseout", () => {
+          card.style.transform = "scale(1)";
+          card.style.boxShadow = "0 3px 8px rgba(0,0,0,0.1)";
+        });
+
+        card.addEventListener("click", async () => {
+          try {
+            const downloadRes = await apiFetch(
+              `https://127.0.0.1:8443/api/patients/me/reports/${report.reportId}`
+            );
+
+            if (!downloadRes.ok) throw new Error("Failed to download report");
+
+            const blob = await downloadRes.blob();
+            const url = window.URL.createObjectURL(blob);
+
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = `report_${report.reportId}.pdf`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            window.URL.revokeObjectURL(url);
+          } catch (err) {
+            alert(err.message);
+          }
+        });
+
+        historyDiv.appendChild(card);
       });
     } catch (err) {
       console.error("Error loading medical reports:", err);
