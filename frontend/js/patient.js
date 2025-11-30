@@ -72,7 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
       ...doctorsForm.querySelectorAll('input[name="doctor"]:checked'),
     ];
     if (checked.length !== 1) {
-      alert("Please select exactly one doctor.");
+      showToast("Please select exactly one doctor.", "info");
       return;
     }
 
@@ -85,16 +85,16 @@ document.addEventListener("DOMContentLoaded", () => {
       );
 
       if (!res.ok) {
-        alert("Failed to request doctor.");
+        showToast("Failed to request doctor.", "error");
         return;
       }
 
-      alert("Doctor requested successfully!");
+      showToast("Doctor requested successfully!", "success");
       doctorsForm.reset();
       loadDoctorStatus();
     } catch (err) {
       console.error(err);
-      alert("Network error.");
+      showToast("Network error.", "error");
     }
   });
 
@@ -232,16 +232,16 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
       if (!res.ok) {
-        alert("Failed to update patient info.");
+        showToast("Failed to update patient info.", "error");
         return;
       }
 
       const updatedPatient = await res.json();
-      alert("Patient info updated successfully!");
+      showToast("Patient info updated successfully!", "success");
       loadPatientInfo();
     } catch (err) {
       console.error(err);
-      alert("Network error.");
+      showToast("Network error.", "error");
     }
   });
 
@@ -286,6 +286,27 @@ document.addEventListener("DOMContentLoaded", () => {
     } catch (err) {
       console.error("Error loading doctors on map:", err);
     }
+  }
+
+  function showToast(message, type = "info", duration = 4000) {
+    const container = document.getElementById("toast-container");
+    if (!container) return;
+
+    const toast = document.createElement("div");
+    toast.classList.add("toast", `toast-${type}`);
+    toast.textContent = message;
+
+    container.appendChild(toast);
+
+    setTimeout(() => {
+      toast.style.transition = "transform 0.3s ease, opacity 0.3s ease";
+      toast.style.transform = "translateX(100%)";
+      toast.style.opacity = "0";
+
+      toast.addEventListener("transitionend", () => {
+        toast.remove();
+      });
+    }, duration);
   }
 
   async function loadMedicalReports() {
@@ -369,7 +390,7 @@ document.addEventListener("DOMContentLoaded", () => {
             a.remove();
             window.URL.revokeObjectURL(url);
           } catch (err) {
-            alert(err.message);
+            showToast("Network error.", "error");
           }
         });
 
