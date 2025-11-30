@@ -654,6 +654,8 @@ document.addEventListener("DOMContentLoaded", () => {
     ctx.lineTo(width, height - (0 - min) * scaleY);
     ctx.stroke();
   }
+/*delete*/
+
 
   async function handleApprove(patientId) {
     const confirmed = await showConfirmModal({
@@ -756,18 +758,39 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
       if (!res.ok) {
-        alert("Failed to update doctor info.");
+        showToast("Failed to update doctor info.", "error");
         return;
       }
 
       const updatedDoctor = await res.json();
-      alert("Doctor info updated successfully!");
+      showToast("Doctor info updated successfully!", "success");
       loadDoctorInfo();
     } catch (err) {
       console.error(err);
-      alert("Network error.");
+      showToast("Network error.", "error");
     }
   });
+
+  function showToast(message, type = "info", duration = 4000) {
+    const container = document.getElementById("toast-container");
+    if (!container) return;
+
+    const toast = document.createElement("div");
+    toast.classList.add("toast", `toast-${type}`);
+    toast.textContent = message;
+
+    container.appendChild(toast);
+
+    setTimeout(() => {
+      toast.style.transition = "transform 0.3s ease, opacity 0.3s ease";
+      toast.style.transform = "translateX(100%)";
+      toast.style.opacity = "0";
+
+      toast.addEventListener("transitionend", () => {
+        toast.remove();
+      });
+    }, duration);
+  }
 
   async function createReport(doctorId, sessionId, comments = "") {
     try {
@@ -785,7 +808,7 @@ document.addEventListener("DOMContentLoaded", () => {
       );
 
       if (!generateRes.ok) {
-        alert("Failed to generate report");
+        showToast("Failed to generate report", "error");
         return false;
       }
 
@@ -803,7 +826,7 @@ document.addEventListener("DOMContentLoaded", () => {
       );
 
       if (!downloadRes.ok) {
-        alert("No report available for this session.");
+        showToast("Failed to download report", "error");
         return false;
       }
 
@@ -820,7 +843,7 @@ document.addEventListener("DOMContentLoaded", () => {
       return true;
     } catch (err) {
       console.error(err);
-      alert("Network error while generating/downloading report");
+      showToast("Network error while generating/downloading report", "error");
       return false;
     }
   }
@@ -895,7 +918,7 @@ document.addEventListener("DOMContentLoaded", () => {
             a.remove();
             window.URL.revokeObjectURL(url);
           } catch (err) {
-            alert(err.message);
+            showToast(err.message, "error");
           }
         });
 

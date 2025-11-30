@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let currentSessionId = null;
   let currentSignalType = null;
-  let symptomsLogged = false; 
+  let symptomsLogged = false;
 
   const startBtn = document.getElementById("start-session-btn");
   const logSymptomsBtn = document.getElementById("log-symptoms-btn");
@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
     fileInput.click();
   });
 
-  uploadBtn.classList.add("hidden"); 
+  uploadBtn.classList.add("hidden");
 
   startBtn.addEventListener("click", async (e) => {
     e.preventDefault();
@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));
-        alert(err.error || "Failed to start session");
+        showToast(err.error || "Failed to start session", "error");
         return;
       }
 
@@ -66,14 +66,12 @@ document.addEventListener("DOMContentLoaded", () => {
         data.id ||
         Object.values(data)[0];
 
-      alert("Session started! ID: " + currentSessionId);
-
       startBtn.classList.add("hidden");
       logSymptomsBtn.classList.remove("hidden");
       logSignalsBtn.classList.remove("hidden");
     } catch (err) {
       console.error(err);
-      alert("Network or server error starting session.");
+      showToast("Network or server error starting session.", "error");
     }
   });
 
@@ -84,6 +82,32 @@ document.addEventListener("DOMContentLoaded", () => {
       await loadSymptomsEnum();
     }
   });
+
+  function capitalizeFirstLetter(str) {
+    str = str.toLowerCase();
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+
+  function showToast(message, type = "info", duration = 4000) {
+    const container = document.getElementById("toast-container");
+    if (!container) return;
+
+    const toast = document.createElement("div");
+    toast.classList.add("toast", `toast-${type}`);
+    toast.textContent = message;
+
+    container.appendChild(toast);
+
+    setTimeout(() => {
+      toast.style.transition = "transform 0.3s ease, opacity 0.3s ease";
+      toast.style.transform = "translateX(100%)";
+      toast.style.opacity = "0";
+
+      toast.addEventListener("transitionend", () => {
+        toast.remove();
+      });
+    }, duration);
+  }
 
   async function loadSymptomsEnum() {
     symptomsCheckboxes.innerHTML = "";
@@ -96,7 +120,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const list = await res.json();
 
       list.forEach((sym) => {
-        const labelText = sym.replaceAll("_", " ");
+        const labelText = capitalizeFirstLetter(sym.replaceAll("_", " "));
         const wrapper = document.createElement("label");
         wrapper.style.display = "flex";
         wrapper.style.alignItems = "center";
@@ -118,6 +142,7 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error(err);
       symptomsCheckboxes.innerHTML =
         "<div style='color:#811'>Could not load symptoms</div>";
+      showToast("Could not load symptoms", "error");
     }
   }
 
@@ -125,7 +150,7 @@ document.addEventListener("DOMContentLoaded", () => {
     e.preventDefault();
 
     if (!currentSessionId) {
-      alert("Please start a session first.");
+      showToast("Please start a session first.", "error");
       return;
     }
 
@@ -134,7 +159,7 @@ document.addEventListener("DOMContentLoaded", () => {
     ].map((n) => n.value);
 
     if (selected.length === 0) {
-      alert("Select at least one symptom");
+      showToast("Select at least one symptom", "error");
       return;
     }
 
@@ -150,23 +175,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));
-        alert(err.error || "Failed to save symptoms.");
+        showToast(err.error || "Failed to save symptoms.", "error");
         return;
       }
 
-      alert("Symptoms saved");
-      symptomsLogged = true; 
+      showToast("Symptoms saved", "success");
+      symptomsLogged = true;
 
       symptomsContainer.classList.add("hidden");
     } catch (err) {
       console.error(err);
-      alert("Network/server error saving symptoms");
+      showToast("Network/server error saving symptoms", "error");
     }
   });
 
   logSignalsBtn.addEventListener("click", () => {
     if (!symptomsLogged) {
-      alert("❗ You must log symptoms before recording signals.");
+      showToast("❗ You must log symptoms before recording signals.", "error");
       return;
     }
 
@@ -177,7 +202,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".signal-btn").forEach((btn) => {
     btn.addEventListener("click", () => {
       if (!symptomsLogged) {
-        alert("You must log symptoms first.");
+        showToast("You must log symptoms first.", "error");
         return;
       }
 
@@ -190,14 +215,12 @@ document.addEventListener("DOMContentLoaded", () => {
       fileInput.classList.remove("hidden");
       selectFileBtn.classList.remove("hidden");
 
-      // Hide upload button until a file is selected
-      uploadBtn.classList.add("hidden");  // <-- FIXED here
+      uploadBtn.classList.add("hidden"); 
       uploadBtn.disabled = true;
 
       fileNameLabel.textContent = "";
     });
   });
-
 
   fileInput.addEventListener("change", () => {
     const file = fileInput.files[0];
@@ -210,15 +233,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
     fileNameLabel.textContent = "Selected: " + file.name;
     uploadBtn.disabled = false;
-    uploadBtn.classList.remove("hidden");  
+    uploadBtn.classList.remove("hidden");
   });
 
   uploadBtn.addEventListener("click", async () => {
-    if (!currentSessionId) return alert("Start a session first");
-    if (!currentSignalType) return alert("Choose a signal first");
+    if (!currentSessionId) {
+      showToast("Start a session first", "error");
+      return;
+    }
+    if (!currentSignalType) {
+      showToast("Choose a signal first", "error");
+      return;
+    }
 
     const file = fileInput.files[0];
-    if (!file) return alert("Please choose a .txt file");
+    if (!file) {
+      showToast("Please choose a .txt file", "error");
+      return;
+    }
 
     const formData = new FormData();
     formData.append("file", file);
@@ -230,7 +262,8 @@ document.addEventListener("DOMContentLoaded", () => {
     } else if (currentSignalType === "EMG") {
       endpoint = `/api/patients/sessions/${currentSessionId}/emg`;
     } else {
-      return alert("Unknown signal type.");
+      showToast("Unknown signal type.", "error");
+      return;
     }
 
     try {
@@ -244,7 +277,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));
-        alert(err.error || "Upload failed");
+        showToast(err.error || "Upload failed", "error");
         return;
       }
 
@@ -253,9 +286,10 @@ document.addEventListener("DOMContentLoaded", () => {
       selectFileBtn.classList.add("hidden");
 
       fileNameLabel.textContent = `${file.name} uploaded ✔️`;
+      showToast("File uploaded successfully", "success");
     } catch (err) {
       console.error(err);
-      alert("Network/server error during upload");
+      showToast("Network/server error during upload", "error");
     }
   });
 });
