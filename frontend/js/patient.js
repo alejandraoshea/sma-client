@@ -356,7 +356,8 @@ document.addEventListener("DOMContentLoaded", () => {
               `https://127.0.0.1:8443/api/patients/me/reports/${report.reportId}`
             );
 
-            if (!downloadRes.ok) throw new Error("Failed to download report");
+            if (!downloadRes.ok)
+              throw new Error("No report available for this session.");
 
             const blob = await downloadRes.blob();
             const url = window.URL.createObjectURL(blob);
