@@ -18,6 +18,27 @@ function getAuthHeaders() {
   };
 }
 
+function showToast(message, type = "info", duration = 4000) {
+  const container = document.getElementById("toast-container");
+  if (!container) return;
+
+  const toast = document.createElement("div");
+  toast.classList.add("toast", `toast-${type}`);
+  toast.textContent = message;
+
+  container.appendChild(toast);
+
+  setTimeout(() => {
+    toast.style.transition = "transform 0.3s ease, opacity 0.3s ease";
+    toast.style.transform = "translateX(100%)";
+    toast.style.opacity = "0";
+
+    toast.addEventListener("transitionend", () => {
+      toast.remove();
+    });
+  }, duration);
+}
+
 async function fetchServerStatus() {
   try {
     const response = await fetch(
@@ -61,7 +82,7 @@ stopBtn.addEventListener("click", async () => {
   const password = stopPassword.value;
 
   if (!password) {
-    alert("Please enter the stop password");
+    showToast("Please enter the stop password", "error");
     return;
   }
 
@@ -75,11 +96,11 @@ stopBtn.addEventListener("click", async () => {
       }
     );
     const data = await response.json();
-    alert(data.message || data.error);
+    showToast(data.message || data.error || "An unexpected error occurred", "error");
     fetchServerStatus();
   } catch (err) {
     console.error(err);
-    alert("Failed to stop server");
+    showToast("Failed to stop server", "error");
   }
 });
 

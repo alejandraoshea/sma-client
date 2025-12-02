@@ -4,7 +4,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MotivSMA</title>
-    <link rel="icon" type="image/x-icon" href="/frontend/assets/svgs/logo.ico">
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="/frontend/assets/svgs/logo.ico"
+    />
     <link rel="stylesheet" href="/frontend/styles/styles.css" />
   </head>
   <body>
@@ -17,7 +21,6 @@
           />MotivSMA
         </h1>
         <div class="links">
-          <a>About</a>
           <button class="open-button" onclick="openForm()">Login</button>
         </div>
       </nav>
@@ -150,6 +153,8 @@
       </div>
     </footer>
 
+    <div id="toast-container"></div>
+
     <div id="login" class="form-popup">
       <div class="form-popup-content">
         <button class="close-button" onclick="closeForm()">×</button>
@@ -197,7 +202,7 @@
           e.preventDefault();
           const role = item.getAttribute("data-role");
           roleInput.value = role;
-          btn.childNodes[0].textContent = item.textContent;
+          btn.firstChild.textContent = item.textContent + " ";
           dropdown.classList.remove("show");
         });
       });

@@ -39,6 +39,27 @@ async function generateAndDownloadReport(doctorId, sessionId) {
 
   } catch (error) {
     console.error('Error generating or downloading report:', error);
-    alert('Sorry, there was an error downloading the report.');
+    showToast("Sorry, there was an error downloading the report.", "error");
   }
+}
+
+function showToast(message, type = "success") {
+  const toast = document.createElement("div");
+  toast.className = `toast-notification ${type}`;
+  toast.innerHTML = `
+    <span class="toast-icon">${type === "success" ? "✔️" : "❌"}</span> 
+    <span><br>${message}</span>
+  `;
+  document.body.appendChild(toast);
+
+  toast.addEventListener("click", () => {
+    toast.remove();
+  });
+
+  setTimeout(() => {
+    toast.style.animation = "fadeout 0.5s ease forwards";
+    toast.addEventListener("animationend", () => {
+      toast.remove();
+    });
+  }, 2500);
 }

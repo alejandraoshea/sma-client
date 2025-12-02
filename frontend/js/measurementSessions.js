@@ -179,7 +179,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      showToast("Symptoms saved", "success");
+      showToast("✓ Symptoms saved", "success");
       symptomsLogged = true;
 
       symptomsContainer.classList.add("hidden");

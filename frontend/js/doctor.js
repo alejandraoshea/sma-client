@@ -403,7 +403,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     );
 
                     if (success) {
-                      commentsTextarea.value = "";  
+                      commentsTextarea.value = "";
                     }
                   };
 
@@ -795,7 +795,9 @@ document.addEventListener("DOMContentLoaded", () => {
   async function createReport(doctorId, sessionId, comments = "") {
     try {
       const generateRes = await fetch(
-        `https://127.0.0.1:8443/api/doctors/${doctorId}/report/${sessionId}/generate?doctorsComments=${encodeURIComponent(comments)}`,
+        `https://127.0.0.1:8443/api/doctors/${doctorId}/report/${sessionId}/generate?doctorsComments=${encodeURIComponent(
+          comments
+        )}`,
         {
           method: "POST",
           headers: {
@@ -903,7 +905,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const downloadRes = await apiFetch(
               `https://127.0.0.1:8443/api/doctors/reports/${report.reportId}`
             );
-            if (!downloadRes.ok) throw new Error("Failed to download report");
+            if (!downloadRes.ok) throw new Error("No report available for this session.");
 
             const blob = await downloadRes.blob();
             const url = window.URL.createObjectURL(blob);

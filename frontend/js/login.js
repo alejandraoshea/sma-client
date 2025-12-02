@@ -1,3 +1,46 @@
+function showToast(message, type = "info", duration = 4000) {
+  const container = document.getElementById("toast-container");
+  if (!container) return;
+
+  const toast = document.createElement("div");
+  toast.classList.add("toast", `toast-${type}`);
+  toast.textContent = message;
+
+  container.appendChild(toast);
+
+  setTimeout(() => {
+    toast.style.transition = "transform 0.3s ease, opacity 0.3s ease";
+    toast.style.transform = "translateX(100%)";
+    toast.style.opacity = "0";
+
+    toast.addEventListener("transitionend", () => {
+      toast.remove();
+    });
+  }, duration);
+}
+
+function showToast(message, type = "info", duration = 4000) {
+  const container = document.getElementById("toast-container");
+  if (!container) return;
+
+  const toast = document.createElement("div");
+  toast.classList.add("toast", `toast-${type}`);
+  toast.textContent = message;
+
+  container.appendChild(toast);
+
+  setTimeout(() => {
+    toast.style.transition = "transform 0.3s ease, opacity 0.3s ease";
+    toast.style.transform = "translateX(100%)";
+    toast.style.opacity = "0";
+
+    toast.addEventListener("transitionend", () => {
+      toast.remove();
+    });
+  }, duration);
+}
+
+
 const loginForm = document.getElementById("login-form");
 
 loginForm.addEventListener("submit", async (e) => {
@@ -20,7 +63,7 @@ loginForm.addEventListener("submit", async (e) => {
       try {
         errorData = await res.json();
       } catch {}
-      alert(errorData.error || `Login failed (status ${res.status})`);
+      showToast(errorData.error || `Login failed (status ${res.status})`, "error");
       return;
     }
 
@@ -44,12 +87,15 @@ loginForm.addEventListener("submit", async (e) => {
     }
 
     if (data.role) {
-      window.location.href = `frontend/pages/${data.role.toLowerCase()}Dashboard.html`;
+      showToast("✓ Login successful!", "success");
+      setTimeout(() => {
+        window.location.href = `frontend/pages/${data.role.toLowerCase()}Dashboard.html`;
+      }, 400); 
     } else {
-      alert("Login successful, but role unknown");
+      showToast("✓ Login successful, but role unknown", "warning");
     }
   } catch (err) {
     console.error(err);
-    alert("Network or server error");
+    showToast("Network or server error", "error");
   }
 });

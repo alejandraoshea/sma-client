@@ -1,3 +1,24 @@
+function showToast(message, type = "info", duration = 4000) {
+  const container = document.getElementById("toast-container");
+  if (!container) return;
+
+  const toast = document.createElement("div");
+  toast.classList.add("toast", `toast-${type}`);
+  toast.textContent = message;
+
+  container.appendChild(toast);
+
+  setTimeout(() => {
+    toast.style.transition = "transform 0.3s ease, opacity 0.3s ease";
+    toast.style.transform = "translateX(100%)";
+    toast.style.opacity = "0";
+
+    toast.addEventListener("transitionend", () => {
+      toast.remove();
+    });
+  }, duration);
+}
+
 const registerForm = document.getElementById("register");
 
 registerForm.addEventListener("submit", async (e) => {
@@ -5,7 +26,7 @@ registerForm.addEventListener("submit", async (e) => {
 
   const role = document.getElementById("reg-role").value;
   if (!role) {
-    alert("Please select a role.");
+    showToast("Please select a role.", "error");
     return;
   }
 
@@ -29,19 +50,19 @@ registerForm.addEventListener("submit", async (e) => {
     if (res.headers.get("content-type")?.includes("application/json")) {
       data = await res.json();
     } else {
-      const text = await res.text();
-      console.error("Non-JSON response:", text);
-      alert("Registration failed: invalid response from server");
+      showToast("Registration failed", "error");
       return;
     }
 
     if (!res.ok) {
-      alert(data.error || "Registration failed");
+      console.log("Server error response:", JSON.stringify(data, null, 2));
+      showToast( "Registration failed", "error");
+      return;
     } else {
-      alert("Registration successful!");
+      showToast("✓ Registration successful!", "success");
     }
   } catch (err) {
     console.error(err);
-    alert("Network or server error");
+    showToast("Network or server error", "error");
   }
 });
